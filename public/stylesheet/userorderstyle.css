@@ -1,0 +1,88 @@
+.order-item-card{
+    display: flex;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    padding: 8px;
+    background-color: black;
+    width: 100%;
+    padding:12px;
+    justify-content: space-between;
+    min-height: 140px;
+}
+.order-item-card{
+    display: flex;
+}
+.order-items{
+    width: 100%;
+}
+.order-item-card-one-images{
+    width: 80px;
+    /* background-color: aqua; */
+}
+
+.order-details-one{
+    padding: 18px;
+}
+.return-button{
+    padding: 4px 8px;
+    border: none;
+    background-color: FFE500;
+    border-radius: 8px;
+}
+.order-item-card-one{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hidden{
+    display: none;
+}
+
+/* Order single Page */
+.order-details-u{
+    background-color: black;
+    margin-bottom: 10px;
+    /* min-height: 200px; */
+    border-radius: 8px;
+    padding: 20px;
+}
+.order-details-u-address{
+    background-color: 1C1C1C;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+.address-inner{
+    padding-left: 8px;
+}
+
+
+/* /Order single Page */
+
+.addaddress-modal{
+    background-color: 1C1C1C;
+    border-radius: 8px;
+}
+.addaddress-modal input{
+    border-radius: 8px;
+    border: none;
+    padding: 4px;
+    width: 70%;
+}
+
+@media(max-width:600px){
+    .order-item-card-one-images{
+        width: 50px;
+    }
+    .return-button{
+        padding: 4px 4px;
+        width: 45px;
+        font-size: 12px;
+    }
+    .hidden{
+        display: block;
+    }
+    .visible{
+        display: none;
+    }
+}

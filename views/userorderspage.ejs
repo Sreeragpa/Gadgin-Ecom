@@ -1,0 +1,211 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link href="https://cdn.jsdelivr.net/npm/boosted@5.3.2/dist/css/boosted.min.css" rel="stylesheet"
+        integrity="sha384-fyenpx19UpfUhZ+SD9o9IdxeIJKE6upKx0B54OcXy1TqnO660Qw9xw6rOASP+eir" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+    <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+    <link rel="stylesheet" href="/stylesheet/userorderstyle.css">
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+        <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <div>
+            <!-- Sweetalert -->
+            <div id="sweetalert-overlay-modal" class="sweetalert-overlay-modal">
+                <div id="sweetalert-modal" class="sweetalert-modal">
+                    <p class="text-white fw-bold mt-2">Do you want to Cancel Order</p>
+                    <div>
+                        <button id="yesBtn" class="m-0 okBtn">Yes</button>
+                        <button id="noBtn" class="m-0 okBtn">No</button>
+
+                    </div>
+                    <!-- <button id="cancelBtn">No</button> -->
+                </div>
+            </div>
+            <!-- Sweetalert -->
+            <div class="container-fluid p-0 main-div">
+                <div class="inner-content-div-user text-white">
+
+                    <!-- Content -->
+
+
+
+                    <!-- Cart Heading -->
+                    <div class="cart-heading gap-2">
+                        <div class="">
+                            <h4 class="m-0">Orders</h4>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- / Cart Heading -->
+                    <!-- Cart Content -->
+                    <div class="cart-content">
+                        <%if(orders.length>0){%>
+                            <div class="order-items">
+                                <!-- Order-item-card -->
+                                <%for(let i=0;i<orders.length;i++){%>
+                                    <a href="/orders/<%=orders[i]._id%>">
+                                        <div class="order-item-card">
+                                            <div class="order-item-card-one">
+                                                <div class="order-item-card-one-images row">
+
+                                                    <img src="<%=orders[i].orderitems.images[0]%>"
+                                                        class="img-fluid col-12 p-0 ">
+
+
+                                                </div>
+                                                <div class="order-details-one ">
+                                                    <ul>
+                                                        <!-- <li>Order id:<span><%=orders[i].orderid%></span> </li> -->
+                                                        <li>
+                                                            <%=orders[i].orderitems.name%>
+                                                        </li>
+                                                        <li>Quantity:<%=orders[i].orderitems.quantity%>
+                                                        </li>
+                                                        <li class="hidden text-capitalize">Order Status:
+                                                            <%=orders[i].orderitems.orderstatus%>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                                <div>
+                                                    <ul>
+                                                        <li class="visible text-capitalize">Order Status:
+                                                            <%=orders[i].orderitems.orderstatus%>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <%if(orders[i].orderitems.orderstatus=='pending' ||
+                                                        orders[i].orderitems.orderstatus=='ordered' ){%>
+                                                        <form
+                                                            action="/api/order/cancel/<%=orders[i]._id%>/<%=orders[i].orderitems.pid%>"
+                                                            method="post" class="order-cancel-form m-0"
+                                                            id="order-cancel-form">
+                                                            <button class="return-button"
+                                                                id="cancel-btn">Cancel</button>
+                                                        </form>
+
+                                                        <%}else if(orders[i].orderitems.orderstatus=='delivered' ){%>
+                                                            <form method="post" class="m-0">
+                                                                <!-- <button
+                                                                    class="return-button text-bg-light">Return</button> -->
+                                                            </form>
+                                                            <%}%>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <%}%>
+                                        <!-- Order-item-card -->
+
+
+                            </div>
+                            <%}else{%>
+                                <div>No Orders</div>
+                                <%}%>
+
+
+                    </div>
+                    <!-- /Cart Content -->
+                    <!-- Pagination -->
+                      <nav aria-label="...">
+                        <ul class="pagination pagination-sm justify-content-center">
+               
+                          <% for (let i = 1; i <= pageCount; i++) { %>
+                            <li class="bg-black <%= i === currentPage ? 'active text-white' : 'text-black' %>">
+                              <a class="page-link " href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                          <% } %>
+                        </ul>
+                      </nav>
+                      <!-- / Pagination -->
+
+                </div>
+
+                <!-- /Content -->
+                <!-- MODAL -->
+                <!-- <div id="continue-overlay">
+                <div id="modal">
+                  <p>An Item in your Cart is Out of Stock</p>
+                  <button id="cancelBtn">Ok</button>
+                </div>
+              </div> -->
+                <!-- MODAL -->
+          
+            </div>
+        </div>
+        <!-- /MAIN -->
+
+
+
+        <!-- Footer -->
+        <%- include('include/_footer') %>
+            <!-- Footer -->
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            <script>
+                // const overlay = document.getElementById('continue-overlay');
+                // document.getElementById('preventbtn').addEventListener('click',(e)=>{
+                //     e.preventDefault();
+                //     overlay.style.display = 'flex';
+                //     document.getElementById('cancelBtn').addEventListener('click',(e)=>{
+                //         overlay.style.display = '';
+                //     })
+                // })
+
+                let alertmodal = document.getElementById('sweetalert-overlay-modal');
+
+                document.querySelectorAll('.order-cancel-form').forEach((cancelform) => {
+                    cancelform.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        alertmodal.style.display = 'flex';
+                        document.getElementById('yesBtn').addEventListener('click', () => {
+                            cancelform.submit();
+                        })
+                        document.getElementById('noBtn').addEventListener('click', () => {
+                            alertmodal.style.display = 'none';
+                        })
+
+                    });
+
+
+                })
+            </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,282 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <!-- <link rel="stylesheet" href="/stylesheet/form.css"> -->
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/sweetalert.css">
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+
+        <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <div class="container-fluid  p-0">
+            <!--carousel  -->
+            <!-- Sweetalert Success-->
+            <%if(messages.userblocked){%>
+                <div id="sweetalert-overlay-modal-success" class="sweetalert-overlay">
+                    <div id="sweetalert" class="sweetalert">
+                        <!-- <lord-icon src="https://cdn.lordicon.com/fkmafinl.json" trigger="in"
+                            state="in-reveal" style="width:100px;height:100px">
+                        </lord-icon> -->
+                        <p class="text-white fw-bold mt-4">
+                            <%=messages.userblocked%>
+                        </p>
+                        <div>
+
+                        </div>
+                        <!-- <button id="cancelBtn">No</button> -->
+                    </div>
+                </div>
+                <%}%>
+
+                    <!-- Sweetalert Success-->
+                    <div id="carouselExample" class="carousel slide" style="height: 30vw; ">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <!-- <img src="/img/carousel-1.webm" class="d-block w-100 h-100" alt="..."> -->
+                                <video class="d-block w-100" autoplay loop muted playsinline>
+                                    <source src="/img/carousel-1.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/img/carousel-2.webp" class="d-block w-100 h-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <video class="d-block w-100" autoplay loop muted playsinline>
+                                    <source src="/img/carousel-4.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <!--/carousel  -->
+
+                    <!-- Featured Products -->
+
+                    <div class="featured-products-container text-white">
+                        <h4>Featured Products</h4>
+                        <div class="featured-products-scroll" id="myDiv">
+                            <% for(let i=0;i<products.length;i++) {%>
+                                <a href="/sproduct/<%=products[i]._id%>">
+                                    <div class="featured-product">
+                                        <img src="<%=products[i].images[0]%>" class="img-fluid featured-products-img"
+                                            alt="">
+                                        <div class="product-details">
+                                            <div class="fw-bold wrap-text-100 py-2">
+                                                <%=products[i].name%>
+                                            </div>
+                                            <%if(products[i].discount>0){%>
+                                                <span class="text-bg-success discount-span">
+                                                    <%=products[i].discount%>%
+                                                </span>
+                                                <%}%>
+                                                    <div class="">₹<%=products[i].price.toLocaleString('en-IN')%>
+                                                    </div>
+                                                    <%if(products[i].price!=products[i].mrp){%>
+                                                        <div><s>₹<%=products[i].mrp.toLocaleString('en-IN')%></s></div>
+                                                        <%}%>
+                                                            <div><svg width="57" height="9" viewBox="0 0 57 9"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M4.5 0L6.02963 2.60796L9 3.24671L6.975 5.49727L7.28115 8.5L4.5 7.28296L1.71885 8.5L2.025 5.49727L0 3.24671L2.97037 2.60796L4.5 0Z"
+                                                                        fill="#FFCB45" />
+                                                                    <path
+                                                                        d="M16.5 0L18.0296 2.60796L21 3.24671L18.975 5.49727L19.2812 8.5L16.5 7.28296L13.7188 8.5L14.025 5.49727L12 3.24671L14.9704 2.60796L16.5 0Z"
+                                                                        fill="#FFCB45" />
+                                                                    <path
+                                                                        d="M28.5 0L30.0296 2.60796L33 3.24671L30.975 5.49727L31.2812 8.5L28.5 7.28296L25.7188 8.5L26.025 5.49727L24 3.24671L26.9704 2.60796L28.5 0Z"
+                                                                        fill="#FFCB45" />
+                                                                    <path
+                                                                        d="M40.5 0L42.0296 2.60796L45 3.24671L42.975 5.49727L43.2812 8.5L40.5 7.28296L37.7188 8.5L38.025 5.49727L36 3.24671L38.9704 2.60796L40.5 0Z"
+                                                                        fill="#FFCB45" />
+                                                                    <path
+                                                                        d="M52.5 0L54.0296 2.60796L57 3.24671L54.975 5.49727L55.2812 8.5L52.5 7.28296L49.7188 8.5L50.025 5.49727L48 3.24671L50.9704 2.60796L52.5 0Z"
+                                                                        fill="#FFCB45" />
+                                                                </svg>
+                                                            </div>
+
+                                        </div>
+                                        <div class="">
+                                            <a href="/dkmdk">
+                                                <i class="fa-regular fa-heart fa-lg favourite-span"
+                                                    style="color: #ffffff; font-size: 20px;"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </a>
+                                <% } %>
+
+
+                        </div>
+                        <!-- Scroll Buttons -->
+                        <div class="left-right-btns">
+                            <button class="scroll-btnn-left scroll-btnn scroll-left" id="btn1"><i
+                                    class="fa-solid fa-arrow-right fa-flip-both" style="color: #000000;"></i></button>
+                            <button class="scroll-btnn-right scroll-btnn scroll-right" id="btn2"><i
+                                    class="fa-solid fa-arrow-right" style="color: #000000;"></i></button>
+                        </div>
+                        <!-- / Scroll Buttons -->
+
+
+                    </div>
+                    <!-- /Featured Products -->
+
+
+                    <!-- Shop By Category -->
+
+                    <div class="shopbycategory-container text-white">
+                        <h4>Shop By Category</h4>
+                        <div class="shopbycategory-scroll">
+                            <% for(let i=0;i<category.length;i++){%>
+                                <a href="/products?category=<%=category[i].categoryName%>">
+                                    <div class="shopbycategory-category">
+                                        <img src="<%=category[i].images%>" class="img-fluid category-img" alt="">
+                                        <div class="category-name">
+                                            <%=category[i].categoryName%>
+                                        </div>
+                                    </div>
+                                </a>
+                                <% }%>
+
+                        </div>
+
+                        <!-- Scroll Button -->
+                        <!-- <div class="left-right-btns">
+                    <button class="scroll-btnn-left scroll-btnn"><i class="fa-solid fa-arrow-right fa-flip-both" style="color: #000000;"></i></button>
+              <button class="scroll-btnn-right scroll-btnn"><i class="fa-solid fa-arrow-right" style="color: #000000;"></i></button>
+              </div> -->
+                        <!-- Scroll Button -->
+                    </div>
+                    <!-- /Shop By Category -->
+
+                    <!-- Coupon -->
+
+                    <div id="coupon" class="carousel slide m-5 " data-bs-ride="carousel" style="height: 10vw;">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="coupon-div">
+                                    <p class="text-white">Welcome OFFER</p>
+                                </div>
+
+                            </div>
+                            <div class="carousel-item">
+                                <div class="coupon-div">
+                                    <p class="text-white">NEW OFFERS</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#coupon"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#coupon"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <!-- /Coupon-->
+
+        </div>
+        <!-- /MAIN -->
+        <!-- <script>
+        // Function to scroll horizontally
+        function scrollHorizontally(amount) {
+          document.body.scrollLeft += amount; // For Safari
+          document.documentElement.scrollLeft += amount; // For Chrome, Firefox, IE, and Opera
+        }
+      
+        // Show the scroll buttons when scrolling
+        window.onscroll = function() {
+          showScrollButtons();
+        };
+      
+        function showScrollButtons() {
+          var scrollLeftButton = document.getElementById("scroll-left");
+          var scrollRightButton = document.getElementById("scroll-right");
+      
+          if (document.body.scrollLeft > 20 || document.documentElement.scrollLeft > 20) {
+            scrollLeftButton.style.display = "block";
+          } else {
+            scrollLeftButton.style.display = "none";
+          }
+      
+          if (document.body.scrollLeft < document.body.scrollWidth - window.innerWidth - 20 ||
+              document.documentElement.scrollLeft < document.documentElement.scrollWidth - window.innerWidth - 20) {
+            scrollRightButton.style.display = "block";
+          } else {
+            scrollRightButton.style.display = "none";
+          }
+        }
+      </script> -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $("#btn1").click(function () {
+                var currentScrollLeft = $("#myDiv").scrollLeft();
+                $("#myDiv").animate({ scrollLeft: currentScrollLeft - 600 }, 500);
+            });
+
+            $("#btn2").click(function () {
+                var currentScrollLeft = $("#myDiv").scrollLeft();
+                $("#myDiv").animate({ scrollLeft: currentScrollLeft + 600 }, 500);
+            });
+        </script>
+        <script src="/js/scrolltest.js"></script>
+        <script>
+
+            setTimeout(() => {
+                const element = document.getElementById('sweetalert-overlay-modal-success');
+
+                if (element) {
+                    element.classList.add("hidemee");
+                }
+            }, 3000);
+        </script>
+        <!-- Footer -->
+        <%- include('include/_footer') %>
+            <!-- Footer -->
+
+
+</body>
+
+</html>

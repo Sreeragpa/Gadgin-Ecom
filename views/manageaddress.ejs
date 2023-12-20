@@ -1,0 +1,286 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link href="https://cdn.jsdelivr.net/npm/boosted@5.3.2/dist/css/boosted.min.css" rel="stylesheet"
+        integrity="sha384-fyenpx19UpfUhZ+SD9o9IdxeIJKE6upKx0B54OcXy1TqnO660Qw9xw6rOASP+eir" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+    <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+        <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <div>
+            
+             <!-- Sweetalert for default address-->
+             <div id="sweetalert-overlay-modal" class="sweetalert-overlay-modal">
+                <div id="sweetalert-modal" class="sweetalert-modal">
+                    <p class="text-white fw-bold mt-2">Make address Default</p>
+                    <div>
+                        <button id="yesBtn" class="m-0 okBtn">Yes</button>
+                        <button id="noBtn" class="m-0 okBtn">No</button>
+
+                    </div>
+                    <!-- <button id="cancelBtn">No</button> -->
+                </div>
+            </div>
+            <!-- Sweetalert for default address-->
+             <!-- Sweetalert for delete address-->
+             <div id="sweetalert-overlay-modal-delete" class="sweetalert-overlay-modal">
+                <div id="sweetalert-modal" class="sweetalert-modal">
+                    <p class="text-white fw-bold mt-2">Delete Address</p>
+                    <div>
+                        <button id="yesBtn-del" class="m-0 okBtn">Yes</button>
+                        <button id="noBtn-del" class="m-0 okBtn">No</button>
+
+                    </div>
+                    <!-- <button id="cancelBtn">No</button> -->
+                </div>
+            </div>
+            <!-- Sweetalert for delete address-->
+             <!-- Sweetalert Success-->
+             <%if(messages.success){%>
+                <div id="sweetalert-overlay-modal-success" class="sweetalert-overlay">
+                    <div id="sweetalert" class="sweetalert">
+                        <p class="text-white fw-bold mt-2"><%=messages.success%></p>
+                        <div>
+                            <button id="okBtn" class="m-0 okBtn">Ok</button>
+                        </div>
+                        <!-- <button id="cancelBtn">No</button> -->
+                    </div>
+                </div>
+            <%}%>
+  
+            <!-- Sweetalert Success-->
+
+            <div class="container-fluid p-0 main-div">
+                <!-- Content -->
+                <div class="inner-content-div-user text-white">
+    
+                    <!-- Checkout Heading -->
+                    <div class="cart-heading gap-2">
+                        <div class="">
+                            <h4 class="m-0">Manage Address</h4>
+                          
+                        </div>
+                        <div>
+                        
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- / Checckout Heading -->
+                    <!-- Cart Content -->
+                    <div class="manageaddress-content">
+                        <!-- Address -->
+                        <%if(addresses){%>
+                        
+                        <%for(let i=0;i<addresses.address.length;i++){%>
+                            <div class="payment-address-div">
+                                <div class="address-div d-flex  justify-content-between align-items-center">
+                                    <div class="address-details m-0">
+                                      <ul class="address-font">
+                                        <li><%=addresses.address[i].name%></li>
+                                        <li><%=addresses.address[i].house%></li>
+                                        <li>PIN:<%=addresses.address[i].pincode%></li>
+                                        <li>Phone: <%=addresses.address[i].phone%></li>
+                                      </ul>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center gap-3">
+                                        <div>
+                                            <%if(!addresses.address[i].defaultaddress){%>
+                                            <form action="/api/user/address/makedefault/<%=addresses.address[i]._id%>?_method=PATCH" method="post" class="makedefault-form">
+                                                <button class="default-btn"><span class="">Make Default</span></button>
+                                            </form>
+                                            <%}else{%>
+                                                <div>Default</div>
+                                            <%}%>
+                                        </div>
+                                        <div>
+                                            <form action="/api/user/address/delete/<%=addresses.address[i]._id%>?_method=DELETE" class="delete-form m-0" method="post">
+                                                <button class="delete-address-btn">
+                                                    <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                            </div>
+                        <%}%>
+                        <%}%>
+                
+                        <div>
+                            <div class="add-address-div">
+                                <button class="add-address-btn" id="addaddress-show">Add Address</button>
+                            </div>
+                        </div>
+                        <div class="add-new-address-main hide-div" id="add-new-address-main">
+                            <div class="add-new-address">
+                                <!-- <h4>Add New Address</h4> -->
+                                <form action="/api/user/addaddress" method="post" id="address-form">
+                                    <div class="d-flex gap-4 ">
+                                        <div class="d-flex flex-column">
+                                            <label for="">Name</label>
+                                            <input type="text" placeholder="Name" class="" name="name" id="name"> 
+                                            <%if(messages.nameerror){%>
+                                                <span class=" text-danger"><%=messages.nameerror%></span>
+                                            <%}%>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-4 mt-2">
+                                        <div class="d-flex flex-column">
+                                            <label for="">House/Flat</label>
+                                            <!-- <input type="" placeholder="Address" class=""> -->
+                                            <textarea name="house" id="house" ></textarea>
+                                            <%if(messages.houseerror){%>
+                                                <span class="nameerror text-danger"><%=messages.houseerror%></span>
+                                            <%}%>
+                                        </div>
+                                    </div>
+                               
+                                    <div class="d-flex gap-4 mt-2">
+                                        <div class="d-flex flex-column">
+                                            <label for="">Phone</label>
+                                            <input type="number" placeholder="Phone" name="phone" id="phone">
+                                            <span class="text-danger p-1" id="phone-error"></span>
+                                            <%if(messages.phoneerror){%>
+                                                <span class="nameerror text-danger"><%=messages.phoneerror%></span>
+                                            <%}%>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <label for="">PinCode</label>
+                                            <input type="number" placeholder="PIN" name="pin" id="pin">
+                                            <span class="text-danger p-1" id="pin-error"></span> 
+                                            <%if(messages.pinerror){%>
+                                                <span class="nameerror text-danger"><%=messages.pinerror%></span>
+                                            <%}%>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button class="add-address-btn" type="submit">Submit</button>
+                                    </div>
+                                    
+                                   
+                                    
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- / Address -->
+                    </div>
+                    <!-- /Cart Content -->
+    
+    
+    
+                </div>
+    
+                <!-- /Content -->
+    
+            </div>
+        </div>
+        <!-- /MAIN -->
+
+
+
+        <!-- Footer -->
+        <%- include('include/_footer') %>
+            <!-- Footer -->
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script>
+                document.getElementById('addaddress-show').addEventListener('click',()=>{
+                    document.getElementById('add-new-address-main').classList.remove('hide-div')
+                    document.getElementById('addaddress-show').classList.add('hide-div');
+                })
+
+                // document.getElementById('address-form').addEventListener('submit',(e)=>{
+                //     const phone = document.getElementById('phone');
+                //     const pin = document.getElementById('pin');
+                //     const name = document.getElementById('name');
+                //     const home = document.getElementById('home');
+                //     if(phone.value.length!=10){
+                //         e.preventDefault();
+                //         document.getElementById('phone-error').innerHTML="Invalid Phone";
+                //     }
+                //     if(pin.value.length<1){
+                //         e.preventDefault();
+                //         document.getElementById('pin-error').innerHTML="Invalid PIN";
+                //     }
+                //     if(name.value=='' || home.value==''){
+                //         e.preventDefault();
+                //     }
+                //     if(name.value.trim()=='' || home.value.trim()=='' ){
+                //         e.preventDefault();
+                //     }
+                    
+                   
+                    
+                // })
+                
+            </script>
+            <script>
+                            let alertmodal = document.getElementById('sweetalert-overlay-modal');
+
+                                document.querySelectorAll('.makedefault-form').forEach((defaultform) => {
+                                    defaultform.addEventListener('submit', (e) => {
+                                        e.preventDefault();
+                                        alertmodal.style.display = 'flex';
+                                        document.getElementById('yesBtn').addEventListener('click', () => {
+                                            defaultform.submit();
+                                        })
+                                        document.getElementById('noBtn').addEventListener('click', () => {
+                                            alertmodal.style.display = 'none';
+                                        })
+
+                                    });
+
+
+                                })
+                            let alertmodaldel = document.getElementById('sweetalert-overlay-modal-delete');
+
+                                document.querySelectorAll('.delete-form').forEach((deleteform) => {
+                                    deleteform.addEventListener('submit', (e) => {
+                                        e.preventDefault();
+                                        alertmodaldel.style.display = 'flex';
+                                        document.getElementById('yesBtn-del').addEventListener('click', () => {
+                                            deleteform.submit();
+                                        })
+                                        document.getElementById('noBtn-del').addEventListener('click', () => {
+                                            alertmodaldel.style.display = 'none';
+                                        })
+
+                                    });
+
+
+                                })
+
+                                document.getElementById('okBtn').addEventListener('click',()=>{
+                                    document.getElementById('sweetalert-overlay-modal-success').classList.add("hidemee");
+                                })
+            </script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link href="https://cdn.jsdelivr.net/npm/boosted@5.3.2/dist/css/boosted.min.css" rel="stylesheet"
+        integrity="sha384-fyenpx19UpfUhZ+SD9o9IdxeIJKE6upKx0B54OcXy1TqnO660Qw9xw6rOASP+eir" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+    <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+        <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <%if(messages.success){%>
+                            <!-- Sweetalert -->
+        <div id="sweetalert-overlay" class="sweetalert-overlay">
+            <div id="sweetalert" class="sweetalert">
+                <i class="fa-regular fa-circle-check" style="color: #00ff40;"></i>
+                <p class="text-white fw-bold mt-2"><%=messages.success%></p>
+                <button id="okBtn" class="okBtn m-0">Ok</button>
+                <!-- <button id="cancelBtn" class="cancelBtn">No</button> -->
+            </div>
+        </div>
+        <!-- Sweetalert -->
+        <%}%>
+        <div class="container-fluid p-0 main-div">
+            <!-- Content -->
+            <div class="inner-content-div-user text-white">
+
+
+                <!-- Checkout Heading -->
+                <div class="cart-heading gap-2">
+                    <div class="">
+                        <h4 class="m-0">Edit Account</h4>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                <hr>
+                <!-- / Checckout Heading -->
+                <!-- Cart Content -->
+                <div class="useredit-content">
+                    <!-- Address -->
+
+
+                    <div class="profile-image-div p-2">
+                       
+                            <form id="profilechange-form" action="/api/user/changeprofile" method="post" enctype="multipart/form-data">
+                                <%if(!userinfo.profileimg){%>
+                                    <img class="profile-image-user-edit" src="/img/userprofile.png" alt="">
+                                  
+                                    <%}else{%>
+                                        <img class="profile-image-user-edit" src="<%=userinfo.profileimg%>" alt="">
+                                    <%}%>
+                                    <div class="edit-profile" id="edittrigger">
+                                        <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
+                                    </div>
+                                    <input type="file" id="profileinput" 
+                                    name="images" style="display: none;" accept="image/*" >
+                            </form>
+                    
+                    
+                   
+                    
+                    </div>
+                    <div class="add-new-address-main" id="add-new-address-main">
+                        <div class="add-new-address">
+                            <!-- <h4>Add New Address</h4> -->
+                            <form action="/api/user/changeinfo?_method=PATCH" method="post" class="editaccount-form">
+                                <div class="d-flex gap-4 ">
+                                    <div class="d-flex flex-column">
+                                        <label for="">Name</label>
+                                        <div class="d-flex justify-content-center align-items-baseline gap-2">
+                                            <input type="text" placeholder="Name" class="h-100" name="name" id="name"
+                                                readonly required value="<%=userinfo.name%>">
+                                            <div class="text-info actlink" id="name-btn">Edit</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex flex-column">
+                                        <label for="">Phone</label>
+                                        <div class="d-flex justify-content-center align-items-baseline gap-2">
+                                            <input name="phone" id="phone" class="h-100" placeholder="Phone" readonly
+                                                required value="<%=userinfo.phone%>"></input>
+                                            <div class="text-info actlink" id="phone-btn">Edit</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex  align-items-center mt-3">
+                                    <button class="add-address-btn hidee" type="submit" id="submit-btn">Submit</button>
+                                </div>
+                            </form>
+                            <form action="api/user/changepassword?_method=PATCH" method="post">
+                                <div class="pass-div ">
+                                    <div class="d-flex flex-column">
+                                        <label for="">Old Password</label>
+                                        <input type="password" placeholder="Old Password" name="oldpassword"
+                                            id="oldpassword" readonly required>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <label for="">New Password</label>
+                                        <input type="password" placeholder="New Password" name="password"
+                                            id="newpassword" readonly required>
+                                    </div>
+                                    <div class="text-info actlink" id="changepassword">Change Password</div>
+                                </div>
+                                <%if(messages.passerror){%>
+                                    <div class="mt-2">
+                                        <span class="text-danger"><%=messages.passerror%></span>
+                                    </div>
+                                <%}%>
+                                <div class="d-flex  align-items-center mt-3">
+                                    <button class="add-address-btn hidee" type="submit"
+                                        id="changepass-btn">Change</button>
+                                </div>
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <!-- / Address -->
+                </div>
+                <!-- /Cart Content -->
+
+
+
+            </div>
+
+            <!-- /Content -->
+
+        </div>
+        <!-- /MAIN -->
+
+
+
+        <!-- Footer -->
+        <%- include('include/_footer') %>
+            <!-- Footer -->
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script>
+       
+                document.getElementById('name-btn').addEventListener('click', () => {
+                    document.getElementById('name').readOnly = false;
+                    document.getElementById('submit-btn').classList.remove('hidee');
+                })
+                document.getElementById('phone-btn').addEventListener('click', () => {
+                    document.getElementById('phone').readOnly = false;
+                    document.getElementById('submit-btn').classList.remove('hidee');
+                })
+                document.getElementById('changepassword').addEventListener('click', () => {
+                    document.getElementById('newpassword').readOnly = false;
+                    document.getElementById('oldpassword').readOnly = false;
+                    document.getElementById('changepass-btn').classList.remove('hidee');
+
+                })
+                document.getElementById('okBtn').addEventListener('click',()=>{
+                    document.getElementById('sweetalert-overlay').classList.add("hidemee");
+                })
+
+              
+            </script>
+            <script>
+                document.getElementById('edittrigger').addEventListener('click', function() {
+                 document.getElementById('profileinput').click();
+});
+                document.getElementById('profileinput').addEventListener('change',(e)=>{
+                    document.getElementById('profilechange-form').submit();
+                })
+
+            </script>
+</body>
+
+</html>

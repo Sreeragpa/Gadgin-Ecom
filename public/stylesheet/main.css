@@ -1,0 +1,256 @@
+:root {
+    --primary-color: #000000;
+    --secondary-color: 1C1C1C;
+    --ternary-color: FFE500;
+    --footer-background: 101115;
+
+}
+
+body {
+    margin: 0px;
+    background-color: black;
+
+
+}
+
+#search-box {
+    background-color: transparent;
+}
+
+.navv {
+    display: flex;
+    background-color: var(--primary-color);
+    height: 10vh;
+    margin: 0px;
+    padding: 0px;
+    justify-content: space-between;
+    padding: 0px 50px 0px 50px;
+    align-items: center;
+}
+
+.navv-items {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+
+}
+
+.search-div {
+    display: flex;
+    align-items: center;
+    width: 50vw;
+    height: 2.5rem;
+    border: 0px solid;
+    border-radius: 30px 0px 0px 30px;
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+    margin: 0px;
+
+}
+
+#search-box {
+    /* padding: auto; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline: none;
+    width: 45vw;
+
+
+}
+
+.search-button {
+    display: flex;
+    align-items: center;
+    width: 50px;
+    height: 2.5rem;
+    border: 0px solid;
+    border-radius: 0px 30px 30px 0px;
+    padding: 10px;
+    background-color: var(--ternary-color);
+    ;
+}
+
+.mobile-navv {
+    display: none;
+    background-color: var(--primary-color);
+    height: 8vh;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+.a-center {
+    display: flex;
+    justify-content: center;
+
+}
+
+.footer {
+    margin: 5rem 0 0 0;
+    height: auto;
+    background-color: var(--footer-background);
+
+}
+
+.test {
+    background-color: aqua;
+}
+
+footer {
+    color: white;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.foot-details {
+    margin-top: 100px;
+}
+
+.bottom-footer {
+    margin: 0px 50px 0px 50px;
+    padding-bottom: 40px;
+}
+
+.search-form {
+    display: flex;
+    padding-top: 10px;
+
+}
+
+
+.foot-sub1 h4 {
+    color: white;
+}
+
+.header-cart-main{
+    position: relative;
+}
+.cart-count{
+    position: absolute;
+    z-index: 1;
+    top: -2px;
+    left: 15px;
+    width: 18px;
+    height: 18px;
+    background-color: var(--ternary-color);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+.checkmark {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.8rem;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #4bb71b;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px #4bb71b;
+    animation: fill 0.4s ease-in-out 0.4s forwards,
+        scale 0.3s ease-in-out 0.9s both;
+    position: relative;
+    top: 5px;
+    right: 5px;
+}
+
+.checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: #4bb71b;
+    fill: #fff;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+
+    0%,
+    100% {
+        transform: none;
+    }
+
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px #4bb71b;
+    }
+}
+
+
+
+@media(max-width: 600px) {
+   
+    .navv {
+        justify-content: space-between;
+    }
+
+    .navv-middle {
+        display: none;
+    }
+
+    .mobile-navv {
+        display: flex;
+    }
+
+    .search-div {
+        display: flex;
+        align-items: center;
+        /* padding: 2px 20px 0px 5pxpx; */
+    }
+
+    #search-box {
+
+        width: 80px;
+
+
+    }
+
+    .foot-details {
+        flex-direction: column;
+        margin-top: 100px;
+    }
+
+    .mobile-navv {
+
+        position: sticky;
+        /* top: 0; */
+        /* Adjust the background color as needed */
+        z-index: 1000;
+
+    }
+
+    .social-icons {
+        width: 50%;
+    }
+
+    .main-logo-footer svg {
+        width: 50px;
+    }
+}

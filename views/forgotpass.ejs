@@ -1,0 +1,69 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- Bootstrap -->
+        <!-- Fontawesome -->
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"  />
+        <!-- Fontawesome -->
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/registerform.css">
+    <!-- Stylesheets -->
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%- include('include/_headerwocart') %>
+    <!-- Header Ends -->
+
+
+    <!-- Register Form -->
+    <div class="form-div">
+        <div class="form-div-inner">
+            <form class="login-form" action="/api/getotp?forgotpass=1" method="post" id="form">
+                <h3 class="a-center" id="type">Forgot Password</h3>
+                <span class="err-msg align-self-center text-danger" id="errorElement">
+                    <% if (messages.error) { %>
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <%= messages.error %>
+                        <% } %>
+                </span>
+                <div class="form-group mail">
+                    <label for="email">Email address<span id="email-error"></span></label>
+                    <input type="email" id="email" class="form-control" name="email" aria-describedby="emailHelp"
+                        placeholder="Enter email" onkeyup="validateEmail()">
+                </div>
+                <div class="form-group form-check">
+                    <div class="a-center">
+                        <button type="submit" class="btn btn-primary">Send OTP</button>
+                    </div>
+                </div>
+                <!-- <div class="a-center mt-5">
+                    <a class="sm-font text-white">Continue</a>
+                </div> -->
+            </form>
+
+        </div>
+    </div>
+    <!-- Login Form Ends -->
+
+
+    
+    
+<!-- Footer -->
+<%- include('include/_footer') %>
+<!-- Footer -->
+
+</body>
+
+</html>

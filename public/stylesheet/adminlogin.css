@@ -1,0 +1,42 @@
+body{
+    background-color: rgb(245, 245, 245);
+}
+header{
+    height: 10vh;
+    margin: 10px;
+}
+.loginform{
+    align-items: center;
+    background-color: white;
+    display: inline-block;
+    padding: 10vw;
+    border-radius: 15px;
+
+}
+.main-section{
+    display: flex;
+    justify-content: center;
+    height: 70vh;
+    align-items: center;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+
+.login-btn{
+    margin-top: 40px;
+    background-color: black;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+}
+.input-box{
+    background-color: rgb(245, 245, 245);
+    outline: none;
+    border: none;
+    border-radius: 12px;
+    padding: 5px 12px;
+}

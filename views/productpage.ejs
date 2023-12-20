@@ -1,0 +1,170 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <!-- <link rel="stylesheet" href="/stylesheet/form.css"> -->
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+    <!-- Header Ends -->
+
+
+
+        <!-- Login Form -->
+        <div class="container-fluid mt-4 text-white main-div">
+            <div class="sidebar">
+                <!-- <h2>Filter & Sort</h2> -->
+                <form id="filterForm" class="filter-form mt-2">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" class="select-sty">
+                            <option value="all">All Categories</option>
+                            <option value="mobile">Mobiles</option>
+                            <option value="laptop">Laptops</option>
+                            <!-- Add more categories as needed -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priceRange">Price Range:</label>
+                        <div class="d-flex gap-2">
+                            <input type="number" id="minPrice" name="minPrice" placeholder="Min"
+                                class="w-50 select-sty">
+                            <input type="number" id="maxPrice" name="maxPrice" placeholder="Max"
+                                class="w-50 select-sty">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sortBy">Sort By:</label>
+                        <select id="sortBy" name="sortBy" class="select-sty">
+                            <option value="priceLowToHigh">Price Low to High</option>
+                            <option value="priceHighToLow">Price High to Low</option>
+                            <option value="newest">Newest Arrivals</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="select-sty mt-3">Apply Filters</button>
+                </form>
+            </div>
+
+
+            <div class="section-2 row p-0 m-0 gap-2">
+                <div class="d-flex ">
+                    <div class="filter-icon">
+                        <i class="fa-solid fa-filter" style="color: #ffffff;"></i>
+                    </div>
+                    <div class="text-white">
+                        <h3 class="text-capitalize">
+                            <%= products[0].category%>
+                        </h3>
+                    </div>
+
+
+                </div>
+                <% for(let i=0;i<products.length;i++) {%>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3 product-div">
+                        <a href="/sproduct/<%=products[i]._id%>">
+                            <div class="product-inner text-white">
+                                <img src="<%=products[i].images[0]%>" class="img-fluid p-3" alt="">
+                                   <!-- Discount -->
+                                   <div class="discount-div">
+                                    <%if(products[i].discount>0){%>
+                                        <span class="text-bg-success discount-span "><%=products[i].discount%>%</span>
+                                        <%}%>
+                                </div>
+                                    <!-- / Discount -->
+                      
+                                <div class="d-flex flex-column product-details-section">
+                                    <div class="fw-bold wrap-text-100">
+                                        <%=products[i].name%>
+                                    </div>
+                                    <div class="pdt-pp">
+                                        <div>
+                                            <div>₹<%=products[i].price.toLocaleString('en-IN')%>
+                                            </div>
+                                            <div><s>₹<%=products[i].mrp.toLocaleString('en-IN')%></s></div>
+                                            <div><svg width="57" height="9" viewBox="0 0 57 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.5 0L6.02963 2.60796L9 3.24671L6.975 5.49727L7.28115 8.5L4.5 7.28296L1.71885 8.5L2.025 5.49727L0 3.24671L2.97037 2.60796L4.5 0Z"
+                                                        fill="#FFCB45" />
+                                                    <path
+                                                        d="M16.5 0L18.0296 2.60796L21 3.24671L18.975 5.49727L19.2812 8.5L16.5 7.28296L13.7188 8.5L14.025 5.49727L12 3.24671L14.9704 2.60796L16.5 0Z"
+                                                        fill="#FFCB45" />
+                                                    <path
+                                                        d="M28.5 0L30.0296 2.60796L33 3.24671L30.975 5.49727L31.2812 8.5L28.5 7.28296L25.7188 8.5L26.025 5.49727L24 3.24671L26.9704 2.60796L28.5 0Z"
+                                                        fill="#FFCB45" />
+                                                    <path
+                                                        d="M40.5 0L42.0296 2.60796L45 3.24671L42.975 5.49727L43.2812 8.5L40.5 7.28296L37.7188 8.5L38.025 5.49727L36 3.24671L38.9704 2.60796L40.5 0Z"
+                                                        fill="#FFCB45" />
+                                                    <path
+                                                        d="M52.5 0L54.0296 2.60796L57 3.24671L54.975 5.49727L55.2812 8.5L52.5 7.28296L49.7188 8.5L50.025 5.49727L48 3.24671L50.9704 2.60796L52.5 0Z"
+                                                        fill="#FFCB45" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="cart-div">
+                                            <%if(isInCart==null){%>
+                                                <form action="/api/user/addtocart/<%=products[i]._id%>" method="post">
+                                                    <button class="cart-button-productpage">
+                                                        <i class="fa-solid fa-cart-plus fa-lg" style="color: #ffffff;"></i>
+                                                    </button>
+                                                    </form>
+                                            <%}else{%>
+                                                <i class="fa-solid fa-cart-shopping" style="color: #ffffff;"></i>
+                                            <%}%>
+                                            
+                                            <div class="">
+                                                <i class="fa-regular fa-heart fa-lg favourite-span" style="color: #ffffff;"></i>
+                                            </div>
+                                        </div>
+                                      
+                                    </div>
+                                  
+                                </div>
+                                <div class="quick-cart">
+                              
+                                    
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+
+                    <% }%>
+
+            </div>
+        </div>
+        <!-- Login Form Ends -->
+
+
+
+        <!-- Footer -->
+        <%-include('include/_footer') %>
+            <!-- Footer -->
+
+</body>
+
+</html>

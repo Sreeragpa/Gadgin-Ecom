@@ -1,0 +1,177 @@
+.inner-content-div-user{
+    margin: 0px 50px 50px 50px;
+    padding: 50px;
+    background-color: 1C1C1C;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    
+}
+body{
+    background-color: black;
+}
+.user-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main-div{
+    width: 100%;
+}
+.user-details-div{
+    display: flex;
+    width: 100%;
+    gap:10px;
+}
+.user-di{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.user-profile-details{
+    display: flex;
+    background-color: black;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+}
+.useredit-content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.profile-image{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.profile-image-div{
+    position: relative;
+    /* width: 30%; */
+}
+.profile-image-user-edit{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+.edit-profile{
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.526);
+    mix-blend-mode: darken;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    opacity: 0;
+   
+}
+.profile-image-div:hover .edit-profile {
+    opacity: 1; 
+}
+.user-manage{
+    display:flex;
+    justify-content: center;
+    border-radius: 20px;
+    width: 50%;
+}
+ul {
+    list-style: none;
+    padding: 0; /* Optional: Remove default padding */
+    margin: 0; /* Optional: Remove default margin */
+}
+.style-300{
+    font-weight: 400;
+    font-size: 18px;
+}
+.logout-btnn{
+    background-color: rgb(200, 0, 0);
+    border: none;
+    padding: 4px 8px;
+}
+.personalinfo-user{
+    width: 100%;
+}
+.user-manage-card{
+    display: flex;
+    background-color: black;
+    width: 160px;
+    height: 160px;
+    border-radius: 25px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+.pass-div{
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    gap: 4px;
+}
+
+@media(max-width:954px) {
+    .user-details-div{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .user-manage{
+        width: auto;
+    }
+    .user-di {
+        width: 100%;
+    }
+    .user-profile-details{
+        width: 100%;
+    }
+}
+
+@media(max-width:660px) {
+    .inner-content-div-user{
+        margin: 0px;
+    }
+    .user-details-div{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .user-manage-card{
+        width: 90px;
+        height: 90px;
+    }
+    .user-manage-card svg{
+        width: 50%;
+        height: 50%;
+        align-self: center;
+    }
+    .cards-row{
+        width: 100%;
+    }
+    li{
+        font-size: 12px;
+    }
+    .useredit-content{
+        justify-content: center;
+        align-items: center;
+    }
+    .profile-image-div{
+        display: flex;
+        justify-content: center;
+    }
+
+
+ 
+}
+
+@media(max-width:360px){
+    .pass-div{
+        flex-direction: column;
+    }
+    #changepass-btn{
+        width: 80px;
+    }
+}       

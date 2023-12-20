@@ -1,0 +1,165 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <!-- <link rel="stylesheet" href="/stylesheet/form.css"> -->
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+
+    <!-- Header Ends -->
+
+
+    <!-- MAIN -->
+    <div class="container-fluid p-0 main-div">
+      <div class="inner-content-div-user text-white">
+        <div class="user-head">
+            <div>
+                <h4>Hello, <%=user.name%></h4>
+                
+            </div>
+            <div class="profile-image-div">
+                <%if(!user.profileimg){%>
+                <img class="profile-image" src="/img/userprofile.png" alt="">
+                <%}else{%>
+                    <img class="profile-image" src="<%=user.profileimg%>" alt="">
+                <%}%>
+            
+            </div>
+        </div>
+        <hr class="mt-1">
+        <div class="user-details-div">
+            <div class="user-di">
+                <div class="user-profile-details">
+                    <div class="personalinfo-user">
+                        <span class="Account">Personal Information</span>
+                        <hr style="width: 60%;">
+                        <ul>
+                            <li>Name: <%=user.name%></li>
+                            <li>Email: <%=user.email%></li>
+                            <li>Status: <%=user.status%></li>
+                        </ul>
+                    </div>
+                   
+                </div>
+                <div class="m-3">
+                    <form action="/logout" method="post">
+                        <button class="logout-btnn text-white" type="submit"><i class="fa-solid fa-right-from-bracket" style="color: #ffffff;"></i>Logout</button>
+                    </form>
+                   
+                </div>
+            </div>
+       
+            <div class="user-manage">
+              <div class="cards-row">
+                                 <!-- Order Card -->
+                                 <div class="col-6 user-manage-card">
+                                    <a href="/myorders" >
+                                        <div class="d-flex flex-column align-content-center justify-content-center text-center">
+                                            <svg width="66" height="66" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12.667 22.581C12.667 22.3766 12.667 22.2744 12.7051 22.1825C12.7431 22.0906 12.8154 22.0184 12.9599 21.8739L20.9954 13.8383C21.5735 13.2603 21.8625 12.9712 22.2301 12.819C22.5976 12.6667 23.0063 12.6667 23.8238 12.6667H52.1768C52.9943 12.6667 53.4031 12.6667 53.7706 12.819C54.1381 12.9712 54.4272 13.2603 55.0052 13.8383L63.0408 21.8739C63.1853 22.0184 63.2575 22.0906 63.2956 22.1825C63.3337 22.2744 63.3337 22.3766 63.3337 22.581V25.3334H12.667V22.581Z" stroke="white" stroke-width="2"/>
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M66.5 25.3333H9.5V62.4999C9.5 64.3855 9.5 65.3283 10.0858 65.9141C10.6716 66.4999 11.6144 66.4999 13.5 66.4999H62.5C64.3856 66.4999 65.3284 66.4999 65.9142 65.9141C66.5 65.3283 66.5 64.3855 66.5 62.4999V25.3333ZM29.5 34.8333C29.5 34.281 29.0523 33.8333 28.5 33.8333C27.9477 33.8333 27.5 34.281 27.5 34.8333C27.5 37.618 28.6062 40.2887 30.5754 42.2579C32.5445 44.227 35.2152 45.3333 38 45.3333C40.7848 45.3333 43.4555 44.227 45.4246 42.2579C47.3938 40.2887 48.5 37.618 48.5 34.8333C48.5 34.281 48.0523 33.8333 47.5 33.8333C46.9477 33.8333 46.5 34.281 46.5 34.8333C46.5 37.0876 45.6045 39.2496 44.0104 40.8437C42.4163 42.4377 40.2543 43.3333 38 43.3333C35.7457 43.3333 33.5837 42.4377 31.9896 40.8437C30.3955 39.2496 29.5 37.0876 29.5 34.8333Z" fill="white"/>
+                                                </svg>
+                                                <div>Orders</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!-- Order Card -->
+                                <!-- Wishlist Card -->
+                                <div class="col-6 user-manage-card">
+                                    <a href="" >
+                                        <div class="d-flex flex-column align-content-center justify-content-center text-center">
+                                            <svg width="66" height="66" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.06562 44.5907L33.8883 69.6321C35.0016 70.6712 36.4711 71.2501 38 71.2501C39.5289 71.2501 40.9984 70.6712 42.1117 69.6321L68.9344 44.5907C73.4469 40.3899 76 34.4969 76 28.3368V27.4758C76 17.1001 68.5039 8.25319 58.2766 6.54616C51.5078 5.41803 44.6203 7.62975 39.7812 12.4688L38 14.2501L36.2188 12.4688C31.3797 7.62975 24.4922 5.41803 17.7234 6.54616C7.49609 8.25319 0 17.1001 0 27.4758V28.3368C0 34.4969 2.55312 40.3899 7.06562 44.5907Z" fill="white"/>
+                                                </svg>
+                                                
+                                                <div>Wishlist</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!-- Wishlist  Card -->
+              </div>
+              <div class="cards-row">
+                <!-- Address Card -->
+                <div class="col-6 user-manage-card">
+                    <a href="/manageaddress" >
+                        <div class="d-flex flex-column align-content-center justify-content-center text-center">
+                            <svg width="66" height="66" viewBox="0 0 76 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_138_1282)">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M60.6446 57.6024C69.9945 60.2491 76 64.4782 76 69.2466C76 77.2515 58.9904 83.7389 38.0036 83.7389C17.0168 83.7389 0 77.2515 0 69.2466C0 64.3631 6.32195 60.0478 16.017 57.4226L17.0815 58.861C17.8007 59.8464 18.6134 60.8245 19.4261 61.7811C12.6439 63.4209 8.2998 65.9526 8.2998 68.7935C8.2998 73.7417 21.4543 77.755 37.6871 77.755C53.9199 77.755 67.0745 73.7417 67.0745 68.7935C67.0745 66.1539 63.3058 63.7589 57.3218 62.1335C58.5014 60.6951 59.609 59.1559 60.6446 57.6024Z" fill="white"/>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M50.4822 59.5369C47.3055 63.0371 43.6462 66.0667 39.6148 68.5344C39.363 68.7191 39.0609 68.8228 38.7488 68.8318C38.4366 68.8408 38.1291 68.7546 37.8671 68.5847C32.1174 64.9582 27.0128 60.3981 22.7634 55.0922C17.2614 48.1876 13.7588 40.5208 12.5721 33.1344C11.3854 25.748 12.493 18.4479 16.2185 12.5934C17.7325 10.2115 19.6362 8.10114 21.85 6.35061C27.1003 2.15755 33.0843 -0.043263 39.0826 -0.000109796C43.2624 0.114812 47.3473 1.27242 50.966 3.36752C54.5847 5.46262 57.6225 8.42879 59.8033 11.9965C63.8094 18.5917 64.6724 27.0066 62.9175 35.5294C60.9702 44.4851 56.6788 52.7627 50.4822 59.5154V59.5369ZM37.9462 13.3127C40.4899 13.3127 42.9765 14.067 45.0914 15.4804C47.2063 16.8938 48.8545 18.9026 49.8277 21.2528C50.8008 23.603 51.055 26.189 50.5582 28.6838C50.0614 31.1785 48.836 33.4698 47.0368 35.268C45.2376 37.0662 42.9456 38.2904 40.4506 38.7858C37.9556 39.2811 35.3697 39.0254 33.02 38.051C30.6704 37.0766 28.6625 35.4272 27.2503 33.3115C25.8381 31.1958 25.0851 28.7088 25.0865 26.1651C25.0865 24.4767 25.4192 22.8048 26.0656 21.245C26.7119 19.6852 27.6593 18.2681 28.8535 17.0745C30.0477 15.881 31.4654 14.9344 33.0256 14.2889C34.5857 13.6435 36.2578 13.3117 37.9462 13.3127Z" fill="white"/>
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_138_1282">
+                                <rect width="76" height="83.7388" fill="white"/>
+                                </clipPath>
+                                </defs>
+                                </svg>
+                                
+                                <div>Address</div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Address Card -->
+                <!-- Account Card -->
+                <div class="col-6 user-manage-card">
+                    <a href="/editaccount" >
+                        <div class="d-flex flex-column align-content-center justify-content-center text-center">
+                            <svg width="66" height="66" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <rect width="76" height="76" fill="url(#pattern0)"/>
+                                <defs>
+                                <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                <use xlink:href="#image0_141_1298" transform="scale(0.0104167)"/>
+                                </pattern>
+                                <image id="image0_141_1298" width="96" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAADpElEQVR4nO2cTUhVQRiGT2VZZEEQSEWLStrkoiIKKqNo1V6liNYtWrmMFopotWhfWrsIjNbRsj/6JYgSCoIWBUEmVtyOpEU9MdwxxAzvPX9zZ877wIWLnHuced+Zb+bMfHOiSAghhBBCCCGEEEKIBgNYBRwDLgNPgU/AD/sx358Aw8BRc63r8gYDsA64CExSO5PWqDbX5fcWYAXQD8Qkx/SO80Cz6/p4BdAGvCQ7HgCtruvlBcB2YIzseQ+0u66fDy1/jPx4p57wf/GXA8/Jn4caE+Y3oJ/iOJdrV/Z0qhkXaMA0sMV1vRsGqvP8ohl2Xe+GAFhd50NWVpge1xKVHarLC67ojsoO1SUDVwxFZYfqwporHkVlBxh3aMBYVHaoTgldMRWVHWSAcwPGHfYAhSA0CDvvAcMOe8ClqOxQ3cN1RVdUdoAW4JsD8bUU4fhpWE/Bc3bCzAZ6UUwBm/4WQESRzV4oikFpPgdgKXC3APFNhoTSVOYDaLXZC3mhTfmFANpzMsGIv02hpwaAtcCdDMVXYla9AM0meyHlYp357SCwTC0/IcBmu1xRT9aEebAb0lQz+yfmbrN+Azy2GXTT9jNm/2ayK7qAlWrxQgghhBBCCCGEEELUCLAG2AOcAAaA68Bt4Bnw1qY0ms11w2dgAngN3LPXXgBOAoeA9RJ+4SOqHcAZ4FZO+aIfgZv2NOaRUh9PApYAB4CzwP1ZLblIftozw2bDZjewKAoZYDFwGLhiXy/TaHyw+wkdQZkBbLDd3myK+8Ib4LQ5v5yy7j12fBoFdmWnam3/fAdwreCMt6yZslubdb93COibc6+vZlKRj9r/phmOAL8Jhy/AxhTi52+CzWIY8LzFz0cF2JeB+PmZAOwEXhEelTrF76zxvtmZYDMVXLxqoKHEt1o02fBbqwnpBmbgVGCxPrH4CU0YTSP+ceAX4VFJEHaaEpowkVT8rcB3wqOScMAdSWhCT1IDisjj9222U68JfUnF30t4xMDBFOLPcGMeE8y619U51/UmEr8BzvX6MM9fqCcka/mzbvaCcKhkLP5CJnSmEt/eyMxfQyDOKOxQazjKBMIgzln8/EwgjLCzvwDxZ0gfdgIyIC6o5aef7QRoQOy9+B4bEAchvqcGxMGI76EBcVDi20L6Qhyc+LagPhAHKb4tbKMTByt+aCDx3SHxJX45QWHHuQFp0ICbFonvGNTyvTOg13GRwwKJ740BvY6LGiZI/IY3oLfIAv0B/SWYO4eRqogAAAAASUVORK5CYII="/>
+                                </defs>
+                                </svg>
+                                
+                                <div>Account</div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Account Card -->
+           
+              </div>
+                    
+            </div>
+        </div>
+ 
+      </div>
+
+    </div>
+    <!-- /MAIN -->
+
+
+
+    <!-- Footer -->
+    <%- include('include/_footer') %>
+    <!-- Footer -->
+    
+
+</body>
+
+</html>
