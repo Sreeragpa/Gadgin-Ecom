@@ -3,13 +3,13 @@ const passport = require('../configs/passport-config');
 const route = express.Router();
 
 route.post("/login",passport.authenticate('local',{
-    successRedirect:'/',
+    // successRedirect:'/',
     failureRedirect:'/login',
     failureFlash:true
 }),(req,res)=>{
-    console.log('Login succcesfully');
+    req.flash('login',true)
+    res.redirect('/')
 })
-
 
 
 module.exports = route

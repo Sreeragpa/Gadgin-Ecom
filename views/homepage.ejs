@@ -45,7 +45,7 @@
                             <%=messages.userblocked%>
                         </p>
                         <div>
-
+                            
                         </div>
                         <!-- <button id="cancelBtn">No</button> -->
                     </div>
@@ -214,39 +214,10 @@
                         </button>
                     </div>
                     <!-- /Coupon-->
+                    <div class="d-none"><input id="newlogin" type="text" value="<%=(messages.login)?'true':''%>"></div>
 
         </div>
         <!-- /MAIN -->
-        <!-- <script>
-        // Function to scroll horizontally
-        function scrollHorizontally(amount) {
-          document.body.scrollLeft += amount; // For Safari
-          document.documentElement.scrollLeft += amount; // For Chrome, Firefox, IE, and Opera
-        }
-      
-        // Show the scroll buttons when scrolling
-        window.onscroll = function() {
-          showScrollButtons();
-        };
-      
-        function showScrollButtons() {
-          var scrollLeftButton = document.getElementById("scroll-left");
-          var scrollRightButton = document.getElementById("scroll-right");
-      
-          if (document.body.scrollLeft > 20 || document.documentElement.scrollLeft > 20) {
-            scrollLeftButton.style.display = "block";
-          } else {
-            scrollLeftButton.style.display = "none";
-          }
-      
-          if (document.body.scrollLeft < document.body.scrollWidth - window.innerWidth - 20 ||
-              document.documentElement.scrollLeft < document.documentElement.scrollWidth - window.innerWidth - 20) {
-            scrollRightButton.style.display = "block";
-          } else {
-            scrollRightButton.style.display = "none";
-          }
-        }
-      </script> -->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -271,6 +242,31 @@
                     element.classList.add("hidemee");
                 }
             }, 3000);
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+        <script>
+            
+           const isnewlogin = document.getElementById('newlogin').value;
+           const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                customClass: {
+                popup: 'sign-in-toast'
+                },
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            }); 
+            if(isnewlogin=='true'){
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                });
+            }
         </script>
         <!-- Footer -->
         <%- include('include/_footer') %>
