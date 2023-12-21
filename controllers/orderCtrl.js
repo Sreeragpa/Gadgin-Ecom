@@ -80,10 +80,10 @@ exports.getallorderwithuser = async (req, res, next) => {
                 if (orders.length > 0) {
                     res.json({ orders, pageCount });
                 } else {
-                    res.json({ orders: [], pageCount });
+                    res.json({ orders: [], pageCount:0 });
                 }
             } else {
-                res.json({ orders: [], pageCount: 1 });
+                res.json({ orders: [], pageCount: 0 });
             }
 
         } catch (error) {
