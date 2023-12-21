@@ -4,7 +4,6 @@ const uuid = require('uuid');
 var orderSchema = new mongoose.Schema({
     orderid: {
         type: String,
-        default: uuid.v4().replace(/-/g, ''), 
         unique: true
     },
     userid: {
@@ -55,10 +54,13 @@ var orderSchema = new mongoose.Schema({
         type: String
     },
     address: {
-       
+       type:Object
     },
     orderquantity: {
         type: Number
+    },
+    comments:{
+        type:Object
     }
 
 })

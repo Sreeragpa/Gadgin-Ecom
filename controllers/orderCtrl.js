@@ -310,11 +310,12 @@ exports.changeorderStatus = async (req, res, next) => {
 
 exports.cancelOrder = async (req, res, next) => {
     try {
+        console.log(req.body);
         const orderid = req.params.oid;
         const pid = req.params.pid;
         const userid = req.session.passport.user;
     
-        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled' } })
+        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled','comments':req.body }, })
         if (result) {
             res.redirect('/myorders')
         }

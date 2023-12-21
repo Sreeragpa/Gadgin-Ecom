@@ -7,7 +7,8 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const axios = require('axios');
 const { validationResult } = require('express-validator');
-const generateProfilepicture = require('../services/generateProfilepicSharp')
+const generateProfilepicture = require('../services/generateProfilepicSharp');
+const uuid = require('uuid');
 
     
 
@@ -296,10 +297,10 @@ exports.checkout = async (req, res) => {
 
 
                 newOrder = new Orderdb({
+                    orderid:uuid.v4().replace(/-/g, ''),
                     userid: userid,
                     orderitems: items,
                     orderdate: Date.now(),
-                    orderstatus: 'pending',
                     address: orderaddress,
                     orderquantity: totalcartquantity,
                 })
@@ -329,10 +330,10 @@ exports.checkout = async (req, res) => {
                 };
                 // console.log(orderItem);
                 newOrder = new Orderdb({
+                    orderid:uuid.v4().replace(/-/g, ''),
                     userid: userid,
                     orderitems: [orderItem],
                     orderdate: Date.now(),
-                    orderstatus: 'pending',
                     address: orderaddress,
                     orderquantity: quantity,
                 })

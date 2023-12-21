@@ -190,6 +190,14 @@
                                                     <li class="hidden text-capitalize">Order Status:
                                                         <%=orders.orderitems[i].orderstatus%>
                                                     </li>
+													<%if(orders.comments){%>
+														<li class=" text-capitalize">
+															Reason:<%=orders.comments.reason%>
+														</li>
+														<li class=" text-capitalize">
+															Comment:<%=orders.comments.comments%>
+														</li>
+													<%}%>
                                                 </ul>
                                             </div>
                                         </div>

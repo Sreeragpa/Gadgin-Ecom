@@ -36,8 +36,8 @@
 
         <!-- MAIN -->
         <div>
-                       <!-- Sweetalert -->
-                       <div id="sweetalert-overlay-modal" class="sweetalert-overlay-modal">
+            <!-- Sweetalert -->
+            <!-- <div id="sweetalert-overlay-modal" class="sweetalert-overlay-modal">
                         <div id="sweetalert-modal" class="sweetalert-modal">
                             <p class="text-white fw-bold mt-2">Do you want to Cancel Order</p>
                             <div>
@@ -45,10 +45,48 @@
                                 <button id="noBtn" class="m-0 okBtn">No</button>
         
                             </div>
-                            <!-- <button id="cancelBtn">No</button> -->
                         </div>
+                    </div> -->
+            <!-- Sweetalert -->
+
+            <!-- Order Cancel feedback modal -->
+            <div id="sweetalert-overlay-modal"
+            class="sweetalert-overlay-modal">
+            <div id="sweetalert-modal" class="return-feedback-modal">
+                <div class="text-white fw-bold mt-2">Order Cancellation Feedback</div>
+                <form action="" method="post" id="feedback-form-cancel">
+                  <div class="text-white m-2">
+                      <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" id="flexRadioDefault1" checked value="Changed my mind">
+                          <label class="form-check-label" for="flexRadioDefault1">
+                            Changed my mind
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="reason" id="flexRadioDefault2" value="Wrong Product">
+                          <label class="form-check-label" for="flexRadioDefault2">
+                            Wrong Product
+                          </label>
+                        </div>
+                        <div class="form-floating">
+                          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="comments"></textarea>
+                          <label for="floatingTextarea">Comments</label>
+                        </div>
+           
                     </div>
-                    <!-- Sweetalert -->
+                </form>
+                
+                <div>
+                  <button type="button" class="btn btn-light" id="yesBtn">Submit</button>
+                  <button type="button" class="btn btn-light" id="noBtn">Cancel</button>
+                    <!-- <button id=""class="m-0 okBtn">Submit</button> -->
+                    <!-- <button id="" class="m-0 okBtn">Cancel</button> -->
+
+                </div>
+                <!-- <button id="cancelBtn">No</button> -->
+            </div>
+        </div>
+            <!-- Order Cancel feedback modal -->
 
             <div class="container-fluid p-0 main-div">
                 <!-- Content -->
@@ -76,7 +114,8 @@
                                     <ul>
                                         <li>Payment Method:<%=orders.paymentmethod%>
                                         </li>
-                                        <li>Order Date:<%= new Date(orders.orderdate).toLocaleString('en-IN') %></li>
+                                        <li>Order Date:<%= new Date(orders.orderdate).toLocaleString('en-IN') %>
+                                        </li>
                                         <li>Order Items:<%=orders.orderquantity%>
                                         </li>
                                     </ul>
@@ -146,7 +185,8 @@
                                                     orders.orderitems[i].orderstatus=='ordered' ){%>
                                                     <form
                                                         action="/api/order/cancel/<%=orders._id%>/<%=orders.orderitems[i].pid%>"
-                                                        method="post" class="order-cancel-form m-0" id="order-cancel-form">
+                                                        method="post" class="order-cancel-form m-0"
+                                                        id="order-cancel-form">
                                                         <button class="return-button">Cancel</button>
                                                     </form>
 
@@ -205,16 +245,18 @@
                         e.preventDefault();
                         alertmodal.style.display = 'flex';
                         document.getElementById('yesBtn').addEventListener('click', () => {
-                            cancelform.submit();
+                            console.log(cancelform.action);
+                            document.getElementById('feedback-form-cancel').action = cancelform.action;
+                            document.getElementById('feedback-form-cancel').submit();
                         })
                         document.getElementById('noBtn').addEventListener('click', () => {
                             alertmodal.style.display = 'none';
+                            document.getElementById('feedback-form-cancel').action = '';
                         })
 
                     });
-
-
                 })
+
             </script>
 
 </body>
