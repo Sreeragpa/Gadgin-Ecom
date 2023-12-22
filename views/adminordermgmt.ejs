@@ -137,6 +137,7 @@
 												<option value="delivered" <%=(query=='delivered')?"selected":''%>>Delivered</option>
 												<option value="failed" <%=(query=='failed')?"selected":''%>>Failed</option>
 												<option value="ordered" <%=(query=='ordered')?"selected":''%>>Ordered</option>
+												<option value="shipped" <%=(query=='shipped')?"selected":''%>>Shipped</option>
 										</select>
 										<!-- <button  class="search-btn submitt-btn " type="submit" >Filter</button> -->
 										
@@ -195,6 +196,7 @@
 										<select id="status" class="status" name="status" required>
 											<option value="pending" <%=(orders[i].orderitems.orderstatus=="pending")?"selected":''%>>Pending</option>
 											<option value="cancelled" <%=(orders[i].orderitems.orderstatus=="cancelled")?"selected":''%>>Cancelled</option>
+											<option value="shipped" <%=(orders[i].orderitems.orderstatus=="shipped")?"selected":''%>>Shipped</option>
 											<option value="delivered" <%=(orders[i].orderitems.orderstatus=="delivered")?"selected":''%>>Delivered</option>
 											<option value="failed" <%=(orders[i].orderitems.orderstatus=="failed")?"selected":''%>>Failed</option>
 										</select>
