@@ -473,6 +473,7 @@ exports.setcodSuccess = async (req, res) => {
     try {
         const userid = req.params.userid;
         const orderid = req.params.orderid;
+        const paymentmethod = req.query.paymentmethod;
         const order = await Orderdb.findOne({ userid: userid, _id: orderid });
 
         let flag = 0;
@@ -494,14 +495,14 @@ exports.setcodSuccess = async (req, res) => {
         if (flag == 1) {
             const changeorder = await Orderdb.findOneAndUpdate(
                 { userid: userid, _id: orderid },
-                { $set: { 'orderitems.$[].orderstatus': "failed", paymentmethod: "cod" } },
+                { $set: { 'orderitems.$[].orderstatus': "failed", paymentmethod: paymentmethod } },
                 { upsert: true }
             );
             res.send();
         } else {
             const changeorder = await Orderdb.findOneAndUpdate(
                 { userid: userid, _id: orderid },
-                { $set: { 'orderitems.$[].orderstatus': "ordered", paymentmethod: "cod" } },
+                { $set: { 'orderitems.$[].orderstatus': "ordered", paymentmethod: paymentmethod } },
                 { upsert: true }
             );
             for (const product of order.orderitems) {

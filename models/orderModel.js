@@ -65,7 +65,16 @@ var orderSchema = new mongoose.Schema({
     },
     ordervalue:{
         type:Number
+    },
+    razorpay_payment_id:{
+        type:String,
+        default:null
+    },
+    razorpay_order_id:{
+        type:String,
+        default:null
     }
+
 
 })
 

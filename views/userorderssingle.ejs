@@ -112,12 +112,16 @@
                             <div class="order-details-u-inner">
                                 <div class="order-details-u-address">
                                     <ul>
-                                        <li>Payment Method:<%=orders.paymentmethod%>
+                                        <li class="text-capitalize">Payment Method:<%=orders.paymentmethod%>
                                         </li>
                                         <li>Order Date:<%= new Date(orders.orderdate).toLocaleString('en-IN') %>
                                         </li>
                                         <li>Order Items:<%=orders.orderquantity%>
                                         </li>
+                                        <%if(orders.paymentmethod=='razorpay'){%>
+                                            <li>Payment id:<%=orders.razorpay_payment_id%>
+                                            </li>
+                                        <%}%>
                                     </ul>
                                 </div>
                             </div>
@@ -133,6 +137,17 @@
                                             <li>PIN: <%=orders.address.pincode%>
                                             </li>
                                             <li>Phone: <%=orders.address.phone%>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-details-u-inner">
+                                <div class="order-details-u-address">
+                                    <p>Order Summary</p>
+                                    <div class="address-inner">
+                                        <ul>
+                                            <li class="fw-bold">Total: ₹<%=orders.ordervalue.toLocaleString('en-IN')%>
                                             </li>
                                         </ul>
                                     </div>

@@ -242,7 +242,7 @@ exports.paymentCheck = async (req, res, next) => {
         
                 if (paymentmethod == 'cod') {
                     delete req.session.pendingorderid;
-                    const codsuccess = await axios.get(`http://localhost:3001/api/user/cod/success/${userid}/${orderid}`)
+                    const codsuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=cod`)
                     if (codsuccess.data) {
                         // const ress = await axios.get(`http://localhost:3001/api/user/cart/clearafterpurchase?userid=${userid}`);
                         await Cartdb.findOneAndUpdate({userid:userid},{$set:{cartitems:[]}});

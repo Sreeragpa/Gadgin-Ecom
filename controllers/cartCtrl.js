@@ -102,7 +102,8 @@ exports.deleteCartitem =async(req,res)=>{
         if (todeleteIndex !== -1){
             cart.cartitems.splice(todeleteIndex,1);
             await cart.save()
-            res.redirect('/cart');
+            // res.status(200).redirect('/cart');
+            res.status(200).json({ success: true, message: 'Item deleted successfully' });
         }else {
             return res.status(404).json({ message: 'Item not found in the cart' });
         }
