@@ -30,6 +30,7 @@ route.get('/manageaddress',CheckAuthenticated,isBlocked,userRender.manageAddress
 route.get('/myorders',CheckAuthenticated,isBlocked,userRender.userOrders)
 route.get('/editaccount',CheckAuthenticated,isBlocked,userRender.editAccount)
 route.get('/orders/:id',CheckAuthenticated,isBlocked,userRender.orderitemInfo)
+route.get('/wallet',userRender.userWallet)
 
 
 

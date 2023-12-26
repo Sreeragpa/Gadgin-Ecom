@@ -325,7 +325,7 @@ exports.editAccount = async (req, res, next) => {
 
 }
 
-exports.orderitemInfo = async (req, res) => {
+exports.orderitemInfo = async (req, res,next) => {
     const orderid = req.params.id;
     const userid = req.session.passport.user;
     try {
@@ -335,4 +335,8 @@ exports.orderitemInfo = async (req, res) => {
         next(error)
     }
  
+}
+
+exports.userWallet = async(req,res)=>{
+    res.render("userwallet");
 }

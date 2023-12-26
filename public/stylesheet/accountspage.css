@@ -113,6 +113,51 @@ ul {
     gap: 4px;
 }
 
+/* Wallet */
+.wallet-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.wallet-div{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    background-color: black;
+    width: 468.8px;
+    /* height: 60vh; */
+    border-radius: 12px;
+    padding: 28px;
+}
+.item-title{
+    font-size: 20px;
+}
+.font-sz-18{
+    font-size: 22px;
+}
+.wallet-config{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+.add-money-div{
+    display: flex;
+    justify-content:center ;
+    align-items: center;
+}
+.add-money-btn{
+    background-color: rgb(175, 175, 175);
+    border-radius: 12px;
+    border: none;
+    padding: 8px;
+}
+.wallet-transaction-table{
+    /* background-color: black; */
+}
+/* Wallet */
+
 @media(max-width:954px) {
     .user-details-div{
         flex-direction: column;
