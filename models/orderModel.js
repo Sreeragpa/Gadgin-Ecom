@@ -41,7 +41,8 @@ var orderSchema = new mongoose.Schema({
             },
             orderstatus: {
                 type:String
-            }
+            },
+           
         }
     ],
     orderdate: {
@@ -61,6 +62,9 @@ var orderSchema = new mongoose.Schema({
     },
     comments:{
         type:Object
+    },
+    ordervalue:{
+        type:Number
     }
 
 })

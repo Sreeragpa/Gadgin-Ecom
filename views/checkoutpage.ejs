@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/stylesheet/homestyle.css">
     <link rel="stylesheet" href="/stylesheet/accountspage.css">
     <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 </head>
 
@@ -58,10 +59,15 @@
                             <div class="card-payment">
                                 <form action="/checkout" method="post" id="checkout-form">
                                     <div class="card-payment-head">
+                                        <button type="button" id="rzp-button1"><img class="w-25"
+                                                src="/img/razorpaypng.png" alt=""></button>
+
+                                    </div>
+                                    <!-- <div class="card-payment-head">
                                         <input type="radio" class="radio-btn" name="paymentmethod" value="card" id="card-radio">
                                         <span class="transform50 sub-title">Card</span>
-                                    </div>
-                                    <div class="mt-3 d-flex flex-column">
+                                    </div> -->
+                                    <!-- <div class="mt-3 d-flex flex-column">
                                         <div class="mt-1">
                                             <div>
                                                 <label for="cardnumber">Card number</label>
@@ -89,15 +95,16 @@
                                             </div>
                                             <input type="text" name="cardnumber" class="mt-1 input-box-cardpayment width-50 width-100">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="mt-3">
                                         <div class="card-payment-head">
-                                            <input type="radio" class="radio-btn" name="paymentmethod" value="cod" id="cod-radio" >
+                                            <input type="radio" class="radio-btn" name="paymentmethod" value="cod"
+                                                id="cod-radio">
                                             <span class="transform50 sub-title">Cash on Delivery</span>
                                         </div>
                                     </div>
                                     <span id="paymentmethod-error" class="text-danger mt-1"></span>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -107,8 +114,12 @@
                         </div>
 
                         <div class="calc-div-row">
-                            <div><span>Price:(<span id="count"><%=productpricedetails.count%></span>)</span></div>
-                            <div>₹<span id="totalmrp"><%=productpricedetails.mrp%></span></div>
+                            <div><span>Price:(<span id="count">
+                                        <%=productpricedetails.count%>
+                                    </span>)</span></div>
+                            <div>₹<span id="totalmrp">
+                                    <%=productpricedetails.mrp%>
+                                </span></div>
                         </div>
                         <div class="calc-div-row">
                             <div><span>Shipping:</span></div>
@@ -125,7 +136,9 @@
                         <hr>
                         <div class="calc-div-row fw-bold">
                             <div><span>Total:</span></div>
-                            <div>₹<span id="total"><%=productpricedetails.price%></span></div>
+                            <div>₹<span id="total">
+                                    <%=productpricedetails.price%>
+                                </span></div>
                         </div>
                         <div class="calc-div-row">
                             <div><input class="coupon-input" type="text" placeholder="Coupon Code"></div>
@@ -135,7 +148,7 @@
                             <button class="payment-btn fw-bold" id="payment-btn">Proceed to Payment</button>
                         </div>
                     </div>
-                </form>
+                    </form>
                 </div>
                 <!-- /Cart Content -->
 
@@ -156,18 +169,86 @@
             <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <script src="/js/cartupdateAJAX.js"></script>
             <script>
-                document.getElementById('payment-btn').addEventListener('click',(e)=>{
-                   
-                    let flag=0;
+                document.getElementById('payment-btn').addEventListener('click', (e) => {
+
+                    let flag = 0;
                     const cod = document.getElementById('cod-radio');
                     const card = document.getElementById('card-radio');
-                    if(!cod.checked && !card.checked){
+                    if (!cod.checked && !card.checked) {
                         e.preventDefault();
-                        flag=1;
-                        document.getElementById('paymentmethod-error').innerHTML="Select a Payment Method"
+                        flag = 1;
+                        document.getElementById('paymentmethod-error').innerHTML = "Select a Payment Method"
                     }
                 })
-                
+
+            </script>
+
+            <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+            <script>
+
+
+                document.getElementById('rzp-button1').onclick = async function (e) {
+                    e.preventDefault();
+
+                    let response = await fetch('api/user/payment/123',{
+                        method:'POST',
+                        headers:{
+                            "Content-type":"application/json"
+                        }
+                    })
+
+                    const orderData = await response.json();
+                    console.log(orderData);
+
+                    var options = {
+                    "key": "rzp_test_9MbG2FIUatrMFy", // Enter the Key ID generated from the Dashboard
+                    "amount": orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "currency": "INR",
+                    "name": "GADGIN",
+                    "description": "Test Transaction",
+                    // "image": "https://example.com/your_logo",
+                    "order_id": orderData.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "handler": function (response) {
+                        alert(response.razorpay_payment_id);
+                        alert(response.razorpay_order_id);
+                        alert(response.razorpay_signature)
+                    },
+                    // "prefill": {
+                    //     "name": "Gaurav Kumar",
+                    //     "email": "gaurav.kumar@example.com",
+                    //     "contact": "9000090000"
+                    // },
+                    // "notes": {
+                    //     "address": "Razorpay Corporate Office"
+                    // },
+                    "theme": {
+                        "color": "#050505"
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                // rzp1.on('payment.failed', function (response) {
+                //     alert(response.error.code);
+                //     alert(response.error.description);
+                //     alert(response.error.source);
+                //     alert(response.error.step);
+                //     alert(response.error.reason);
+                //     alert(response.error.metadata.order_id);
+                //     alert(response.error.metadata.payment_id);
+                // });
+
+
+
+
+
+
+
+                    rzp1.open();
+                }
+
+
+
+             
+
             </script>
 
 </body>

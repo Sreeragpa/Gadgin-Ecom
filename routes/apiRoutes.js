@@ -8,6 +8,7 @@ const { CheckAuthenticated, CheckNotauthenticated } = require('../middlewares/au
 const {isBlocked} = require('../middlewares/userBlockMiddleware');
 const store = require('../services/multer');
 const validation = require('../middlewares/validationMiddleware');
+const paymentCtrl = require('../controllers/PaymentCtrl')
 
 // User
 route.post('/register',validation.strongPassword,userCtrl.create)
@@ -60,6 +61,10 @@ route.post('/checkout/:id',userCtrl.checkout)
 route.get('/user/getorders/:userid/:orderid',orderCtrl.getOrders)
 route.get('/user/getorders/products/:userid/:orderid',orderCtrl.getOrderProducts)
 route.get('/user/cod/success/:userid/:orderid',userCtrl.setcodSuccess)
+
+
+// Razorpay 
+route.post('/user/payment/:orderid',CheckAuthenticated,paymentCtrl.payment)
 
 
 

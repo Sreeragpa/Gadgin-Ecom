@@ -1,7 +1,8 @@
 const axios = require('axios');
 const Userdb = require('../models/userModel');
 const Cartdb = require('../models/cartModel');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Orderdb = require('../models/orderModel');
 
 exports.homepage = (req, res) => {
 
@@ -206,6 +207,8 @@ exports.checkoutPage = async (req, res, next) => {
                 discount: discount,
                 count: count
             }
+            const result = await Orderdb.findOneAndUpdate({_id:orderid,userid:userid},{$set:{'ordervalue':price}});
+            console.log(result);
             if (orderid) {
                 res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails });
             } else {
@@ -227,7 +230,7 @@ exports.paymentCheck = async (req, res, next) => {
     // const orderid = req.params.id;
     const orderid = req.session.pendingorderid;
     const userid = req.session.passport.user;
-    delete req.session.pendingorderid;
+    
 
     if (!orderid) {
         res.redirect('/');
@@ -238,6 +241,7 @@ exports.paymentCheck = async (req, res, next) => {
             if (order) {
         
                 if (paymentmethod == 'cod') {
+                    delete req.session.pendingorderid;
                     const codsuccess = await axios.get(`http://localhost:3001/api/user/cod/success/${userid}/${orderid}`)
                     if (codsuccess.data) {
                         // const ress = await axios.get(`http://localhost:3001/api/user/cart/clearafterpurchase?userid=${userid}`);
@@ -251,9 +255,12 @@ exports.paymentCheck = async (req, res, next) => {
                     }
     
                 } else if (paymentmethod == 'card') {
-                    res.send("Card payment is not available now")
+                    // res.send("Card payment is not available now")
+                    const razpayOrder = await axios.get(`http://localhost:3001/api/user/payment/${orderid}`)
+                    console.log(razpayOrder.data);
                 }
             } else {
+                delete req.session.pendingorderid;
                 res.send('Error')
             }
         } catch (error) {

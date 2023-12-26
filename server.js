@@ -13,6 +13,7 @@ const passport = require('./configs/passport-config');
 const session = require('express-session')
 const flash = require('express-flash');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const cors = require('cors')
 dbConnect();
 
 app.use(session({
@@ -27,6 +28,7 @@ app.use(passport.session())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(cors())
 app.use(methodOverride('_method'));
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname,'public')))
