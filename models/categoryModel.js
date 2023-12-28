@@ -6,6 +6,10 @@ var categorySchema = new mongoose.Schema({
     },
     images: {
         type: String,
+    },
+    unlisted:{
+        type:Boolean,
+        default:false,
     }
 
 })

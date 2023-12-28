@@ -3,8 +3,9 @@ const axios = require('axios');
 exports.loginpage = (req, res) => {
     res.render('adminlogin.ejs')
 }
-exports.admindash = (req, res) => {
-    res.render('admindash.ejs')
+exports.admindash = async(req, res) => {
+    const dashdetails = await admindashdetails();
+    res.render('admindash.ejs',{dashdetails:dashdetails})
 }
 
 exports.loginvalidate = (req, res) => {
@@ -101,4 +102,65 @@ exports.ordersmgmtsingle = async (req, res, next) => {
 
 }
 
+
+const Userdb = require('../models/userModel');
+const Orderdb = require('../models/orderModel');
+async function admindashdetails(){
+    const usersCount = await Userdb.countDocuments();
+    const Totalsales = await Orderdb.aggregate([{
+        $group:{
+            _id:null,
+            sales:{$sum:"$ordervalue"},
+            orders:{$sum:1}
+        }
+    }]);
+    let dashdetails ;
+
+    if(usersCount && Totalsales){
+        const {sales,orders} = Totalsales[0];
+         dashdetails = {
+            users:usersCount,
+            orders:orders,
+            sales:sales
+        }
+    }else{
+         dashdetails = {
+            users:0,
+            orders:0,
+            sales:0
+        }
+    }
+  
+
+    return dashdetails;
+}
+
+async function orderdetails(){
+    const orders = await Orderdb.aggregate([
+        {
+            $group:{
+                _id:"$orderdate",
+                // count:{$sum:"$orderquantity"},
+                count:{$sum:1},
+                // dates:{ $addToSet: "$orderdate" }
+            }
+        },
+      
+    ])
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug' ,'Sep', 'Oct', 'Nov', 'Dec'];
+    let ordersbymonth = {
+        Jan:0,Feb:0, Mar:0, Apr:0, May:0, Jun:0, Jul:0, Aug:0 ,Sep:0, Oct:0, Nov:0, Dec:0
+    }
+    orders.forEach((order)=>{
+        // console.log(order._id.getMonth()+1);
+        month = labels[(order._id.getMonth())]
+        ordersbymonth[month] += order.count;
+        
+
+    })
+    console.log(Object.values(ordersbymonth));
+    console.log(Object.keys(ordersbymonth));
+
+    return ordersbymonth
+}
 

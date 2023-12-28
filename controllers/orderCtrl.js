@@ -1,6 +1,12 @@
+const async = require('hbs/lib/async');
 const Orderdb = require('../models/orderModel');
 const Userdb = require('../models/userModel');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const CsvParser = require('json2csv').Parser;
+
+// const csv = require('csvtojson')
+
+
 exports.getallOrders = async (req, res) => {
     const orders = await Orderdb.find({}).sort({ orderdate: -1 });
     res.send(orders)
@@ -361,4 +367,68 @@ exports.getSingleOrder = async(req,res,next)=>{
         next(error)
     }
   
+}
+
+exports.salesReport = async(req,res,next)=>{
+    try {
+
+        const Orders = [];
+
+        const Orderdata = await Orderdb.aggregate([
+            {
+                $unwind:"$orderitems"
+            }
+        ])
+
+        Orderdata.forEach((order)=>{
+            const {orderid,orderitems,orderdate,paymentmethod} = order;
+            const productname = orderitems.name;
+            const price= orderitems.price;
+            const quantity = orderitems.quantity;
+            const orderDate = orderdate.toISOString().split('T')[0];
+            Orders.push({orderid,orderDate,productname,price,quantity,paymentmethod})
+        });
+
+        const csvFields = ['Order id',"Order Date","Product","Price","Quantity","Payment Method"];
+
+        const csvParser = new CsvParser({csvFields});
+        const csvData = csvParser.parse(Orders);
+
+        res.setHeader("Content-type","text/csv")
+        res.setHeader("Content-Disposition","attachment: filename=OrderData.csv");
+
+        res.status(200).end(csvData);
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.ordersreportforgraph = async(req,res,next)=>{
+    const orders = await Orderdb.aggregate([
+        {
+            $group:{
+                _id:"$orderdate",
+                // count:{$sum:"$orderquantity"},
+                count:{$sum:1},
+                // dates:{ $addToSet: "$orderdate" }
+            }
+        },
+      
+    ])
+    // const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug' ,'Sep', 'Oct', 'Nov', 'Dec'];
+    // let ordersbymonth = {
+    //     Jan:0,Feb:0, Mar:0, Apr:0, May:0, Jun:0, Jul:0, Aug:0 ,Sep:0, Oct:0, Nov:0, Dec:0
+    // }
+    // orders.forEach((order)=>{
+    //     // console.log(order._id.getMonth()+1);
+    //     month = labels[(order._id.getMonth())]
+    //     ordersbymonth[month] += order.count;
+        
+
+    // })
+    // console.log(Object.values(ordersbymonth));
+    // console.log(Object.keys(ordersbymonth));
+
+    res.send(orders)
 }

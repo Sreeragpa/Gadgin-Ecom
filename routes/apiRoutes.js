@@ -61,11 +61,15 @@ route.post('/checkout/:id',userCtrl.checkout)
 route.get('/user/getorders/:userid/:orderid',orderCtrl.getOrders)
 route.get('/user/getorders/products/:userid/:orderid',orderCtrl.getOrderProducts)
 route.get('/user/order/success/:userid/:orderid',userCtrl.setcodSuccess)
+route.get('/admin/salesreport',orderCtrl.salesReport);
+route.get('/admin/ordersreportforgraph',orderCtrl.ordersreportforgraph);
+
 
 
 // Razorpay 
 route.post('/user/payment',CheckAuthenticated,paymentCtrl.payment)
-route.post('/user/payment/verify',CheckAuthenticated,paymentCtrl.paymentVerification)
+route.post('/user/payment/verify',CheckAuthenticated,paymentCtrl.paymentVerification);
+
 
 
 

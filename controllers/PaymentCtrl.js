@@ -20,7 +20,6 @@ exports.payment = async (req, res) => {
         receipt: "order_rcptid_11"
     };
     let order = await instance.orders.create(options, function (err, order) {
-        console.log(order);
         res.status(201).json({
             success: true,
             order,
@@ -46,10 +45,11 @@ exports.paymentVerification = async (req, res) => {
     const isValid = generated_signature === razorpay_signature;
 
     if(isValid){
+        delete req.session.pendingorderid;
         const ordersuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=razorpay`);
 
         if(ordersuccess.data){
-            const order = await Orderdb.findOneAndUpdate({_id:orderid},{$set:{razorpay_payment_id:razorpay_payment_id,razorpay_order_id:razorpay_order_id}},{upsert:true});
+            const order = await Orderdb.findOneAndUpdate({_id:orderid},{$set:{razorpay_payment_id:razorpay_payment_id,razorpay_order_id:razorpay_order_id,razorpay_signature:razorpay_signature}},{upsert:true});
             res.status(200).render('paymentstatuspage.ejs', { paymentstatus: "Order Success", orderdetails: order });
         }else {
             res.render('paymentstatuspage.ejs', { paymentstatus: "Order Failed" })
