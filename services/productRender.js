@@ -70,7 +70,8 @@ exports.productsbyCategory = async (req, res,next) => {
         req.flash('cartcount',cartcount.data.itemCount)
     }
     if (req.query.category) {
-        axios.get(`http://localhost:3001/api/products?category=${req.query.category}`)
+        if(req.query.sortBy){
+            axios.get(`http://localhost:3001/api/products?category=${req.query.category}&sortBy=${req.query.sortBy}`)
             .then(function (response) {
                 if (!response.data) {
                     res.send("No products")
@@ -81,6 +82,20 @@ exports.productsbyCategory = async (req, res,next) => {
             }).catch(error => {
                 next(error)
             })
+        }else{
+
+            axios.get(`http://localhost:3001/api/products?category=${req.query.category}`)
+                .then(function (response) {
+                    if (!response.data) {
+                        res.send("No products")
+                    } else {
+                        res.render('productpage.ejs', { products: response.data, isInCart: null })
+                    }
+    
+                }).catch(error => {
+                    next(error)
+                })
+        }
     } else {
         axios.get(`http://localhost:3001/api/products`)
             .then(function (response) {

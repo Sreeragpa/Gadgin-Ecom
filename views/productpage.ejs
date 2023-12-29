@@ -38,8 +38,8 @@
                         <label for="category">Category:</label>
                         <select id="category" name="category" class="select-sty">
                             <option value="all">All Categories</option>
-                            <option value="mobile">Mobiles</option>
-                            <option value="laptop">Laptops</option>
+                            <option value="mobile" <%=(products[0].category=="mobile")?"selected":""%>>Mobiles</option>
+                            <option value="laptop" <%=(products[0].category=="laptop")?"selected":""%>>Laptops</option>
                             <!-- Add more categories as needed -->
                         </select>
                     </div>

@@ -10,18 +10,36 @@ const { log } = require('console');
 const Cartdb = require('../models/cartModel');
 exports.getProducts = async (req, res) => {
     if (req.query.category) {
-        try {
-            const category = req.query.category;
-            const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false })
-            if (products.length === 0) {
-                const nop = false;
-                res.send();
-            } else {
-                res.send(products)
+        if(req.query.sortBy){
+            try {
+                const category = (req.query.category=="all")?"":req.query.category;
+                const sortby = (req.query.sortBy=="priceLowToHigh")?1:-1;
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).sort({price:sortby})
+                if (products.length === 0) {
+                    const nop = false;
+                    res.send();
+                } else {
+                    res.send(products)
+                }
+            } catch (error) {
+                console.error("Error in getProductcategory:", error);
+                res.status(500).send({ error: "Internal Server Error" });
             }
-        } catch (error) {
-            console.error("Error in getProductcategory:", error);
-            res.status(500).send({ error: "Internal Server Error" });
+        }else{
+
+            try {
+                const category = req.query.category;
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false })
+                if (products.length === 0) {
+                    const nop = false;
+                    res.send();
+                } else {
+                    res.send(products)
+                }
+            } catch (error) {
+                console.error("Error in getProductcategory:", error);
+                res.status(500).send({ error: "Internal Server Error" });
+            }
         }
 
 
@@ -138,14 +156,15 @@ exports.addProductsfromUnlisted = async (req, res) => {
 exports.addategoryFromUnlisted = async (req, res) => {
     try {
         const id = req.params.id;
-        const categoryToMove = await UnlistedCategorydb.findById(id)
+        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:false}},{ new: true })
+        // const categoryToMove = await UnlistedCategorydb.findById(id)
 
-        const newCate = new Categorydb({
-            categoryName: categoryToMove.categoryName,
-            images: categoryToMove.images
-        })
-        await newCate.save()
-        await UnlistedCategorydb.findByIdAndDelete(id)
+        // const newCate = new Categorydb({
+        //     categoryName: categoryToMove.categoryName,
+        //     images: categoryToMove.images
+        // })
+        // await newCate.save()
+        // await UnlistedCategorydb.findByIdAndDelete(id)
         res.redirect('/admin/categorymgmt');
     } catch (error) {
         console.error("Error in addcategoryFromUnlisted:", error);
@@ -210,16 +229,18 @@ exports.deleteProducts = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
     try {
         const id = req.params.id;
-        const productToMove = await Categorydb.findById(id);
-        const newCate = new UnlistedCategorydb({
-            categoryName: productToMove.categoryName,
-            images: productToMove.images
-        })
-        await newCate.save()
+        console.log(id);
+        // const productToMove = await Categorydb.findById(id);
+        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:true}},{ new: true })
+        // const newCate = new UnlistedCategorydb({
+        //     categoryName: productToMove.categoryName,
+        //     images: productToMove.images
+        // })
+        // await newCate.save()
 
-        const deletesuccess = await Categorydb.findByIdAndDelete(id);
+        // const deletesuccess = await Categorydb.findByIdAndDelete(id);
 
-        if (deletesuccess) {
+        if (result) {
             res.status(200).redirect('/admin/categorymgmt');
         } else {
             console.log('Category not found.');
@@ -292,7 +313,7 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategory = async (req, res) => {
     try {
-        const categories = await Categorydb.find()
+        const categories = await Categorydb.find({unlisted:false})
         res.send(categories)
     } catch (error) {
         console.error('Error getCategory:', error);
@@ -302,7 +323,7 @@ exports.getCategory = async (req, res) => {
 }
 exports.getUnlistedCategory = async (req, res) => {
     try {
-        const categories = await UnlistedCategorydb.find()
+        const categories = await Categorydb.find({unlisted:true})
         res.send(categories)
     } catch (error) {
         console.error('Error getUnlistedCategory:', error);
