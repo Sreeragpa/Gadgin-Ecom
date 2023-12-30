@@ -130,9 +130,10 @@
                                                             </div>
 
                                         </div>
-                                        <div class="">
-                                            <a href="/dkmdk">
-                                                <i class="fa-regular fa-heart fa-lg favourite-span"
+                                        <div class="mywishlist" id="mywishlist">
+                                            <a href="/api/wishlist/<%=products[i]._id%>" class="add-wishlist"
+                                                id="finder<%=i%>">
+                                                <i class=" <%=(wishlist.has(products[i]._id))?"fa-solid text-danger":"fa-regular"%> fa-heart fa-lg favourite-span"
                                                     style="color: #ffffff; font-size: 20px;"></i>
                                             </a>
 
@@ -220,7 +221,33 @@
         <!-- /MAIN -->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            document.querySelectorAll(".add-wishlist").forEach((element)=>{
+                element.addEventListener('click',(e)=>{
+                    e.preventDefault()
+                    const href = element.getAttribute('href');
+                    $.ajax({
+                        url:href,
+                        method:"GET",
+                        success: function (data) {
+                   const samepage = $(data).find('#mywishlist').html();
 
+                   if(samepage){
+                    const finder = element.getAttribute('id');
+                    console.log(finder);
+                    const newelement = $(data).find(`#${finder}`);
+                    console.log(newelement);
+                    $(element).html(newelement.html());
+                   }
+                },
+                error: function () {
+                    // Handle error if the content cannot be loaded
+                    console.error('Failed to load content.');
+                }
+                    })
+                })
+            })
+        </script>
         <script>
             $("#btn1").click(function () {
                 var currentScrollLeft = $("#myDiv").scrollLeft();
@@ -246,7 +273,9 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
         <script>
             
-           const isnewlogin = document.getElementById('newlogin').value;
+        //    const isnewlogin = document.getElementById('newlogin').value;
+           const isnewlogin = '<%=messages.login%>';
+           console.log(isnewlogin);
            const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",

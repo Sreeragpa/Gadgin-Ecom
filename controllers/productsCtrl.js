@@ -1,9 +1,9 @@
 const axios = require('axios');
 const Productdb = require('../models/productModel')
-const UnlistedProductdb = require('../models/UnlistedproductModel');
+
 const store = require('../services/multer');
 const Categorydb = require('../models/categoryModel');
-const UnlistedCategorydb = require('../models/UnlistedcategoryModel');
+
 const fs = require('fs');
 const path = require('path');
 const { log } = require('console');
@@ -157,14 +157,6 @@ exports.addategoryFromUnlisted = async (req, res) => {
     try {
         const id = req.params.id;
         const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:false}},{ new: true })
-        // const categoryToMove = await UnlistedCategorydb.findById(id)
-
-        // const newCate = new Categorydb({
-        //     categoryName: categoryToMove.categoryName,
-        //     images: categoryToMove.images
-        // })
-        // await newCate.save()
-        // await UnlistedCategorydb.findByIdAndDelete(id)
         res.redirect('/admin/categorymgmt');
     } catch (error) {
         console.error("Error in addcategoryFromUnlisted:", error);
@@ -230,15 +222,9 @@ exports.deleteCategory = async (req, res) => {
     try {
         const id = req.params.id;
         console.log(id);
-        // const productToMove = await Categorydb.findById(id);
-        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:true}},{ new: true })
-        // const newCate = new UnlistedCategorydb({
-        //     categoryName: productToMove.categoryName,
-        //     images: productToMove.images
-        // })
-        // await newCate.save()
 
-        // const deletesuccess = await Categorydb.findByIdAndDelete(id);
+        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:true}},{ new: true })
+
 
         if (result) {
             res.status(200).redirect('/admin/categorymgmt');
@@ -263,7 +249,7 @@ exports.deleteImage = async (req, res) => {
         const img = product.images[index];
         product.images.splice(index, 1);
         imgfilepath = path.join(__dirname, '../' + '/public' + img)
-        console.log(imgfilepath);
+      
         // fs.unlink(imgfilepath, (err) => {
         //     if (err) {
         //         console.log(err);

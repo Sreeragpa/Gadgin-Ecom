@@ -2,6 +2,7 @@ const route = require('express').Router();
 const userCtrl = require('../controllers/userCtrl')
 const otpCtrl = require('../controllers/otpCtrl')
 const productCtrl = require('../controllers/productsCtrl')
+const wishlistCtrl = require('../controllers/wishlistCtrl')
 const orderCtrl = require('../controllers/orderCtrl')
 const cartCtrl = require('../controllers/cartCtrl')
 const { CheckAuthenticated, CheckNotauthenticated } = require('../middlewares/authMiddleware');
@@ -33,6 +34,11 @@ route.post('/user/addaddress',validation.checkAddress,userCtrl.addAddress)
 route.patch('/user/address/makedefault/:id',userCtrl.makeaddressDefault)
 route.get('/getusers',userCtrl.getuser)
 route.get('/user/cartcount/:id',userCtrl.getcartCount)
+// Wishlist
+route.get('/wishlist/:pid',CheckAuthenticated,wishlistCtrl.addtoWishlist)
+route.get('/getwishlist/:id',wishlistCtrl.getWishlist)
+
+
 
 // Product
 route.get('/products',productCtrl.getProducts )

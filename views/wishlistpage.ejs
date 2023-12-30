@@ -1,0 +1,175 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link href="https://cdn.jsdelivr.net/npm/boosted@5.3.2/dist/css/boosted.min.css" rel="stylesheet" integrity="sha384-fyenpx19UpfUhZ+SD9o9IdxeIJKE6upKx0B54OcXy1TqnO660Qw9xw6rOASP+eir" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+    <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+
+</head>
+
+<body>
+
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+    <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <div class="container-fluid p-0 main-div mm">
+            <!-- Content -->
+            <div class="inner-content-div-user text-white">
+
+                <!-- Cart Heading -->
+                <div class="cart-heading gap-2">
+                    <div class="">
+                        <h4 class="m-0">Wishlist</h4>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-heart mb-0"></i>
+                    </div>
+                </div>
+                <hr>
+                <!-- / Cart Heading -->
+                <!-- Cart Content -->
+                <div class="cart-content">
+                    <div class="cart-items">
+                       <%if(true){%>
+                           <!-- <div class="mb-2">
+                               <form action="/api/user/cart/clear?_method=DELETE" method="post">
+                                   <button class="clear-btn text-white">Clear Cart<i class="fa-solid fa-arrows-rotate" style="color: #ffffff;"></i></button>  
+                               </form>
+                           </div> -->
+                           
+                       <%}%>
+                 
+                       <!-- Cart-item-card -->
+                       <%if(products){%>
+                           <% for(let i=0;i<products.length;i++){%>
+                               <div class="cart-item-card">
+                                   <div class="img-div">
+                                       <img class=" cart-item-img" src="<%=products[i].images[0]%>">
+                                   </div>
+                                   <div class="product-details-div">
+                                       <div class="product-details-first">
+                                           <span class="fw-bold wrap-text-100 pdt-title"><%=products[i].name%></span>
+                                           <!-- Mobile -->
+                                           <div class="price-details-mobile">
+                                               <div class="product-details-second">
+                                                   <ul class="d-flex gap-2 align-items-center">
+                                                        <li class="fw-bold" ><input type="number" id="price" class="d-none" value="<%=products[i].price%>">₹<%=products[i].price%></li>
+                                                        <li><s class="small-text" ><input type="number" id="mrp" class="d-none" value="<%=products[i].mrp%>">₹<%=products[i].mrp%></s></li>
+                                                        <li><input type="number" id="discountp" class="d-none" value="<%=products[i].discount%>"><%=products[i].discount%>%</li>
+                                                   </ul>
+                                                </div>
+                                                <div class="remove-btn-div-mobile mt-2">
+                                                   <form action="/api/wishlist/<%=products[i]._id%>" method="get">
+                                                       <button class="remove-btn"  ><i class="fa-solid fa-xmark"></i></button>
+                                                   </form>
+                                                   
+                                                </div>
+                                           </div>
+                                           <!-- Mobile -->
+                                       </div>
+                                       <div class="product-details-second hideme">
+                                          <ul>
+                                               <li class="fw-bold"><%=products[i].price%></li>
+                                               <li><s class="small-text"><%=products[i].mrp%></s></li>
+                                               <li> <%=products[i].discount%>%</li>
+                                          </ul>
+                                       </div>
+                                       <div class="product-details-third hideme">
+                                           <form action="/api/wishlist/<%=products[i]._id%>" method="get">
+                                               <button class="remove-btn" ><i class="fa-solid fa-xmark"></i></button>
+                                           </form>
+                                           <form action="/api/user/addtocart/6566ba67f8ef40d64f992c49" method="post">
+                                            <button class="addtocart bold-500" type="submit" id=""> Add to Cart</button>
+                                        </form>
+                                       </div>
+                                   </div>
+                               </div>
+                               <%}%>
+                       <%}else{%>
+                           <div>No item</div>
+                       <%}%>
+                       
+                        <!-- Cart-item-card -->
+
+                    </div>
+                  
+               </div>
+                <!-- /Cart Content -->
+                
+        </div>
+                	<!-- MODAL -->
+		        <div id="continue-overlay">
+			        <div id="modal">
+			       
+			        <button id="cancelBtn">Ok</button>
+			        </div>
+		        </div>
+		            <!-- MODAL -->
+                
+            </div>
+            
+            <!-- /Content -->
+	
+        <!-- /MAIN -->
+
+
+
+        <!-- Footer -->
+        <%- include('include/_footer') %>
+        <!-- Footer -->
+      
+        <script>
+            const overlay = document.getElementById('continue-overlay');
+            document.getElementById('preventbtn').addEventListener('click',(e)=>{
+                e.preventDefault();
+                overlay.style.display = 'flex';
+                document.getElementById('cancelBtn').addEventListener('click',(e)=>{
+                    overlay.style.display = '';
+                })
+            })
+        </script>
+        <script>
+    //          async function deleteCartItem(itemId) {
+    //     try {
+    //         const response = await fetch(`/api/cart/delete/${itemId}`, {
+    //             method: 'DELETE',
+    //         });
+
+    //         if (response.ok) {
+    //             location.reload(); 
+    //         } else {
+    //             console.error('Failed to delete item from cart');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error deleting item from cart:', error);
+    //     }
+    // }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        
+        <script src="/js/cartupdateAJAX.js"></script>
+        
+    </body>
+
+</html>

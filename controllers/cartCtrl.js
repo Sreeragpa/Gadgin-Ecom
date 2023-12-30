@@ -93,6 +93,7 @@ exports.getCart =async(req,res)=>{
 
 exports.deleteCartitem =async(req,res)=>{
     try {
+        
         const pid = req.params.id;
         const userid = req.session.passport.user;
         const cart = await cartDb.findOne({userid});

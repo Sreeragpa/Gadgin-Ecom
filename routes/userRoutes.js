@@ -31,6 +31,7 @@ route.get('/myorders',CheckAuthenticated,isBlocked,userRender.userOrders)
 route.get('/editaccount',CheckAuthenticated,isBlocked,userRender.editAccount)
 route.get('/orders/:id',CheckAuthenticated,isBlocked,userRender.orderitemInfo)
 route.get('/wallet',userRender.userWallet)
+route.get('/wishlist',CheckAuthenticated,isBlocked,userRender.userWishlist)
 
 
 
