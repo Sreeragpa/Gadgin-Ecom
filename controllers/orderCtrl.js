@@ -1,4 +1,3 @@
-const async = require('hbs/lib/async');
 const Orderdb = require('../models/orderModel');
 const Userdb = require('../models/userModel');
 const mongoose = require('mongoose');
