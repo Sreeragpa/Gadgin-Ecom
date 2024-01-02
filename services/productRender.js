@@ -96,14 +96,27 @@ exports.productsbyCategory = async (req, res,next) => {
                     next(error)
                 })
         }
-    } else {
-        axios.get(`http://localhost:3001/api/products`)
-            .then(function (response) {
-                console.log(response);
+    } else if(req.query.search){
+        
+        axios.get(`http://localhost:3001/api/products?search=${req.query.search}`)
+        .then(function (response) {
+            if (!response.data) {
+                res.send("No products")
+            } else {
                 res.render('productpage.ejs', { products: response.data, isInCart: null })
-            }).catch(err => {
-                next(error)
-            })
+            }
+
+        }).catch(error => {
+            next(error)
+        })
+    }else{
+        axios.get(`http://localhost:3001/api/products`)
+        .then(function (response) {
+            console.log(response);
+            res.render('productpage.ejs', { products: response.data, isInCart: null })
+        }).catch(err => {
+            next(error)
+        })
     }
 }
 

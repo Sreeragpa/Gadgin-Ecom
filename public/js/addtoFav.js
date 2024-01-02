@@ -4,7 +4,7 @@ document.querySelectorAll(".add-wishlist").forEach((element)=>{
         const href = element.getAttribute('href');
         $.ajax({
             url:href,
-            method:"GET",
+            method:"PUT",
             success: function (data) {
        const samepage = $(data).find('#mywishlist').html();
 

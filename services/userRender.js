@@ -117,7 +117,6 @@ exports.changepassword = (req, res) => {
 exports.newaccount = (req, res) => {
     if (req.session?.email) {
         res.render('finalreg.ejs', { email: req.session.email });
-        req.session.destroy()
     } else {
         res.render('errorpage.ejs');
     }

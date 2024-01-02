@@ -53,7 +53,22 @@ exports.getProducts = async (req, res) => {
             res.status(500).send({ error: "Internal Server Error" });
         }
     }
-    else {
+    else if(req.query.search){
+        try {
+            const products = await Productdb.find({
+                unlisted: false,
+                $or: [
+                    { name: { $regex: req.query.search, $options: 'i' } },
+        
+                ]
+            });
+            console.log(products);
+            res.send(products)
+        } catch (error) {
+            console.error("Error in getProducts:", error);
+            res.status(500).send({ error: "Internal Server Error" });
+        }
+    }else{
         try {
             const products = await Productdb.find({ unlisted: false });
             res.send(products)
@@ -61,7 +76,6 @@ exports.getProducts = async (req, res) => {
             console.error("Error in getProducts:", error);
             res.status(500).send({ error: "Internal Server Error" });
         }
-
     }
     // if(req.query.search){
     //     const name = req.query.search;

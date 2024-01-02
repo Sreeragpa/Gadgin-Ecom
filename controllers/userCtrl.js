@@ -20,10 +20,11 @@ exports.create = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         req.flash('error', "Password should be Strong");
-        req.session.email = req.body.email;
+        // req.session.email = req.body.email;
         return res.redirect('/newaccount')
     }
-    const existingUser = await Userdb.findOne({ email: req.body.email });
+    const email = req.session.email;
+    const existingUser = await Userdb.findOne({ email: email });
 
     const existingPhone = await Userdb.findOne({ phone: req.body.phone });
 
@@ -32,15 +33,16 @@ exports.create = async (req, res) => {
         res.render("userlogin.ejs", { messages: { error: "User Already exists" } })
     } else if (existingPhone) {
         // res.render("userlogin.ejs",{messages:{error:"Phone already exists"}})
-        res.render('finalreg.ejs', { email: req.body.email, messages: { error: "Phone already exists" } })
+        res.render('finalreg.ejs', { email: email, messages: { error: "Phone already exists" } })
     } else {
         try {
+            
             const filename = await generateProfilepicture.generateProfilepicture(req.body.name[0]);
             console.log(filename);
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             const user = new Userdb({
                 name: req.body.name,
-                email: req.body.email,
+                email: email,
                 password: hashedPassword,
                 phone: req.body.phone,
                 profileimg:filename
@@ -49,6 +51,7 @@ exports.create = async (req, res) => {
             await user.save()
                 .then(async() => {
                     // res.render('successpage.ejs', { messages: "Registered Successfully" });
+                    req.session.email=null;
                     req.flash('success', "User Registered");
                     res.redirect('/login');
                 })

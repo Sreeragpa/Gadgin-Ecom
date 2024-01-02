@@ -206,6 +206,7 @@ ul {
     .profile-image-div{
         display: flex;
         justify-content: center;
+        flex-direction: column;
     }
 
 

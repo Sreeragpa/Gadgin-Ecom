@@ -133,10 +133,11 @@
                             <div class="order-details-u-inner">
                                 <div class="order-details-u-address">
                                     <ul>
-                                        <li class="fw-bolder">Payment Method:<%=orders.paymentmethod%>
+                                        <li class="fw-bolder">Payment Method:<%=(orders.paymentmethod)?orders[i].paymentmethod:"Failed"%>
                                         </li>
                                         <li>#<%=orders.orderid%></li>
-                                        <li>Order Date:<%=orders.orderdate%></li>
+                                        <li>Order Date:<%=orders.orderdate.split('T')[0]%></li>
+                                        <li id="ordertime">Order Time:</li>
                                         <li>Order Items:<%=orders.orderquantity%>
                                         </li>
                                     </ul>
@@ -251,6 +252,20 @@
 		crossorigin="anonymous"></script>
 	<script src="/js/adminprdmgmt.js"></script>
 	<script src="/js/admindashscript.js"></script>
+	<script>
+		let isodate = '<%=orders.orderdate%>';
+		isodate=new Date(isodate)
+		console.log(isodate);
+		let hours = isodate.getHours();
+		let minutes = isodate.getMinutes();
+		const ampm = (hours>=12)?'PM':'AM';
+		console.log(hours);
+		hours= (hours>12)?Math.abs(12-hours):hours;
+		hours = (hours<10)?'0'+hours:hours
+		minutes = (minutes<10)?'0'+minutes:minutes
+		const formattedTime = `${hours}:${minutes} ${ampm}`;
+		document.getElementById('ordertime').append(formattedTime)
+	</script>
 	<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/tZlKXNHaaD6B6sWJeQG3UE6z5wEiZ3lFO8NwI=" crossorigin="anonymous"></script> -->
 
 

@@ -16,8 +16,8 @@
           }
       }); 
       if(isnewlogin=='true'){
-          Toast.fire({
-              icon: "success",
-              title: "Signed in successfully"
-          });
+        //   Toast.fire({
+        //       icon: "success",
+        //       title: "Signed in successfully"
+        //   });
       }

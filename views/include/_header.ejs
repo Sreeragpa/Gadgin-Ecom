@@ -14,12 +14,14 @@
                 
 
             </div>
-            <form class="search-form">
+            <form class="search-form" action="/products" method="get">
                  <!-- Search Bar -->
             <div class="navv-items navv-middle">
 
                 <div class="search-div">
-                    <input type="search" id="search-box" placeholder="Search">
+                  
+                        <input type="search" id="search-box" placeholder="Search" name="search">
+                   
                 </div>
                 <button class="search-button">
                     <svg width="20" height="29" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,9 +79,10 @@
         </div>
 
         <!-- Mobile Search -->
+        <form action="/products?category=mobile" class="m-0">
         <div class="mobile-navv">
             <div class="search-div">
-                <input type="search" id="search-box" placeholder="Search">
+                <input type="search" id="search-box" placeholder="Search" class="w-auto" name="search">
             </div>
             <button class="search-button">
                 <svg width="20" height="29" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,6 +92,8 @@
                 </svg>
 
             </button>
+            
         </div>
+    </form>
 
     </header>

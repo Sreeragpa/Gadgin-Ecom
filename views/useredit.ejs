@@ -67,7 +67,7 @@
                     <!-- Address -->
 
 
-                    <div class="profile-image-div p-2">
+                    <div class="profile-image-div p-2 ">
                        
                             <form id="profilechange-form" action="/api/user/changeprofile" method="post" enctype="multipart/form-data">
                                 <%if(!userinfo.profileimg){%>
@@ -79,12 +79,13 @@
                                     <div class="edit-profile" id="edittrigger">
                                         <i class="fa-solid fa-pen" style="color: #ffffff;"></i>
                                     </div>
+                                    
                                     <input type="file" id="profileinput" 
                                     name="images" style="display: none;" accept="image/*" >
                             </form>
+                         
                     
-                    
-                   
+                            <div>Change Profile</div>
                     
                     </div>
                     <div class="add-new-address-main" id="add-new-address-main">

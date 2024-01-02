@@ -3,7 +3,7 @@ const adminRender = require('../services/adminRender')
 const productRender = require('../services/productRender')
 const {adminAuthenticated,adminNotAuthenticated} = require('../middlewares/adminMiddleware')
 // Route /admin/..
-const store = require('../services/multer');
+const store = require('../services/multer');    
 route.get('/',adminAuthenticated,adminRender.admindash)
 route.get('/login',adminNotAuthenticated,adminRender.loginpage)
 route.post('/login',adminNotAuthenticated,adminRender.loginvalidate)

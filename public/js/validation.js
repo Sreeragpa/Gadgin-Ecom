@@ -4,6 +4,7 @@ const password = document.getElementById('password') || 1;
 const confirmpassword = document.getElementById('confirmpassword') || 1;
 const otp = document.getElementById('otpinputt') || 1;
 const form = document.getElementById('form');
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 emailValid=true
 
 form.addEventListener('submit',(e)=>{
@@ -15,6 +16,9 @@ form.addEventListener('submit',(e)=>{
     if(password!=1 && password.value==='' || password.value===null){
         errmessage.push("Password required")
     }
+    // if(password!=1 && passwordRegex.test(password.value)){
+    //     errmessage.push("Strong Password Required")
+    // }
     if(!emailValid || email.value=='' || email.value==null){
         errmessage.push("Email Required")
     }

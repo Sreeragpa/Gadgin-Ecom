@@ -3,6 +3,8 @@ const password = document.getElementById('password') || 1;
 const confirmpassword = document.getElementById('confirmpassword') || 1;
 const phone = document.getElementById('phone') || 1;
 const form = document.getElementById('form');
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+let passValid = true;
 
 form.addEventListener('submit',(e)=>{
     let flag=0;
@@ -32,6 +34,9 @@ form.addEventListener('submit',(e)=>{
         flag=1;
         document.getElementById('passmatch-error').innerHTML="Confirm Password Required";
     }
+    if(!passValid){
+        flag=1;
+    }
 
 
     if(flag==1){
@@ -52,6 +57,7 @@ name1.addEventListener('keyup',()=>{
   })
 password.addEventListener('keyup',()=>{
     document.getElementById('pass-error').innerHTML=""
+    checkStrongpass()
   })
 confirmpassword.addEventListener('keyup',()=>{
     document.getElementById('passmatch-error').innerHTML=""
@@ -59,6 +65,21 @@ confirmpassword.addEventListener('keyup',()=>{
 phone.addEventListener('keyup',()=>{
     document.getElementById('phone-error').innerHTML=""
   })
+
+
+  function checkStrongpass(){
+    let passError=document.getElementById('pass-error')
+    // email.addEventListener('keyup',(k)=>{
+        if(!password.value.match(passwordRegex)){
+            passError.innerHTML='Strong Password Required<i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>';
+            passValid=false;
+            return false
+        }
+        passValid=true;
+        passError.innerHTML='<i class="fa-solid fa-circle-check" style="color: #00a814;"></i>';
+        return true;
+    // })
+}
 
   
 

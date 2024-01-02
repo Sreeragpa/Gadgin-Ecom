@@ -38,8 +38,8 @@
                         <label for="category">Category:</label>
                         <select id="category" name="category" class="select-sty">
                             <option value="all">All Categories</option>
-                            <option value="mobile" <%=(products[0].category=="mobile")?"selected":""%>>Mobiles</option>
-                            <option value="laptop" <%=(products[0].category=="laptop")?"selected":""%>>Laptops</option>
+                            <option value="mobile" <%=(products[0]?.category=="mobile")?"selected":""%>>Mobiles</option>
+                            <option value="laptop" <%=(products[0]?.category=="laptop")?"selected":""%>>Laptops</option>
                             <!-- Add more categories as needed -->
                         </select>
                     </div>
@@ -70,13 +70,16 @@
 
 
             <div class="section-2 row p-0 m-0 gap-2">
-                <div class="d-flex ">
+                <%if(products.length==0){%>
+                        🤖 No Products
+                <%}%>
+                <div class="d-flex">
                     <div class="filter-icon">
                         <i class="fa-solid fa-filter" style="color: #ffffff;"></i>
                     </div>
                     <div class="text-white">
                         <h3 class="text-capitalize">
-                            <%= products[0].category%>
+                            <%= products[0]?.category%>
                         </h3>
                     </div>
 

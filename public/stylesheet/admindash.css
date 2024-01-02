@@ -595,13 +595,14 @@ body {
 	padding: 5px 10px;
 	border-radius: 8px;
 }
+
 .content-list-item{
 	margin-top: 20px;
 	padding: 18px;
 	background-color: var(--grey);
 	border-radius: 5px;
 	display: flex;
-	height: 7rem;
+	height: 10rem;
 	font-size: 15px;
 }
 .content-list-item-img{

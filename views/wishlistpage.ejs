@@ -96,7 +96,7 @@
                                           </ul>
                                        </div>
                                        <div class="product-details-third hideme">
-                                           <form action="/api/wishlist/<%=products[i]._id%>" method="get">
+                                           <form action="/api/wishlist/<%=products[i]._id%>?_method=PUT" method="post">
                                                <button class="remove-btn" ><i class="fa-solid fa-xmark"></i></button>
                                            </form>
                                            <form action="/api/user/addtocart/6566ba67f8ef40d64f992c49" method="post">

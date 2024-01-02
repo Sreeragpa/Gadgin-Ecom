@@ -96,7 +96,115 @@ exports.getallorderwithuser = async (req, res, next) => {
             // res.json({ orders: [], pageCount: 1 });
            
         }
-    } else {
+    } else if(req.query.search){
+       
+        const search = req.query.search;
+        console.log(search);
+        try {
+            const page = req.query.page || 1;
+            const limit = 10;
+
+            const orders = await Orderdb.aggregate([
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'userid',
+                        foreignField: '_id',
+                        as: 'userdetails'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$orderitems',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: {
+                        $or:[
+                            {
+                                'orderitems.orderstatus':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'orderitems.name':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'orderitems.category':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'userdetails.name':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'userdetails.email':{$regex:search, $options: 'i'}
+                            },
+                            
+                        ]
+                    }
+                }   ,
+                {
+                    $project: {
+                        'userdetails.password': 0,
+                        'userdetails.blocked': 0,
+                        'userdetails.status': 0,
+                    }
+                },
+                {
+                    $sort: {
+                        orderdate: -1
+                    }
+                },
+                {
+                    $skip: (page - 1) * limit
+                },
+                {
+                    $limit: limit
+                }
+         
+            ]);
+            const itemsCount = await Orderdb.aggregate([
+                {
+                    $unwind: '$orderitems'
+                },
+                {
+                    $match: {
+                        $or:[
+                            {
+                                'orderitems.orderstatus':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'orderitems.name':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'orderitems.category':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'userdetails.name':{$regex:search, $options: 'i'}
+                            },
+                            {
+                                'userdetails.email':{$regex:search, $options: 'i'}
+                            },
+                            
+                        ]
+                    }
+                }   ,
+                {
+                    $group: {
+                        _id: null,
+                        count: { $sum: 1 }
+                    }
+                }
+            ])
+            const pageCount = Math.ceil(itemsCount[0]?.count / limit)
+            if (orders) {
+                // res.send(orders)
+                res.json({ orders, pageCount })
+            }
+        } catch (error) {
+            console.error('Error in getallorderwithuser :', error);
+            // res.status(500).send(err);
+            next(error)
+        }
+    }else{
         try {
             const page = req.query.page || 1;
             const limit = 10;

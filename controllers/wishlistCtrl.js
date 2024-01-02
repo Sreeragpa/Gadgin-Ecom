@@ -33,7 +33,8 @@ exports.addtoWishlist = async(req,res,next)=>{
             // result = await Wishlistdb.findOneAndUpdate({userid:userid},{$push:{products:pid}},{new:true})
         }
         const refferer = req.get("Referrer");
-        res.redirect(refferer);
+        
+        res.redirect(303,refferer);
     } catch (error) {
         next(error)
     }

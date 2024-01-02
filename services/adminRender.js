@@ -70,14 +70,27 @@ exports.ordermgmt = async (req, res, next) => {
             console.log(error);
             next(error)
         }
-    } else {
+    } else if(req.query.search) {
+        
+        const page = req.query.page || 1;
+        const currentPage = page;
+        const orderss = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getorders/userdetails?search=${req.query.search}&page=${page}`);
+
+        if (orderss) {
+            const { orders, pageCount } = orderss.data;
+            console.log(orders);
+            req.flash('searchquery',req.query.search)
+            res.render('adminordermgmt.ejs', { orders: orders, query: [], pageCount: pageCount, currentPage: currentPage })
+        } else {
+            console.log('error');
+        }
+    }else{
         try {
             const page = req.query.page || 1;
             const currentPage = page;
             const orderss = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getorders/userdetails?page=${page}`);
             if (orderss) {
                 const { orders, pageCount } = orderss.data;
-                // console.log(orders.data);
                 res.render('adminordermgmt.ejs', { orders: orders, query: null, pageCount: pageCount, currentPage: currentPage })
             } else {
                 res.render('adminordermgmt.ejs', { orders: [], query: null, pageCount: 0, currentPage: 0 })
