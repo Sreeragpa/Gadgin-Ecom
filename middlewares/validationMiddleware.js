@@ -23,3 +23,18 @@ exports.strongPassword = [
     body('password')
     .isStrongPassword().withMessage("Enter a stong Password")
 ]
+
+exports.validateCoupon = [
+    body('couponcode')
+        .isLength({ min: 1 }).trim().withMessage('Coupon Code should not contain spaces'),
+    body('couponexpiry')
+        .isDate().withMessage('Invalid Date'),
+    body('coupondiscount')
+        .custom(value => {
+            // Custom validation function
+            if (parseInt(value) > 70) {
+                throw new Error(`Coupon discount must be less than 70`);
+            }
+            return true; // Indicates the validation passed
+        }).withMessage('Coupon discount must be less than 70'),
+]

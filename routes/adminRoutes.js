@@ -18,6 +18,9 @@ route.get('/usermgmt',adminAuthenticated,adminRender.usermgmt)
 route.get('/getproduct/:id',productRender.getProductdetails)
 route.get('/ordermgmt',adminAuthenticated,adminRender.ordermgmt)
 route.get('/ordermgmt/:id',adminAuthenticated,adminRender.ordersmgmtsingle)
+route.get('/couponmgmt',adminAuthenticated,adminRender.couponManagement)
+route.get('/addcoupon',adminAuthenticated,adminRender.addCouponpage)
+route.get('/editcoupon/:id',adminAuthenticated,adminRender.editCouponpage)
 
 
 

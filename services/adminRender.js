@@ -60,7 +60,6 @@ exports.ordermgmt = async (req, res, next) => {
             const orderss = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getorders/userdetails?orderStatus=${req.query.orderStatus}&page=${page}`);
 
             if (orderss) {
-                // console.log(orders.data);
                 const { orders, pageCount } = orderss.data;
                 res.render('adminordermgmt.ejs', { orders: orders, query: req.query.orderStatus, pageCount: pageCount, currentPage: currentPage })
             } else {
@@ -78,7 +77,6 @@ exports.ordermgmt = async (req, res, next) => {
 
         if (orderss) {
             const { orders, pageCount } = orderss.data;
-            console.log(orders);
             req.flash('searchquery',req.query.search)
             res.render('adminordermgmt.ejs', { orders: orders, query: [], pageCount: pageCount, currentPage: currentPage })
         } else {
@@ -165,15 +163,56 @@ async function orderdetails(){
         Jan:0,Feb:0, Mar:0, Apr:0, May:0, Jun:0, Jul:0, Aug:0 ,Sep:0, Oct:0, Nov:0, Dec:0
     }
     orders.forEach((order)=>{
-        // console.log(order._id.getMonth()+1);
+
         month = labels[(order._id.getMonth())]
         ordersbymonth[month] += order.count;
         
 
     })
-    console.log(Object.values(ordersbymonth));
-    console.log(Object.keys(ordersbymonth));
+
 
     return ordersbymonth
 }
 
+exports.ordersmgmtsingle = async (req, res, next) => {
+    try {
+        const orderid = req.params.id;
+        const result = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getorder/${orderid}`)
+        if (result) {
+            res.render('adminorderdetailed', { orders: result.data[0] })
+        }
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+exports.couponManagement = async(req,res,next)=>{
+    try {
+
+        const result = await axios.get(`http://localhost:${process.env.PORT}/api/getcoupon`)
+        if (result) {
+            res.render('admincouponmgmt', { coupons: result.data })
+        }
+    } catch (error) {
+        const status = 404;
+        const message ="HEHEHEHHEHEHEHE"
+        err={
+            status,
+            message
+        }
+        next(err)
+    }
+}
+
+exports.addCouponpage = async(req,res)=>{
+    const categories = await axios.get('http://localhost:3001/api/getcategory');
+
+    res.render('adminaddcouponform',{categories:categories.data})
+}   
+exports.editCouponpage = async(req,res)=>{
+    const categories = await axios.get('http://localhost:3001/api/getcategory');
+    const coupon = await axios.get(`http://localhost:3001/api/getsinglecoupon/${req.params.id}`);
+ 
+    res.render('admineditcouponform',{categories:categories.data,coupon:coupon.data})
+}

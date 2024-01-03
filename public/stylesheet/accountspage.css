@@ -153,9 +153,7 @@ ul {
     border: none;
     padding: 8px;
 }
-.wallet-transaction-table{
-    /* background-color: black; */
-}
+
 /* Wallet */
 
 @media(max-width:954px) {

@@ -10,7 +10,7 @@ const {isBlocked} = require('../middlewares/userBlockMiddleware');
 const store = require('../services/multer');
 const validation = require('../middlewares/validationMiddleware');
 const paymentCtrl = require('../controllers/PaymentCtrl')
-
+const couponCtrl = require('../controllers/couponCtrl')
 // User
 route.post('/register',validation.strongPassword,userCtrl.create)
 route.patch('/update',validation.strongPassword, userCtrl.updatepass)
@@ -75,6 +75,13 @@ route.get('/admin/ordersreportforgraph',orderCtrl.ordersreportforgraph);
 // Razorpay 
 route.post('/user/payment',CheckAuthenticated,paymentCtrl.payment)
 route.post('/user/payment/verify',CheckAuthenticated,paymentCtrl.paymentVerification);
+
+// Coupon
+route.post('/admin/addcoupon',validation.validateCoupon,couponCtrl.addCoupon)
+route.get('/getcoupon',couponCtrl.getCoupon)
+route.delete('/admin/delete/coupon/:id',couponCtrl.deleteCoupon)
+route.get('/getsinglecoupon/:id',couponCtrl.getSinglecoupon)
+route.put('/admin/editcoupon/:id',validation.validateCoupon,couponCtrl.editCoupon)
 
 
 
