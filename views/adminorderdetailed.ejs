@@ -132,8 +132,10 @@
                         <div class="order-details-u-k">
                             <div class="order-details-u-inner">
                                 <div class="order-details-u-address">
+									<!-- <p class="fw-bolder">Delivery Address</p> -->
+									<div class="address-inner-a">
                                     <ul>
-                                        <li class="fw-bolder">Payment Method:<%=(orders.paymentmethod)?orders[i].paymentmethod:"Failed"%>
+                                        <li class="fw-bolder">Payment Method:<%=(orders.paymentmethod)?orders.paymentmethod:"Failed"%>
                                         </li>
                                         <li>#<%=orders.orderid%></li>
                                         <li>Order Date:<%=orders.orderdate.split('T')[0]%></li>
@@ -141,6 +143,7 @@
                                         <li>Order Items:<%=orders.orderquantity%>
                                         </li>
                                     </ul>
+								</div>
                                 </div>
                             </div>
                             <div class="order-details-u-inner">
@@ -155,6 +158,20 @@
                                             <li>PIN: <%=orders.address.pincode%>
                                             </li>
                                             <li>Phone: <%=orders.address.phone%>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+							<div class="order-details-u-inner">
+                                <div class="order-details-u-address">
+                                    <p class="fw-bolder">Order Summary</p>
+                                    <div class="address-inner-a">
+                                        <ul>
+											<li class="fw-bold">Total: ₹<%=orders.finalvalue.toLocaleString('en-IN')%>
+                                            </li>
+                                            <li class="fw-bold"> <%=(orders.appliedcoupon)?`Coupon Applied: ${orders.appliedcoupon}`:''%>
                                             </li>
                                         </ul>
                                     </div>

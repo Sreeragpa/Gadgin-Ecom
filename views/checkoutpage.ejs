@@ -125,9 +125,28 @@
                             <div><span>Shipping:</span></div>
                             <div><span>Free</span></div>
                         </div>
-                        <div class="calc-div-row">
+                            <div class="calc-div-row">
                             <div><span>Discount:</span></div>
                             <div>-₹<%=productpricedetails.discount%><span id="discount"></span></div>
+                        </div>
+                        <div class="calc-div-row">
+                            <div><span >Coupon Discount</span>:</div>
+                            <div>-₹<span id="total-coupondiscount"><%=productpricedetails?.coupondiscount%></span></div>
+                        </div>
+                        <div class="calc-div-row">
+                            <div>
+                                <span id="coupon-display"><%=(appliedcoupon)?`(${appliedcoupon})`:''%></span>
+                            </div>
+                        </div>
+                        <div class="calc-div-row">
+                            <div ><span id="coupon-error" class="text-danger"></span></div>
+                
+                        </div>
+                        <div class="calc-div-row">
+                            <div class="<%=(appliedcoupon)?'':'hidemee'%>" id="coupon-remove">
+                                <a href="/api/remove/coupon"><span class="text-danger" id="coupon-remove-link">Remove Coupon</span></a>
+                            </div>
+                
                         </div>
                         <!-- <div class="calc-div-row">
                             <div><span>Coupon Code:</span></div>
@@ -141,8 +160,14 @@
                                 </span></div>
                         </div>
                         <div class="calc-div-row">
-                            <div><input class="coupon-input" type="text" placeholder="Coupon Code"></div>
-                            <div><button class="apply-btn">Apply</button></div>
+                            <div data-action="/api/apply/coupon"  id="couponform" class="couponform d-flex" >
+                                <div><input class="coupon-input" type="text" placeholder="Coupon Code"
+                                        name="couponcode" id="couponcode"></div>
+                                <div><button class="apply-btn" type="button" id="apply-button">Apply</button></div>
+                                </div>
+                        </div>
+                        <div class="calc-div-row">
+                       
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                             <button class="payment-btn fw-bold" id="payment-btn">Proceed to Payment</button>
@@ -182,12 +207,12 @@
                 })
 
             </script>
-            
+
 
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
-                
-    
+
+
                 document.getElementById('rzp-button1').onclick = async function (e) {
                     e.preventDefault();
 
@@ -199,7 +224,7 @@
                     })
 
                     const orderData = await response.json();
-
+                    console.log(orderData);
                     const options = {
                         "key": "rzp_test_9MbG2FIUatrMFy",
                         "amount": orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -247,6 +272,79 @@
 
 
 
+            </script>
+            <script>
+         document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded event fired');
+    
+    document.getElementById('apply-button').addEventListener('click', function () {
+        console.log('Apply button clicked');
+        
+        const form = document.getElementById('couponform');
+        if (!form) {
+            console.error("Form not found");
+            return;
+        }
+        
+      
+        const href = form.getAttribute('data-action');
+        console.log('Form action:', href);
+        
+        const formData = {
+            couponcode:document.getElementById('couponcode').value
+        };
+        console.log('Form data:', formData);
+
+        $.ajax({
+            url: href,
+            method: 'POST',
+            data: formData,
+            success: function (data) {
+                console.log('Success:', data);
+                if(data.error){
+                    document.getElementById('coupon-error').innerText =`${data.error}`;
+                    document.getElementById('coupon-display').innerText =``;
+                    document.getElementById('coupon-remove').classList.add('hidemee')
+                }else{
+
+                    // document.getElementById('coupon-display').innerText =`(${data.couponcode})`
+                    // document.getElementById('coupon-error').innerText =``;
+                    // document.getElementById('coupon-remove').classList.remove('hidemee');
+                    // let total=document.getElementById('total');
+                    // console.log(total.value);
+                    // const discount = data.coupondiscount;
+                    // const totaldiscount = data.totaldiscount;
+                    // console.log(totaldiscount);
+                    // const newtotal = total.innerHTML-totaldiscount;
+                    // total.innerHTML=newtotal;
+                    // document.getElementById('total-coupondiscount').innerHTML=totaldiscount;
+                    location.reload();
+                }
+        
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+
+    // Remove Coupon AJAX
+    document.getElementById('coupon-remove-link').addEventListener('click',(e)=>{
+        e.preventDefault();
+        console.log('hHEHE');
+        $.ajax({
+            url: "/api/coupon/remove",
+            method: 'DELETE',
+            success:function(){
+                // document.getElementById('coupon-remove').classList.add('hidemee');
+                // document.getElementById('coupon-display').innerText =``
+                // document.getElementById('total-coupondiscount').innerHTML=``;
+                location.reload();
+            }
+        })
+        
+    })
+});
             </script>
 
 </body>

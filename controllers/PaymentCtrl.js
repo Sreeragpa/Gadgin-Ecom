@@ -11,7 +11,9 @@ exports.payment = async (req, res) => {
 
     // const myorder = axios.get(`/user/getorders/products/${userid}/${pendingorderid}`);
     const myorder = await Orderdb.find({ _id: pendingorderid });
-    const amount = myorder[0].ordervalue;
+    const amountt = myorder[0].finalvalue.toFixed(2);
+    const amount = Number(amountt)
+    console.log(typeof(amount));
     const instance = new Razorpay({ key_id: process.env.raz_keyid, key_secret: process.env.raz_key_secret })
 
     var options = {
@@ -25,6 +27,7 @@ exports.payment = async (req, res) => {
             order,
             amount: amount * 100
         })
+        console.log(err);
     });
 
 }

@@ -82,6 +82,9 @@ route.get('/getcoupon',couponCtrl.getCoupon)
 route.delete('/admin/delete/coupon/:id',couponCtrl.deleteCoupon)
 route.get('/getsinglecoupon/:id',couponCtrl.getSinglecoupon)
 route.put('/admin/editcoupon/:id',validation.validateCoupon,couponCtrl.editCoupon)
+route.post('/apply/coupon',couponCtrl.applyCoupon)
+route.delete('/coupon/remove',couponCtrl.couponRemove)
+
 
 
 

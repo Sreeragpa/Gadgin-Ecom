@@ -14,6 +14,8 @@ document.querySelectorAll(".add-wishlist").forEach((element)=>{
         const newelement = $(data).find(`#${finder}`);
         console.log(newelement);
         $(element).html(newelement.html());
+       }else{
+        $('body').html(data)
        }
     },
     error: function () {

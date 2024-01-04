@@ -200,30 +200,64 @@ exports.checkoutPage = async (req, res, next) => {
     } else {
         try {
             const orderdetails = await axios.get(`http://localhost:${process.env.PORT}/api/user/getorders/${userid}/${orderid}`)
-            // console.log(orderdetails.data);
-            orderdetails.data[0].orderitems.forEach(product => {
-                for (let i = 0; i < product.quantity; i++) {
-                    mrp += product.mrp;
-                    price += product.price;
+            
+            // For new checkout
+            if(!orderdetails.data[0].finalvalue){
+                orderdetails.data[0].orderitems.forEach(product => {
+                    for (let i = 0; i < product.quantity; i++) {
+                        mrp += product.mrp;
+                        price += product.price;
+                    }
+                    discount = mrp - price;
+                    count += product.quantity;
+                });
+        
+        
+                const productpricedetails = {
+                    mrp: mrp,
+                    price: price,
+                    discount: discount,
+                    count: count
+                };
+         
+                const appliedcoupon = orderdetails.data[0].appliedcoupon;
+                const result = await Orderdb.findOneAndUpdate({_id:orderid,userid:userid},{$set:{'ordervalue':price,'finalvalue':price}});
+        
+                if (orderid) {
+                    console.log(appliedcoupon);
+                    res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails ,appliedcoupon:appliedcoupon});
+                } else {
+                    res.end()
                 }
-                discount = mrp - price;
-                count += product.quantity;
-            });
-    
-    
-            const productpricedetails = {
-                mrp: mrp,
-                price: price,
-                discount: discount,
-                count: count
+            }else{   // For checkout after coupon applied
+                orderdetails.data[0].orderitems.forEach(product => {
+                    for (let i = 0; i < product.quantity; i++) {
+                        mrp += product.mrp;
+                        price += product.price;
+                    }
+                    discount = mrp - price;
+                    count += product.quantity;
+                });
+        
+        
+                const productpricedetails = {
+                    mrp: mrp,
+                    price: orderdetails.data[0].finalvalue,
+                    discount: discount,
+                    count: count,
+                    coupondiscount:(orderdetails.data[0].ordervalue-orderdetails.data[0].finalvalue).toFixed(2)
+                };
+                console.log(orderdetails);
+                const appliedcoupon = orderdetails.data[0].appliedcoupon;
+        
+                if (orderid) {
+                    console.log(appliedcoupon);
+                    res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails ,appliedcoupon:appliedcoupon});
+                } else {
+                    res.end()
+                }
             }
-            const result = await Orderdb.findOneAndUpdate({_id:orderid,userid:userid},{$set:{'ordervalue':price}});
-            console.log(result);
-            if (orderid) {
-                res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails });
-            } else {
-                res.end()
-            }
+            
         } catch (error) {
             next(error)
         }
@@ -258,14 +292,13 @@ exports.paymentCheck = async (req, res, next) => {
                         await Cartdb.findOneAndUpdate({userid:userid},{$set:{cartitems:[]}});
 
                         res.render('paymentstatuspage.ejs', { paymentstatus: "Order Success", orderdetails: order.data[0] });
-                        
-                        // res.send("Order Placed Succesfully")
+                      
                     } else {
                         res.render('paymentstatuspage.ejs', { paymentstatus: "Order Failed" })
                     }
     
                 } else if (paymentmethod == 'card') {
-                    // res.send("Card payment is not available now")
+                 
                     const razpayOrder = await axios.get(`http://localhost:3001/api/user/payment/${orderid}`)
                     console.log(razpayOrder.data);
                 }
@@ -285,7 +318,7 @@ exports.paymentCheck = async (req, res, next) => {
 
 exports.manageAddress = async (req, res, next) => {
     const id = req.session.passport.user;
-    // if(!req.session?.isAddress)
+
 
     axios.get(`http://localhost:${process.env.PORT}/api/user/getaddress/${id}`)
         .then((response) => {
@@ -293,7 +326,6 @@ exports.manageAddress = async (req, res, next) => {
         })
         .catch((err) => {
             console.error(err);
-            // res.redirect('/');
             next(error)
         })
 

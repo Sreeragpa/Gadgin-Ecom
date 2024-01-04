@@ -77,6 +77,13 @@ var orderSchema = new mongoose.Schema({
     razorpay_signature:{
         type:String,
         default:null
+    },
+    appliedcoupon:{
+        type:String,
+        default:null
+    },
+    finalvalue:{
+        type:Number
     }
 
 

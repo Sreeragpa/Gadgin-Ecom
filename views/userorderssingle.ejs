@@ -147,7 +147,9 @@
                                     <p>Order Summary</p>
                                     <div class="address-inner">
                                         <ul>
-                                            <li class="fw-bold">Total: ₹<%=orders.ordervalue.toLocaleString('en-IN')%>
+                                            <li class="fw-bold">Total: ₹<%=orders.finalvalue.toLocaleString('en-IN')%>
+                                            </li>
+                                            <li class="fw-bold mt-2"> <%=(orders.appliedcoupon)?`Coupon Applied: ${orders.appliedcoupon}`:''%>
                                             </li>
                                         </ul>
                                     </div>
