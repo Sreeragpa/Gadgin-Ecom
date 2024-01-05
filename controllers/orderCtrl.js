@@ -2,7 +2,7 @@ const Orderdb = require('../models/orderModel');
 const Userdb = require('../models/userModel');
 const mongoose = require('mongoose');
 const CsvParser = require('json2csv').Parser;
-const PdfService = require('../services/invoicepdfService')
+const pdfService = require('../services/invoicepdfService')
 
 // const csv = require('csvtojson')
 
@@ -93,9 +93,7 @@ exports.getallorderwithuser = async (req, res, next) => {
             }
 
         } catch (error) {
-            res.status(500).send("Error")
-            // res.json({ orders: [], pageCount: 1 });
-
+            next(error)
         }
     } else if (req.query.search) {
 
@@ -197,12 +195,10 @@ exports.getallorderwithuser = async (req, res, next) => {
             ])
             const pageCount = Math.ceil(itemsCount[0]?.count / limit)
             if (orders) {
-                // res.send(orders)
                 res.json({ orders, pageCount })
             }
         } catch (error) {
             console.error('Error in getallorderwithuser :', error);
-            // res.status(500).send(err);
             next(error)
         }
     } else {
@@ -254,12 +250,11 @@ exports.getallorderwithuser = async (req, res, next) => {
             ])
             const pageCount = Math.ceil(itemsCount[0]?.count / limit)
             if (orders) {
-                // res.send(orders)
                 res.json({ orders, pageCount })
             }
         } catch (error) {
             console.error('Error in getallorderwithuser :', error);
-            // res.status(500).send(err);
+
             next(error)
         }
     }
@@ -321,7 +316,6 @@ exports.getOrders = async (req, res) => {
                 const pageCount = Math.ceil(itemCount[0].count / limit);
 
                 if (order) {
-                    // res.send(order);
                     res.json({ order, pageCount, currentPage })
                 } else {
                     res.status(500).send('Error')
@@ -350,7 +344,7 @@ exports.getOrders = async (req, res) => {
 exports.getOrderProducts = async (req, res) => {
     const userid = req.params.userid;
     const orderid = req.params.orderid;
-    // const order = await Orderdb.find({userid:userid,_id:orderid});
+
     try {
         if (orderid != 'false') {
             const result = await Orderdb.aggregate([
@@ -397,7 +391,6 @@ exports.getOrderProducts = async (req, res) => {
         console.error("Error in getOrderProducts:", error);
         res.status(500).send({ error: "Internal Server Error" });
     }
-    // res.send(order)
 }
 
 
@@ -412,11 +405,9 @@ exports.changeorderStatus = async (req, res, next) => {
         if (result) {
             const referer = req.get('Referer')
             res.redirect(referer)
-            // res.redirect('/admin/ordermgmt')
         }
     } catch (error) {
         console.error('Error in changeorderStatus :', err);
-        // res.status(500).send(err);
         next(error)
     }
 
@@ -436,7 +427,6 @@ exports.cancelOrder = async (req, res, next) => {
 
     } catch (error) {
         console.error('Error in cancelOrder :', err);
-        // res.status(500).send(err);
         next(error)
     }
 
@@ -457,7 +447,6 @@ exports.returnOrder = async (req, res, next) => {
         }
     } catch (error) {
         console.error('Error in returnOrder :', err);
-        // res.status(500).send(err);
         next(error)
     }
 
@@ -517,37 +506,18 @@ exports.ordersreportforgraph = async (req, res, next) => {
         {
             $group: {
                 _id: "$orderdate",
-                // count:{$sum:"$orderquantity"},
                 count: { $sum: 1 },
-                // dates:{ $addToSet: "$orderdate" }
             }
         },
 
     ])
-    // const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug' ,'Sep', 'Oct', 'Nov', 'Dec'];
-    // let ordersbymonth = {
-    //     Jan:0,Feb:0, Mar:0, Apr:0, May:0, Jun:0, Jul:0, Aug:0 ,Sep:0, Oct:0, Nov:0, Dec:0
-    // }
-    // orders.forEach((order)=>{
-    //     // console.log(order._id.getMonth()+1);
-    //     month = labels[(order._id.getMonth())]
-    //     ordersbymonth[month] += order.count;
-
-
-    // })
-    // console.log(Object.values(ordersbymonth));
-    // console.log(Object.keys(ordersbymonth));
 
     res.send(orders)
 }
 
 exports.generateInvoice = async (req, res) => {
-
-    const puppeteer = require('puppeteer');
-    const ejs = require('ejs');
-    const fs = require('fs').promises;
     const path = require('path');
-    const imageService = require('../services/imgtobase64Service')
+    const imageService = require('../services/imgtobase64Service');
 
 
 
@@ -590,44 +560,7 @@ exports.generateInvoice = async (req, res) => {
         invoiceData
     };
 
-    const generatePdf = async (res, invoiceData) => {
-        const browser = await puppeteer.launch({ headless: "new" });
-
-        const page = await browser.newPage();
-
-        try {
-            const data = {
-                invoiceData
-            };
-
-            const templatePath = path.join(__dirname, '..', 'views', 'invoice.ejs');
-            const templateContent = await fs.readFile(templatePath, 'utf-8');
-            const renderedHtml = ejs.render(templateContent, data);
-
-            await page.setContent(renderedHtml);
-            // Generate the PDF as a buffer
-            const pdfBuffer = await page.pdf({
-                format: 'A4',
-                margin: {
-                    top: '20mm',
-                    right: '20mm',
-                    bottom: '20mm',
-                    left: '20mm',
-                },
-            });
-            // Send the PDF buffer as a response for download
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
-            res.send(pdfBuffer);
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-        } finally {
-            await browser.close();
-        }
-    };
-
-
-    generatePdf(res, invoiceData);
+    await pdfService.generatePdf(res, invoiceData)
 
 
 }
