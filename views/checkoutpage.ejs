@@ -227,7 +227,7 @@
                     console.log(orderData);
                     const options = {
                         "key": "rzp_test_9MbG2FIUatrMFy",
-                        "amount": orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "amount": orderData.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
                         "name": "GADGIN",
                         "description": "Test Transaction",
@@ -303,8 +303,8 @@
                 console.log('Success:', data);
                 if(data.error){
                     document.getElementById('coupon-error').innerText =`${data.error}`;
-                    document.getElementById('coupon-display').innerText =``;
-                    document.getElementById('coupon-remove').classList.add('hidemee')
+                    // document.getElementById('coupon-display').innerText =``;
+                    // document.getElementById('coupon-remove').classList.add('hidemee')
                 }else{
 
                     // document.getElementById('coupon-display').innerText =`(${data.couponcode})`

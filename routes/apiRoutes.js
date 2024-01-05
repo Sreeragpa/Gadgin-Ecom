@@ -17,7 +17,7 @@ route.patch('/update',validation.strongPassword, userCtrl.updatepass)
 route.post('/getotp', otpCtrl.getOtp)
 route.post('/checkotp', otpCtrl.checkOtp)
 route.patch('/user/changepassword',CheckAuthenticated,validation.strongPassword,userCtrl.changePassword)
-route.get('/user/get/:id',CheckAuthenticated,userCtrl.getUser)
+route.get('/user/get/:id',userCtrl.getUser)
 route.patch('/user/changeinfo',CheckAuthenticated,userCtrl.changeInfo)
 route.delete('/user/address/delete/:id',CheckAuthenticated,userCtrl.deleteAddress)
 route.delete('/user/cart/clear',CheckAuthenticated,cartCtrl.clearCart)
@@ -85,7 +85,8 @@ route.put('/admin/editcoupon/:id',validation.validateCoupon,couponCtrl.editCoupo
 route.post('/apply/coupon',couponCtrl.applyCoupon)
 route.delete('/coupon/remove',couponCtrl.couponRemove)
 
-
+// Invoice
+route.get('/get/invoice/:id',orderCtrl.generateInvoice)
 
 
 

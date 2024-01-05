@@ -267,14 +267,16 @@ exports.checkout = async (req, res) => {
         } else {
 
             const address = await Addressdb.find({ "address._id": addressid }, { 'address.$': 1 });
-            const orderaddress = address[0].address[0]
-            // console.log(orderaddress);
+            const orderaddress = address[0].address[0];
 
             if (type == 'cart') {
 
                 let cartProducts = await axios.get(`http://localhost:${process.env.PORT}/api/user/getCart/${userid}`);
 
+                const userdetails = await axios.get(`http://localhost:${process.env.PORT}/api/user/get/${userid}`);
 
+
+                
 
                 let items = cartProducts.data.map(item => {
                     return {
@@ -395,7 +397,7 @@ exports.changePassword = async (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const result = await Userdb.findOne({ _id: id }, { name: 1, phone: 1 })
+        const result = await Userdb.findOne({ _id: id }, { name: 1, phone: 1,email:1 })
         if (result) {
             res.send(result);
         }

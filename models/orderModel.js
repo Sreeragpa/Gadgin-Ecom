@@ -52,7 +52,8 @@ var orderSchema = new mongoose.Schema({
         type: String
     },
     paymentmethod: {
-        type: String
+        type: String,
+        default:null
     },
     address: {
        type:Object

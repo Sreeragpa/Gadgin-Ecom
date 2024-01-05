@@ -2,6 +2,7 @@ const Orderdb = require('../models/orderModel');
 const Userdb = require('../models/userModel');
 const mongoose = require('mongoose');
 const CsvParser = require('json2csv').Parser;
+const PdfService = require('../services/invoicepdfService')
 
 // const csv = require('csvtojson')
 
@@ -85,7 +86,7 @@ exports.getallorderwithuser = async (req, res, next) => {
                 if (orders.length > 0) {
                     res.json({ orders, pageCount });
                 } else {
-                    res.json({ orders: [], pageCount:0 });
+                    res.json({ orders: [], pageCount: 0 });
                 }
             } else {
                 res.json({ orders: [], pageCount: 0 });
@@ -94,10 +95,10 @@ exports.getallorderwithuser = async (req, res, next) => {
         } catch (error) {
             res.status(500).send("Error")
             // res.json({ orders: [], pageCount: 1 });
-           
+
         }
-    } else if(req.query.search){
-       
+    } else if (req.query.search) {
+
         const search = req.query.search;
         console.log(search);
         try {
@@ -121,26 +122,26 @@ exports.getallorderwithuser = async (req, res, next) => {
                 },
                 {
                     $match: {
-                        $or:[
+                        $or: [
                             {
-                                'orderitems.orderstatus':{$regex:search, $options: 'i'}
+                                'orderitems.orderstatus': { $regex: search, $options: 'i' }
                             },
                             {
-                                'orderitems.name':{$regex:search, $options: 'i'}
+                                'orderitems.name': { $regex: search, $options: 'i' }
                             },
                             {
-                                'orderitems.category':{$regex:search, $options: 'i'}
+                                'orderitems.category': { $regex: search, $options: 'i' }
                             },
                             {
-                                'userdetails.name':{$regex:search, $options: 'i'}
+                                'userdetails.name': { $regex: search, $options: 'i' }
                             },
                             {
-                                'userdetails.email':{$regex:search, $options: 'i'}
+                                'userdetails.email': { $regex: search, $options: 'i' }
                             },
-                            
+
                         ]
                     }
-                }   ,
+                },
                 {
                     $project: {
                         'userdetails.password': 0,
@@ -159,7 +160,7 @@ exports.getallorderwithuser = async (req, res, next) => {
                 {
                     $limit: limit
                 }
-         
+
             ]);
             const itemsCount = await Orderdb.aggregate([
                 {
@@ -167,26 +168,26 @@ exports.getallorderwithuser = async (req, res, next) => {
                 },
                 {
                     $match: {
-                        $or:[
+                        $or: [
                             {
-                                'orderitems.orderstatus':{$regex:search, $options: 'i'}
+                                'orderitems.orderstatus': { $regex: search, $options: 'i' }
                             },
                             {
-                                'orderitems.name':{$regex:search, $options: 'i'}
+                                'orderitems.name': { $regex: search, $options: 'i' }
                             },
                             {
-                                'orderitems.category':{$regex:search, $options: 'i'}
+                                'orderitems.category': { $regex: search, $options: 'i' }
                             },
                             {
-                                'userdetails.name':{$regex:search, $options: 'i'}
+                                'userdetails.name': { $regex: search, $options: 'i' }
                             },
                             {
-                                'userdetails.email':{$regex:search, $options: 'i'}
+                                'userdetails.email': { $regex: search, $options: 'i' }
                             },
-                            
+
                         ]
                     }
-                }   ,
+                },
                 {
                     $group: {
                         _id: null,
@@ -204,7 +205,7 @@ exports.getallorderwithuser = async (req, res, next) => {
             // res.status(500).send(err);
             next(error)
         }
-    }else{
+    } else {
         try {
             const page = req.query.page || 1;
             const limit = 10;
@@ -273,60 +274,60 @@ exports.getOrders = async (req, res) => {
         const orderid = req.params.orderid;
         if (orderid == 'false') {
             const Isorder = await Orderdb.find({ userid: userid });
-            if(Isorder.length==0){
+            if (Isorder.length == 0) {
                 return res.send(false)
-            }else{
-                const page = parseInt(req.query.page) || 1;
-            const limit = 10;
-            const order = await Orderdb.aggregate([
-                {
-                    $match: {
-                        userid: new mongoose.Types.ObjectId(userid)
-                    }
-                },
-                {
-                    $unwind: '$orderitems'
-                },
-                {
-                    $sort: {
-                        orderdate: -1
-                    }
-                },
-                {
-                    $skip: (page - 1) * limit
-                },
-                {
-                    $limit: limit
-                }
-            ])
-            const itemCount = await Orderdb.aggregate([
-                {
-                    $match: {
-                        userid: new mongoose.Types.ObjectId(userid)
-                    }
-                },
-                {
-                    $unwind: '$orderitems'
-                },
-                {
-                    $group: {
-                        _id: null,
-                        count: { $sum: 1 }
-                    }
-                }
-            ])
-
-            const currentPage = page;
-            const pageCount = Math.ceil(itemCount[0].count / limit);
-
-            if (order) {
-                // res.send(order);
-                res.json({ order, pageCount, currentPage })
             } else {
-                res.status(500).send('Error')
+                const page = parseInt(req.query.page) || 1;
+                const limit = 10;
+                const order = await Orderdb.aggregate([
+                    {
+                        $match: {
+                            userid: new mongoose.Types.ObjectId(userid)
+                        }
+                    },
+                    {
+                        $unwind: '$orderitems'
+                    },
+                    {
+                        $sort: {
+                            orderdate: -1
+                        }
+                    },
+                    {
+                        $skip: (page - 1) * limit
+                    },
+                    {
+                        $limit: limit
+                    }
+                ])
+                const itemCount = await Orderdb.aggregate([
+                    {
+                        $match: {
+                            userid: new mongoose.Types.ObjectId(userid)
+                        }
+                    },
+                    {
+                        $unwind: '$orderitems'
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            count: { $sum: 1 }
+                        }
+                    }
+                ])
+
+                const currentPage = page;
+                const pageCount = Math.ceil(itemCount[0].count / limit);
+
+                if (order) {
+                    // res.send(order);
+                    res.json({ order, pageCount, currentPage })
+                } else {
+                    res.status(500).send('Error')
+                }
             }
-            }
-            
+
         } else {
             const order = await Orderdb.find({ userid: userid, _id: orderid });
             if (order) {
@@ -406,7 +407,7 @@ exports.changeorderStatus = async (req, res, next) => {
         const orderid = req.params.id;
         const pid = req.params.pid;
         const statustochange = req.body.status;
-    
+
         const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange } })
         if (result) {
             const referer = req.get('Referer')
@@ -427,18 +428,18 @@ exports.cancelOrder = async (req, res, next) => {
         const orderid = req.params.oid;
         const pid = req.params.pid;
         const userid = req.session.passport.user;
-    
-        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled','comments':req.body }, })
+
+        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled', 'comments': req.body }, })
         if (result) {
             res.redirect('/myorders')
         }
-     
+
     } catch (error) {
         console.error('Error in cancelOrder :', err);
         // res.status(500).send(err);
         next(error)
     }
- 
+
 
 
 }
@@ -462,47 +463,47 @@ exports.returnOrder = async (req, res, next) => {
 
 }
 
-exports.getSingleOrder = async(req,res,next)=>{
+exports.getSingleOrder = async (req, res, next) => {
     const orderid = req.params.orderid;
     try {
-        const result = await Orderdb.find({_id:orderid});
+        const result = await Orderdb.find({ _id: orderid });
 
-        if(result){
+        if (result) {
             res.send(result);
         }
     } catch (error) {
         next(error)
     }
-  
+
 }
 
-exports.salesReport = async(req,res,next)=>{
+exports.salesReport = async (req, res, next) => {
     try {
 
         const Orders = [];
 
         const Orderdata = await Orderdb.aggregate([
             {
-                $unwind:"$orderitems"
+                $unwind: "$orderitems"
             }
         ])
 
-        Orderdata.forEach((order)=>{
-            const {orderid,orderitems,orderdate,paymentmethod} = order;
+        Orderdata.forEach((order) => {
+            const { orderid, orderitems, orderdate, paymentmethod } = order;
             const productname = orderitems.name;
-            const price= orderitems.price;
+            const price = orderitems.price;
             const quantity = orderitems.quantity;
             const orderDate = orderdate.toISOString().split('T')[0];
-            Orders.push({orderid,orderDate,productname,price,quantity,paymentmethod})
+            Orders.push({ orderid, orderDate, productname, price, quantity, paymentmethod })
         });
 
-        const csvFields = ['Order id',"Order Date","Product","Price","Quantity","Payment Method"];
+        const csvFields = ['Order id', "Order Date", "Product", "Price", "Quantity", "Payment Method"];
 
-        const csvParser = new CsvParser({csvFields});
+        const csvParser = new CsvParser({ csvFields });
         const csvData = csvParser.parse(Orders);
 
-        res.setHeader("Content-type","text/csv")
-        res.setHeader("Content-Disposition","attachment: filename=OrderData.csv");
+        res.setHeader("Content-type", "text/csv")
+        res.setHeader("Content-Disposition", "attachment: filename=OrderData.csv");
 
         res.status(200).end(csvData);
 
@@ -511,17 +512,17 @@ exports.salesReport = async(req,res,next)=>{
     }
 }
 
-exports.ordersreportforgraph = async(req,res,next)=>{
+exports.ordersreportforgraph = async (req, res, next) => {
     const orders = await Orderdb.aggregate([
         {
-            $group:{
-                _id:"$orderdate",
+            $group: {
+                _id: "$orderdate",
                 // count:{$sum:"$orderquantity"},
-                count:{$sum:1},
+                count: { $sum: 1 },
                 // dates:{ $addToSet: "$orderdate" }
             }
         },
-      
+
     ])
     // const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug' ,'Sep', 'Oct', 'Nov', 'Dec'];
     // let ordersbymonth = {
@@ -531,11 +532,102 @@ exports.ordersreportforgraph = async(req,res,next)=>{
     //     // console.log(order._id.getMonth()+1);
     //     month = labels[(order._id.getMonth())]
     //     ordersbymonth[month] += order.count;
-        
+
 
     // })
     // console.log(Object.values(ordersbymonth));
     // console.log(Object.keys(ordersbymonth));
 
     res.send(orders)
+}
+
+exports.generateInvoice = async (req, res) => {
+
+    const puppeteer = require('puppeteer');
+    const ejs = require('ejs');
+    const fs = require('fs').promises;
+    const path = require('path');
+    const imageService = require('../services/imgtobase64Service')
+
+
+
+    const orderid = req.params.id;
+    const order = await Orderdb.findOne({ _id: orderid });
+    const user = await Userdb.findOne({ _id: order.userid }, { name: 1, email: 1 });
+
+    const products = order.orderitems.map((value) => {
+        return {
+            "quantity": value.quantity,
+            "description": value.description,
+            "price": value.price
+        }
+    })
+    const imagepath = path.join(__dirname,'..','public','img','gadgin.png');
+    const base64Image = await imageService.imageToBase64(imagepath)
+    const invoiceData = {
+        orderNumber: order.orderid,
+        date: order.orderdate.toLocaleString('en-IN', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+        }),
+        amount: order.finalvalue,
+        products: order.orderitems,
+        address: order.address,
+        finalvalue: order.finalvalue,
+        ordervalue: order.ordervalue,
+        paymentmethod: order.paymentmethod,
+        userdetails: {
+            name: user.name,
+            email: user.email,
+        },
+        logo:base64Image
+
+    }
+
+
+    const data = {
+        invoiceData
+    };
+
+    const generatePdf = async (res, invoiceData) => {
+        const browser = await puppeteer.launch({ headless: "new" });
+
+        const page = await browser.newPage();
+
+        try {
+            const data = {
+                invoiceData
+            };
+
+            const templatePath = path.join(__dirname, '..', 'views', 'invoice.ejs');
+            const templateContent = await fs.readFile(templatePath, 'utf-8');
+            const renderedHtml = ejs.render(templateContent, data);
+
+            await page.setContent(renderedHtml);
+            // Generate the PDF as a buffer
+            const pdfBuffer = await page.pdf({
+                format: 'A4',
+                margin: {
+                    top: '20mm',
+                    right: '20mm',
+                    bottom: '20mm',
+                    left: '20mm',
+                },
+            });
+            // Send the PDF buffer as a response for download
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+            res.send(pdfBuffer);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        } finally {
+            await browser.close();
+        }
+    };
+
+
+    generatePdf(res, invoiceData);
+
+
 }

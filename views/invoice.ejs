@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Invoice</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap -->
+</head>
+<style>
+    /* @page {
+            size: A4;
+            margin: 20mm 20mm;
+        } */
+
+    body {
+        width: 210mm;
+        height: 297mm;
+        /* Adjust margins as needed */
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center; */
+        /* align-items: center; */
+    }
+
+    .mytable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .mytable th,
+    .mytable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        word-wrap: break-word;
+    }
+
+    .gadgin-logo {
+        width: 100px;
+    }
+
+    hr {
+        border: none;
+        /* Remove the default border */
+        height: 2px;
+        /* Set the height of the line */
+        background-color: #000000;
+        /* Set the color of the line */
+        margin: 20px 0;
+        /* Add some margin for spacing */
+    }
+    .address-span{
+        white-space: pre-wrap;
+        max-width: 50%;
+    word-wrap: break-word;
+    }
+</style>
+
+<body class="">
+    <div class="d-flex justify-content-between align-content-center ">
+        <div>
+            <!-- <img src="/img/gadgin.png" alt="" class="gadgin-logo"> -->
+            <img src="data:image/png;base64,<%=invoiceData.logo%>" alt="logo Image" class="gadgin-logo">
+       
+ 
+        </div>
+        <div class="">
+            <h1>INVOICE</h1>
+            <h6>GADGIN</h6>
+        </div>
+    </div>
+    <hr>
+
+    <div class="fw-bold">Order id:<%=invoiceData.orderNumber%></div>
+<div class="d-flex justify-content-between">
+    <div>
+        <div>
+            <h4>Customer Information</h4>
+            <span>Name: <%=invoiceData.userdetails.name%></span><br>
+            <span>Email: <%=invoiceData.userdetails.email%></span>
+        </div>
+        <div class="mt-4 d-flex flex-column">
+            <h4>Delivery Information</h4>
+            <span><%=invoiceData.address.name%></span>
+            <div class="address-span mb-1"><%=invoiceData.address.house%></div>
+            <span><%=invoiceData.address.pincode%></span>
+            <span><%=invoiceData.address.phone%></span>
+        </div>
+    </div>
+    <div>
+        <div  class="fw-bold">Date:<%=invoiceData.date%></div>
+        <div  class="fw-bold">Payment Method:<%=invoiceData.paymentmethod%></div>
+    </div>
+</div>
+
+    <table class="mytable">
+        <thead>
+            <tr>
+                <th>Products</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%for(let i=0;i<invoiceData.products.length;i++){%>
+                <tr>
+                    <td><%=invoiceData.products[i].name%></td>
+                    <td><%=invoiceData.products[i].quantity%></td>
+                    <td><%=invoiceData.products[i].price.toLocaleString('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    })%></td>
+                    <td><%=(invoiceData.products[i].price*invoiceData.products[i].quantity).toLocaleString('en-IN', {
+                        style: 'currency',
+                        currency: 'INR'
+                    })%></td>
+                </tr>
+            <%}%>
+           
+        </tbody>
+    </table>
+    <div class="d-flex flex-column mt-5">
+        <span class="fw-bold">Totals</span>
+        <span class="fw-bold">Coupon Discount: -<%=((invoiceData.ordervalue)-(invoiceData.finalvalue)).toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+        });%></span>
+        <span class="fw-bold">Subtotal:<%=(invoiceData.finalvalue).toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+        });%></span>
+    </div>
+
+    <p>Keep Shopping with us.</p>
+</body>
+
+</html>
