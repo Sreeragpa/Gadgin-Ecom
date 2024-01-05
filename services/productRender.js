@@ -65,9 +65,13 @@ exports.categoryManagement = async (req, res, next) => {
 
 exports.productsbyCategory = async (req, res,next) => {
     const userid = req.session?.passport?.user;
+    let wishlistset=new Set();
     if(userid){
         const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
-        req.flash('cartcount',cartcount.data.itemCount)
+         const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
+        req.flash('cartcount',cartcount.data.itemCount);
+         wishlistset = new Set(wishlist.data[0].products);
+    
     }
     if (req.query.category) {
         if(req.query.sortBy){
@@ -76,7 +80,8 @@ exports.productsbyCategory = async (req, res,next) => {
                 if (!response.data) {
                     res.send("No products")
                 } else {
-                    res.render('productpage.ejs', { products: response.data, isInCart: null })
+   
+                    res.render('productpage.ejs', { products: response.data, isInCart: null,wishlist:wishlistset })
                 }
 
             }).catch(error => {
@@ -89,7 +94,8 @@ exports.productsbyCategory = async (req, res,next) => {
                     if (!response.data) {
                         res.send("No products")
                     } else {
-                        res.render('productpage.ejs', { products: response.data, isInCart: null })
+           
+                        res.render('productpage.ejs', { products: response.data, isInCart: null,wishlist:wishlistset })
                     }
     
                 }).catch(error => {
@@ -103,7 +109,8 @@ exports.productsbyCategory = async (req, res,next) => {
             if (!response.data) {
                 res.send("No products")
             } else {
-                res.render('productpage.ejs', { products: response.data, isInCart: null })
+              
+                res.render('productpage.ejs', { products: response.data, isInCart: null ,wishlist:wishlistset})
             }
 
         }).catch(error => {
@@ -112,8 +119,8 @@ exports.productsbyCategory = async (req, res,next) => {
     }else{
         axios.get(`http://localhost:3001/api/products`)
         .then(function (response) {
-            console.log(response);
-            res.render('productpage.ejs', { products: response.data, isInCart: null })
+   
+            res.render('productpage.ejs', { products: response.data, isInCart: null ,wishlist:wishlistset})
         }).catch(err => {
             next(error)
         })

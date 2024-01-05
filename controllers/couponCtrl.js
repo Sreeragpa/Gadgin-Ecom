@@ -108,20 +108,25 @@ exports.applyCoupon = async(req,res)=>{
 
     const isCoupon = await Coupondb.findOne({couponcode:couponcode});
 
+    // Code for Invalid Coupon
     if(!isCoupon){
         return res.json({error:"Invalid Coupon"})
     }
 
+
+    // Conditions if Coupon is Valid
         const order = await Orderdb.findOne({_id:pendingorderid});
         const couponcategory = isCoupon.offertype.category;
         const coupondiscount = isCoupon.coupondiscount;
-        console.log(isCoupon);
+        const orderabove = isCoupon.offertype.priceabove;
+
     
         const couponExpiryDate = new Date(isCoupon.couponexpiry);
-
+    // Checking Coupon Expiry
         if(couponExpiryDate<Date.now() || isCoupon.couponcount==0){
             res.json({error:"Coupon Expired"})
         }
+        // Conditions if Coupon is a category coupon
         else if(couponcategory!='all'){
             const findcategory = order.orderitems.some((item)=>{
                 if(item.category==couponcategory){
@@ -132,32 +137,41 @@ exports.applyCoupon = async(req,res)=>{
             if(!findcategory){
                 res.json({error:"Cannot be applied"})
             }else{
-                await applyCouponinOrder();
+        
                 const totalapplied = order.orderitems.reduce((sum,product)=>{
                     if(product.category==couponcategory){
                         return sum+=product.price;
                     }
                     return sum;
                 },0);
-                console.log('totalapplied'+totalapplied);
+           
                 const totaldiscount = totalapplied*(isCoupon.coupondiscount/100);
                 const finalvalue = Number(order.ordervalue - totaldiscount)
-                await applyCouponinOrder(finalvalue);
-                res.json({couponcode:couponcode,coupondiscount:coupondiscount,totaldiscount:totaldiscount})
+
+                // Checking Orders above ..if ordervalue is less than the specified amount then cannot be applied
+                if(orderabove>order.ordervalue){
+                    return res.json({error:"Cannot be applied"})
+                }
+                await applyCouponinOrder(finalvalue,totaldiscount,res);
+       
             }
         }
         else{
-            console.log(order.orderitems);
-
+        //   Logic for:  If Coupon can be applied to all categories
             const totaldiscount = order.ordervalue*(isCoupon.coupondiscount/100);
             const finalvalue = Number(order.ordervalue - totaldiscount);
-            await applyCouponinOrder(finalvalue)
-            res.json({couponcode:couponcode,coupondiscount:coupondiscount,totaldiscount:totaldiscount})
+             // Checking Orders above ..if ordervalue is less than the specified amount then cannot be applied
+            if(orderabove>order.ordervalue){
+                return res.json({error:"Cannot be applied"})
+            }
+            await applyCouponinOrder(finalvalue,totaldiscount,res)
+ 
         }
 
-        async function applyCouponinOrder(finalvalue){
+        async function applyCouponinOrder(finalvalue,totaldiscount,res){
             const finalv = parseInt(finalvalue)
             await Orderdb.findOneAndUpdate({_id:pendingorderid},{$set:{appliedcoupon:couponcode,finalvalue:finalv}})
+            res.json({couponcode:couponcode,coupondiscount:coupondiscount,totaldiscount:totaldiscount})
         }
         
 

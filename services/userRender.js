@@ -209,7 +209,7 @@ exports.checkoutPage = async (req, res, next) => {
                         price += product.price;
                     }
                     discount = mrp - price;
-                    count += product.quantity;
+                    count += Number(product.quantity);
                 });
         
         
@@ -224,7 +224,7 @@ exports.checkoutPage = async (req, res, next) => {
                 const result = await Orderdb.findOneAndUpdate({_id:orderid,userid:userid},{$set:{'ordervalue':price,'finalvalue':price}});
         
                 if (orderid) {
-                    console.log(appliedcoupon);
+         
                     res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails ,appliedcoupon:appliedcoupon});
                 } else {
                     res.end()
@@ -236,7 +236,7 @@ exports.checkoutPage = async (req, res, next) => {
                         price += product.price;
                     }
                     discount = mrp - price;
-                    count += product.quantity;
+                    count +=  Number(product.quantity);
                 });
         
         
@@ -247,11 +247,11 @@ exports.checkoutPage = async (req, res, next) => {
                     count: count,
                     coupondiscount:(orderdetails.data[0].ordervalue-orderdetails.data[0].finalvalue).toFixed(2)
                 };
-                console.log(orderdetails);
+          
                 const appliedcoupon = orderdetails.data[0].appliedcoupon;
         
                 if (orderid) {
-                    console.log(appliedcoupon);
+      
                     res.render('checkoutpage.ejs', { orderid: orderid, productpricedetails: productpricedetails ,appliedcoupon:appliedcoupon});
                 } else {
                     res.end()

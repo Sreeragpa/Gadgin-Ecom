@@ -139,8 +139,13 @@
                                                 <i class="fa-solid fa-cart-shopping" style="color: #ffffff;"></i>
                                             <%}%>
                                             
-                                            <div class="">
-                                                <i class="fa-regular fa-heart fa-lg favourite-span" style="color: #ffffff;"></i>
+                                            <div class="mywishlist" id="mywishlist">
+                                                <a href="/api/wishlist/<%=products[i]._id%>" class="add-wishlist"
+                                                    id="finder<%=i%>">
+                                                    <i class=" <%=(wishlist.has(products[i]._id))?"fa-solid text-danger":"fa-regular"%> fa-heart fa-lg favourite-span"
+                                                        style="color: #ffffff; font-size: 20px;"></i>
+                                                </a>
+    
                                             </div>
                                         </div>
                                       
@@ -167,7 +172,8 @@
         <!-- Footer -->
         <%-include('include/_footer') %>
             <!-- Footer -->
-
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="/js/addtoFav.js"></script>
 </body>
 
 </html>

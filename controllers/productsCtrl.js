@@ -92,16 +92,20 @@ exports.singlepdtRender = async (req, res) => {
         const id = req.params.id;
         const userid = req.session.passport?.user;
         let isInCart = null;
-     
+        let wishlistset=new Set();
 
         const response = await Productdb.findById(req.params.id);
         if (userid) {
             const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
 
             isInCart = await Cartdb.findOne({ userid: userid, 'cartitems.productid': id });
-            req.flash('cartcount',cartcount.data.itemCount)
+            const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
+            
+             wishlistset = new Set(wishlist.data[0].products);
+             req.flash('cartcount',cartcount.data.itemCount);
+
         }
-        res.render('singleproductpage.ejs', { product: response, isInCart: isInCart });
+        res.render('singleproductpage.ejs', { product: response, isInCart: isInCart,wishlist:wishlistset });
 
     } catch (error) {
         console.error('Error fetching product from external API:', error.message);

@@ -288,12 +288,12 @@
         
       
         const href = form.getAttribute('data-action');
-        console.log('Form action:', href);
+
         
         const formData = {
             couponcode:document.getElementById('couponcode').value
         };
-        console.log('Form data:', formData);
+
 
         $.ajax({
             url: href,
