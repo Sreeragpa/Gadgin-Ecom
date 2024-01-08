@@ -151,9 +151,7 @@ async function orderdetails(){
         {
             $group:{
                 _id:"$orderdate",
-                // count:{$sum:"$orderquantity"},
                 count:{$sum:1},
-                // dates:{ $addToSet: "$orderdate" }
             }
         },
       

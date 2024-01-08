@@ -12,6 +12,8 @@ const validation = require('../middlewares/validationMiddleware');
 const paymentCtrl = require('../controllers/PaymentCtrl')
 const couponCtrl = require('../controllers/couponCtrl')
 const walletCtrl = require('../controllers/walletCtrl')
+
+
 // User
 route.post('/register',validation.strongPassword,userCtrl.create)
 route.patch('/update',validation.strongPassword, userCtrl.updatepass)
@@ -35,6 +37,7 @@ route.post('/user/addaddress',validation.checkAddress,userCtrl.addAddress)
 route.patch('/user/address/makedefault/:id',userCtrl.makeaddressDefault)
 route.get('/getusers',userCtrl.getuser)
 route.get('/user/cartcount/:id',userCtrl.getcartCount)
+
 // Wishlist
 route.put('/wishlist/:pid',CheckAuthenticated,wishlistCtrl.addtoWishlist)
 route.get('/getwishlist/:id',wishlistCtrl.getWishlist)
@@ -94,7 +97,6 @@ route.get('/get/invoice/:id',orderCtrl.generateInvoice)
 route.post('/user/wallet/addmoney',CheckAuthenticated,walletCtrl.walletaddmoney);
 route.get('/user/getwallet/:id',walletCtrl.getWallet);
 route.post('/user/wallet/addmoney/verify',CheckAuthenticated,walletCtrl.paymentVerification);
-// route.get('/user/wallet/addmoney/success/:id',userCtrl.setcodSuccess)
 route.get('/user/wallet/balance/:id',walletCtrl.walletBalance)
 route.put('/wallet/refund/:orderid/:pid',walletCtrl.refundtoWallet)
 

@@ -9,14 +9,17 @@ exports.homepage = (req, res) => {
     axios.all([
         axios.get(`http://localhost:${process.env.PORT}/api/products`),
         axios.get(`http://localhost:${process.env.PORT}/api/getcategory`),
+        axios.get(`http://localhost:${process.env.PORT}/api/getcoupon`),
     
     ])
 
-        .then(axios.spread(async(response1, response2) => {
+        .then(axios.spread(async(response1, response2, response3) => {
             if (req.session?.passport?.user) {
                 const userid = req.session.passport.user;
                 const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
                 const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
+               
+
                 const user = Userdb.findOne({ _id: req.session.passport.user }, { blocked: 1, _id: 0, })
                     .then((user) => {
                         if (user.blocked == 'true') {
@@ -29,7 +32,7 @@ exports.homepage = (req, res) => {
                         }else{
                             const wishlistset = new Set();
                             req.flash('cartcount',cartcount.data.itemCount)
-                            res.render("homepage", { products: response1.data, category: response2.data,wishlist:wishlistset })
+                            res.render("homepage", { products: response1.data, category: response2.data,coupons:response3.data,wishlist:wishlistset })
                         }
                         
                       
@@ -37,7 +40,7 @@ exports.homepage = (req, res) => {
                     })
             } else {
                 const wishlistset = new Set();
-                res.render("homepage", { products: response1.data, category: response2.data,wishlist:wishlistset })
+                res.render("homepage", { products: response1.data, category: response2.data,coupons:response3.data,wishlist:wishlistset })
             }
 
         }))

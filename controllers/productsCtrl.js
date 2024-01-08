@@ -77,13 +77,6 @@ exports.getProducts = async (req, res) => {
             res.status(500).send({ error: "Internal Server Error" });
         }
     }
-    // if(req.query.search){
-    //     const name = req.query.search;
-    //     console.log(name);
-    //     const products = await Productdb.find({name:name});
-    //     res.send(products)
-    // }
-
 
 }
 
@@ -267,12 +260,6 @@ exports.deleteImage = async (req, res) => {
         const img = product.images[index];
         product.images.splice(index, 1);
         imgfilepath = path.join(__dirname, '../' + '/public' + img)
-      
-        // fs.unlink(imgfilepath, (err) => {
-        //     if (err) {
-        //         console.log(err);
-        //     }
-        // })
         const updatedProduct = await product.save();
         const category = await Categorydb.find()
         res.render('admineditproductform.ejs', { product: updatedProduct, categories: category })
@@ -296,7 +283,7 @@ exports.createCategory = async (req, res) => {
             res.render('adminaddcategory.ejs', { messages: { error: "Category Exists" } })
         } else {
             const files = req.files;
-            // console.log(files);
+
             imag = "/uploads/" + files[0].filename;
 
 

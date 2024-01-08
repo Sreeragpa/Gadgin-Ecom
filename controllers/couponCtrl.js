@@ -34,7 +34,7 @@ exports.addCoupon = async (req, res) => {
                 'offertype.pricebelow': pricebelow,
             })
             await newcoupon.save();
-            // const referrer = req.get('Referrer');
+    
             req.flash('success',"Coupon Added")
             res.redirect('/admin/couponmgmt')
         }

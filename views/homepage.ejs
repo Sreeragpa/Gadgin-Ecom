@@ -187,21 +187,18 @@
 
                     <!-- Coupon -->
 
-                    <div id="coupon" class="carousel slide m-5 " data-bs-ride="carousel" style="height: 10vw;">
+                    <div id="coupon" class="carousel slide m-4 coupon-carousel" data-bs-ride="carousel" >
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="coupon-div">
-                                    <p class="text-white">Welcome OFFER</p>
+                            <%for(let i=0;i<coupons.length;i++){%>
+                                <div class="carousel-item active">
+                                    <div class="coupon-div d-flex flex-column">
+                                        <p class="text-white fw-bold"><%=coupons[i].couponcode%></p>
+                                        <p class="text-white ">Get <%=coupons[i].coupondiscount%>% OFF</p>
+                                        <p class="text-white "><%=(coupons[i].offertype.priceabove==1)?'':`On all Orders above ₹${(coupons[i].offertype.priceabove).toLocaleString('en-IN')}` %></p>
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="carousel-item">
-                                <div class="coupon-div">
-                                    <p class="text-white">NEW OFFERS</p>
-                                </div>
-
-                            </div>
-
+                            <%}%>
+         
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#coupon"
                             data-bs-slide="prev">

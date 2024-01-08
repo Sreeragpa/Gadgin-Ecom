@@ -70,9 +70,7 @@ exports.paymentVerification = async (req, res) => {
                     'transactions.$.razorpay_order_id': razorpay_order_id,
                     'transactions.$.razorpay_signature': razorpay_signature
                 },
-                //  $inc:{
-                //     walletbalance:'$transactions.$.amount'
-                // },
+    
             },
 
             { new: true }
@@ -89,12 +87,7 @@ exports.paymentVerification = async (req, res) => {
             { $inc: { walletbalance: amount } }
         )
         res.redirect('/wallet')
-        // delete req.session.pendingorderid;
-        // const ordersuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=razorpay`);
 
-        // if(ordersuccess.data){
-        //     const order = await Orderdb.findOneAndUpdate({_id:orderid},{$set:{razorpay_payment_id:razorpay_payment_id,razorpay_order_id:razorpay_order_id,razorpay_signature:razorpay_signature}},{upsert:true});
-        //     res.status(200).render('paymentstatuspage.ejs', { paymentstatus: "Order Success", orderdetails: order });
     } else {
         res.redirect('/wallet')
     }
@@ -104,20 +97,9 @@ exports.paymentVerification = async (req, res) => {
 
 
 
-// exports.addmoneySuccess = async () => {
-//     const userid = req.params.id;
-//     const isWallet = Walletdb.findOne({ userid: userid });
-//     if (!isWallet) {
-//         const wallet = new Walletdb({
-//             userid: userid,
-
-//         })
-//     }
-// }
-
 exports.getWallet = async (req, res) => {
     const userid = req.params.id;
-    // const wallet = await Walletdb.findOne({userid:userid}).sort({'transactions.timestamp':-1}).limit(10);
+   
     const wallet = await Walletdb.aggregate([
         { $match: { userid: new mongoose.Types.ObjectId(userid) } },
         { $unwind: "$transactions" },

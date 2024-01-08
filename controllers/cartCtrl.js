@@ -68,7 +68,7 @@ exports.getCart =async(req,res)=>{
             },
             {
                 $project: {
-                    // userid: 1,
+    
                     cartItemsWithDetails: 1,
                     "cartitems":1
 
@@ -78,7 +78,6 @@ exports.getCart =async(req,res)=>{
         ]);
 
         if (result.length > 0) {
-            // console.log(result);
             res.status(200).send(result)
 
         } else {
@@ -103,7 +102,6 @@ exports.deleteCartitem =async(req,res)=>{
         if (todeleteIndex !== -1){
             cart.cartitems.splice(todeleteIndex,1);
             await cart.save()
-            // res.status(200).redirect('/cart');
             res.status(200).json({ success: true, message: 'Item deleted successfully' });
         }else {
             return res.status(404).json({ message: 'Item not found in the cart' });

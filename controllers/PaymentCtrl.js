@@ -8,8 +8,6 @@ exports.payment = async (req, res) => {
     const pendingorderid = req.session.pendingorderid;
     const userid = req.session.passport.user;
 
-
-    // const myorder = axios.get(`/user/getorders/products/${userid}/${pendingorderid}`);
     const myorder = await Orderdb.find({ _id: pendingorderid });
     const amountt = myorder[0].finalvalue.toFixed(2);
     const amount = Number(amountt)
@@ -62,8 +60,5 @@ exports.paymentVerification = async (req, res) => {
 
     }
 
-  
-    // delete req.session.pendingorderid;
-    // console.log(req.body);
 }
 

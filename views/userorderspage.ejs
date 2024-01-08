@@ -122,12 +122,14 @@
 
                                                 </div>
                                                 <div class="order-details-one ">
-                                                    <ul>
+                                                    <ul class="d-flex gap-1 flex-column">
                                                         <!-- <li>Order id:<span><%=orders[i].orderid%></span> </li> -->
                                                         <li>
                                                             <%=orders[i].orderitems.name%>
                                                         </li>
                                                         <li>Quantity:<%=orders[i].orderitems.quantity%>
+                                                        </li>
+                                                        <li>Order Date:<%=(orders[i].orderdate).split('T')[0]%>
                                                         </li>
                                                         <li class="hidden text-capitalize">Order Status:
                                                             <%=orders[i].orderitems.orderstatus%>

@@ -11,7 +11,6 @@ exports.getOtp = async (req, res) => {
     req.session.email = req.body.email;
     try {
         fpasss= req.query.forgotpass;
-    //    console.log(fpasss,email);
        if (req.query.forgotpass == 1) {
            const type = 'fpass'
            req.session.fpass = true;

@@ -21,7 +21,6 @@ exports.create = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         req.flash('error', "Password should be Strong");
-        // req.session.email = req.body.email;
         return res.redirect('/newaccount')
     }
     const email = req.session.email;
@@ -30,10 +29,8 @@ exports.create = async (req, res) => {
     const existingPhone = await Userdb.findOne({ phone: req.body.phone });
 
     if (existingUser) {
-        // res.send("User Already Exists")
         res.render("userlogin.ejs", { messages: { error: "User Already exists" } })
     } else if (existingPhone) {
-        // res.render("userlogin.ejs",{messages:{error:"Phone already exists"}})
         res.render('finalreg.ejs', { email: email, messages: { error: "Phone already exists" } })
     } else {
         try {
@@ -51,7 +48,6 @@ exports.create = async (req, res) => {
 
             await user.save()
                 .then(async() => {
-                    // res.render('successpage.ejs', { messages: "Registered Successfully" });
                     req.session.email=null;
                     req.flash('success', "User Registered");
                     res.redirect('/login');
@@ -76,7 +72,7 @@ exports.updatepass = async (req, res) => {
         req.flash('error', "Password should be Strong");
         req.session.email = req.body.email;
         return res.redirect('/changepassword')
-        // return res.status(422).send(errors.array());
+
     } else {
         try {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -87,7 +83,6 @@ exports.updatepass = async (req, res) => {
             );
 
             if (updatedUser) {
-                // res.render('successpage.ejs', { messages: "Password Changed" });
                 req.flash('success', "Password Updated")
                 res.redirect('/login');
             }
@@ -112,7 +107,7 @@ exports.getuser = async (req, res) => {
 }
 exports.getcartCount = async (req, res) => {
     try {
-        // const userid = req.session.passport.id;
+
         const userid = req.params.id;
         const result = await Cartdb.aggregate([
 
@@ -218,8 +213,7 @@ exports.addAddress = async (req, res) => {
 
             await newAddress.save();
 
-            req.flash('success', "Address added")
-            // res.redirect('/manageaddress');
+            req.flash('success', "Address added");
             const referer = req.get('referer');
             res.redirect(referer);
         }
@@ -334,7 +328,7 @@ exports.checkout = async (req, res) => {
                     orderstatus: 'pending'
 
                 };
-                // console.log(orderItem);
+
                 newOrder = new Orderdb({
                     orderid:uuid.v4().replace(/-/g, ''),
                     userid: userid,
@@ -484,7 +478,7 @@ exports.setcodSuccess = async (req, res) => {
 
         let flag = 0;
 
-        // Test
+
         for (const product of order.orderitems) {
             const updateq = Number(product.quantity);
 
@@ -496,7 +490,7 @@ exports.setcodSuccess = async (req, res) => {
                 flag = 1;
             }
         }
-        // Test
+       
 
         if (flag == 1) {
             const changeorder = await Orderdb.findOneAndUpdate(

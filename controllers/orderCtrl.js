@@ -427,7 +427,6 @@ exports.changeorderStatus = async (req, res, next) => {
     
         const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange} })
         if(req.body.status=="cancelled"){
-            // await Walletdb.findOneAndUpdate()
             await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
         }
         if (result) {
