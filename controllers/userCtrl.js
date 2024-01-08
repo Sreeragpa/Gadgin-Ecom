@@ -9,6 +9,7 @@ const axios = require('axios');
 const { validationResult } = require('express-validator');
 const generateProfilepicture = require('../services/generateProfilepicSharp');
 const uuid = require('uuid');
+const Walletdb = require('../models/walletModel');
 
     
 
@@ -505,11 +506,37 @@ exports.setcodSuccess = async (req, res) => {
             );
             res.send();
         } else {
-            const changeorder = await Orderdb.findOneAndUpdate(
-                { userid: userid, _id: orderid },
-                { $set: { 'orderitems.$[].orderstatus': "ordered", paymentmethod: paymentmethod } },
-                { upsert: true }
-            );
+            if(paymentmethod=='wallet'){
+                const changeorder = await Orderdb.findOneAndUpdate(
+                    { userid: userid, _id: orderid },
+                    { $set: { 'orderitems.$[].orderstatus': "ordered", paymentmethod: paymentmethod,paymentstatus:true } },
+                    { upsert: true }
+                );
+
+                const amount = changeorder.finalvalue;
+                console.log(amount);
+
+                const wallet = await Walletdb.findOneAndUpdate(
+                    {userid:userid},
+                    {    $push: {
+                        transactions: {
+                            amount: amount,
+                            debit: true,
+                            status: "success",
+                            transactionid: orderid
+                        }
+                    },
+                        $inc:{walletbalance:-amount}
+                    }
+                )
+            }else{
+                const changeorder = await Orderdb.findOneAndUpdate(
+                    { userid: userid, _id: orderid },
+                    { $set: { 'orderitems.$[].orderstatus': "ordered", paymentmethod: paymentmethod } },
+                    { upsert: true }
+                );
+            }
+         
             for (const product of order.orderitems) {
                 const updateq = Number(product.quantity);
 

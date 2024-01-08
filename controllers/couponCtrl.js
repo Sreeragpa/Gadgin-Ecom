@@ -152,7 +152,7 @@ exports.applyCoupon = async(req,res)=>{
                 if(orderabove>order.ordervalue){
                     return res.json({error:"Cannot be applied"})
                 }
-                await applyCouponinOrder(finalvalue,totaldiscount,res);
+                await applyCouponinOrder(finalvalue,totaldiscount,coupondiscount,res);
        
             }
         }
@@ -164,13 +164,13 @@ exports.applyCoupon = async(req,res)=>{
             if(orderabove>order.ordervalue){
                 return res.json({error:"Cannot be applied"})
             }
-            await applyCouponinOrder(finalvalue,totaldiscount,res)
+            await applyCouponinOrder(finalvalue,totaldiscount,coupondiscount,res)
  
         }
 
-        async function applyCouponinOrder(finalvalue,totaldiscount,res){
+        async function applyCouponinOrder(finalvalue,totaldiscount,coupondiscount,res){
             const finalv = parseInt(finalvalue)
-            await Orderdb.findOneAndUpdate({_id:pendingorderid},{$set:{appliedcoupon:couponcode,finalvalue:finalv}})
+            await Orderdb.findOneAndUpdate({_id:pendingorderid},{$set:{appliedcoupon:couponcode,finalvalue:finalv,coupondiscount:coupondiscount}})
             res.json({couponcode:couponcode,coupondiscount:coupondiscount,totaldiscount:totaldiscount})
         }
         

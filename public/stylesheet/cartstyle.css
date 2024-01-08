@@ -47,38 +47,42 @@
     border: none;
     color: white;
 }
-.clear-btn{
+
+.clear-btn {
     background-color: transparent;
     border: none;
 }
 
 /* Cart Modal */
-#continue-overlay{
-	display: none;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	/* background-color: rgba(0, 0, 0, 0.5); */
-	backdrop-filter: blur(5px);
-	align-items: center;
-	justify-content: center;
-	transition: all 1s;
+#continue-overlay {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    transition: all 1s;
 }
+
 #cancelBtn {
-	background-color: #f44336;
-	color: #fff;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
+    background-color: #f44336;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
+
 #modal {
-	background-color: #1C1C1C;
+    background-color: #1C1C1C;
     color: white;
-	padding: 20px;
-	border-radius: 8px;
-	text-align: center;
-  }
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
 /* /Cart Modal */
 
 
@@ -136,9 +140,10 @@
     background-color: transparent;
     border-radius: 12px;
     padding: 18px;
-    
+
 }
-.address-div-main{
+
+.address-div-main {
     width: 60vw;
     background-color: black;
     border-radius: 12px;
@@ -146,7 +151,7 @@
 }
 
 .address-div {
-    background-color:rgb(16, 15, 15);
+    background-color: rgb(16, 15, 15);
     padding: 18px;
     border-radius: 12px;
     margin-bottom: 10px;
@@ -192,43 +197,51 @@
 
     box-shadow: 0px 4px 18px 10px rgba(0, 0, 0, 0.25);
 }
-.radio-btn{
+
+.radio-btn {
     width: 18px;
     height: 18px;
 }
-.card-payment-head{
+
+.card-payment-head {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.transform50{
+
+.transform50 {
     transform: translateY(0%)
 }
-.sub-title{
+
+.sub-title {
     font-size: 18px;
 }
-.input-box-cardpayment{
+
+.input-box-cardpayment {
     height: 35px;
     border-radius: 8px;
-    border: none ;
+    border: none;
     /* background-color: #181818; */
 }
 
-.width-50{
+.width-50 {
     width: 50%;
 }
-.default-btn{
+
+.default-btn {
     border: none;
     border-radius: 8px;
     padding: 4px 8px;
     transform: translateY(40%);
 }
-.more-address-link{
+
+.more-address-link {
     display: flex;
     justify-content: center;
     cursor: pointer;
 }
-.address-hide{
+
+.address-hide {
     display: none;
 }
 
@@ -237,53 +250,59 @@
 
 /* Manage Address */
 
-.delete-address-btn{
+.delete-address-btn {
     background-color: transparent;
     border: none;
 }
 
-.manageaddress-content{
+.manageaddress-content {
     /* padding-top: 25px; */
     width: 100%;
     gap: 10px;
 }
 
-.add-address-btn{
+.add-address-btn {
     border: none;
     padding: 8px 12px;
     background-color: FFE500;
     margin-left: 18px;
     border-radius: 8px;
 }
-.add-new-address{
+
+.add-new-address {
     margin-top: 20px;
     padding: 20px;
     background-color: black;
     border-radius: 12px;
 }
-.add-new-address input{
+
+.add-new-address input {
     padding: 8px 12px;
     border-radius: 8px;
     border: none;
     width: 100%;
     height: 60%;
 }
-.add-new-address textarea{
+
+.add-new-address textarea {
     width: 100%;
     padding: 8px 12px;
     border-radius: 8px;
     border: none;
 }
-.add-new-address-main{
+
+.add-new-address-main {
     padding: 18px;
     transition: all 2;
 }
-.hide-div{
+
+.hide-div {
     display: none;
     /* opacity: 0; */
-    transition: opacity 0.3s ease, max-height 0.3s ease; 
+    transition: opacity 0.3s ease, max-height 0.3s ease;
 }
-.manage-address-btn{
+
+.manage-address-btn {
     width: 20%;
     display: flex;
     align-items: center;
@@ -291,34 +310,103 @@
     color: black;
     margin-bottom: 12px;
 }
+
 /* / Manage Address */
 
 
-.mm{
+.mm {
     position: relative;
 }
 
 /* User Edit */
 
-.actlink{
+.actlink {
     cursor: pointer;
 }
-.editacc-input{
+
+.editacc-input {
     padding: 8px 12px;
     border-radius: 8px;
     border: none;
     width: 100%;
     height: 100%;
 }
-.hidee{
+
+.hidee {
     display: none;
 }
+
 /* / User Edit */
 
 .add-address-btn {
     cursor: pointer;
 }
 
+.addmoney-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+}
+
+
+
+input:focus {
+    border: 0px solid #000000;
+    /* Set a border for focus state */
+    box-shadow: 0 0 0px rgba(66, 133, 244, 0.5);
+    /* Add a box shadow for focus state */
+}
+
+.add-money-input {
+    border: none;
+    outline: none;
+    box-shadow: 0;
+    border-radius: 8px;
+    background-color: transparent; 
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    width: 30%;
+  margin: 0; /* Remove any default margin */
+  /* padding: 5px; */
+}
+.bold-50{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.addmoney-content-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.add-money-input::placeholder {
+    /* Apply the same styles as needed */
+    color: #999; /* Placeholder text color */
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+textarea:focus,
+input:focus {
+    border: none;
+    outline: none;
+    box-shadow: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.yellow-gadgin {
+    background-color: rgb(239, 239, 0);
+}
 
 @media (max-width: 1110px) {
     .cart-content {
@@ -327,7 +415,7 @@
 
     .cart-content {
         width: 100%;
-        
+
     }
 
     .cart-items {
@@ -346,10 +434,11 @@
     .payment-address-div {
         width: 100%;
     }
-    .address-div-main{
-        width:100%;
+
+    .address-div-main {
+        width: 100%;
     }
- 
+
 }
 
 @media (max-width:800px) {
@@ -383,13 +472,14 @@
         margin: 0px;
         padding: 20px 5px;
         border-radius: 8px;
-        
+
     }
 
     .cart-calculations {
         font-size: 12px;
     }
-    label{
+
+    label {
         font-size: 12px;
     }
 
@@ -405,26 +495,29 @@
 
         font-size: 10px;
     }
-    .stock{
+
+    .stock {
         font-size: 12px;
     }
 
     .cart-heading {
         margin-left: 8px;
-    } 
+    }
 
 }
 
-@media(max-width:600px){
-    .width-100{
+@media(max-width:600px) {
+    .width-100 {
         width: 100%;
-        
-    }  
-    .default-btn{
+
+    }
+
+    .default-btn {
         width: 70%;
         font-size: 12px;
     }
-    .add-address-btn{
+
+    .add-address-btn {
         width: 42%;
         font-size: 12px;
     }

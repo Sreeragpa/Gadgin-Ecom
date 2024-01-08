@@ -31,7 +31,7 @@ const generatePdf = async (res, invoiceData) => {
         });
         // Send the PDF buffer as a response for download
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+        res.setHeader('Content-Disposition', 'attachment: filename=invoice.pdf');
         res.send(pdfBuffer);
     } catch (error) {
         console.error('Error generating PDF:', error);

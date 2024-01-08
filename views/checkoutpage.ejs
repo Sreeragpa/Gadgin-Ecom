@@ -103,7 +103,21 @@
                                             <span class="transform50 sub-title">Cash on Delivery</span>
                                         </div>
                                     </div>
-                                    <span id="paymentmethod-error" class="text-danger mt-1"></span>
+                                    <div class="mt-3">
+                                        <div class="card-payment-head">
+                                            <input type="radio" class="radio-btn" name="paymentmethod" value="wallet"
+                                                id="cod-radio">
+                                            <span class="transform50 sub-title">Use Wallet Cash</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 pt-1">
+                                        <div class="card-payment-head">
+                                            <span class="transform50 sub-title" style="font-size: 16px;">&nbsp;&nbsp;Balance: <%=(walletbalance)?walletbalance.toLocaleString('en-IN',
+                                                { style: 'currency' , currency: 'INR' }):'0'%></span>
+                                 
+                                        </div>
+                                    </div>
+                                    <span id="paymentmethod-error" class="text-danger mt-1"><%=messages?.error%></span>
 
                             </div>
                         </div>

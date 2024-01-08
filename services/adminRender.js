@@ -10,8 +10,8 @@ exports.admindash = async(req, res) => {
 
 exports.loginvalidate = (req, res) => {
     const admincred = {
-        email: "admin@gmail.com",
-        password: "123"
+        email: process.env.admin_email,
+        password: process.env.admin_pass
     }
 
     function checkAdminCredentials(email, password) {

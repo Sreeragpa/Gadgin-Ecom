@@ -11,6 +11,7 @@ const store = require('../services/multer');
 const validation = require('../middlewares/validationMiddleware');
 const paymentCtrl = require('../controllers/PaymentCtrl')
 const couponCtrl = require('../controllers/couponCtrl')
+const walletCtrl = require('../controllers/walletCtrl')
 // User
 route.post('/register',validation.strongPassword,userCtrl.create)
 route.patch('/update',validation.strongPassword, userCtrl.updatepass)
@@ -62,8 +63,9 @@ route.get('/admin/getorders',orderCtrl.getallOrders)
 route.get('/admin/getorders/userdetails',orderCtrl.getallorderwithuser)
 route.post('/order/changestatus/:id/:pid',orderCtrl.changeorderStatus)
 route.post('/order/cancel/:oid/:pid',CheckAuthenticated,orderCtrl.cancelOrder)
+route.post('/order/return/:oid/:pid',CheckAuthenticated,orderCtrl.returnOrder)
 route.get('/admin/getorder/:orderid',orderCtrl.getSingleOrder)
-route.post('/checkout/:id',userCtrl.checkout)
+route.post('/checkout/:id',CheckAuthenticated,userCtrl.checkout)
 route.get('/user/getorders/:userid/:orderid',orderCtrl.getOrders)
 route.get('/user/getorders/products/:userid/:orderid',orderCtrl.getOrderProducts)
 route.get('/user/order/success/:userid/:orderid',userCtrl.setcodSuccess)
@@ -88,7 +90,12 @@ route.delete('/coupon/remove',couponCtrl.couponRemove)
 // Invoice
 route.get('/get/invoice/:id',orderCtrl.generateInvoice)
 
-
-
+// Wallet
+route.post('/user/wallet/addmoney',CheckAuthenticated,walletCtrl.walletaddmoney);
+route.get('/user/getwallet/:id',walletCtrl.getWallet);
+route.post('/user/wallet/addmoney/verify',CheckAuthenticated,walletCtrl.paymentVerification);
+// route.get('/user/wallet/addmoney/success/:id',userCtrl.setcodSuccess)
+route.get('/user/wallet/balance/:id',walletCtrl.walletBalance)
+route.put('/wallet/refund/:orderid/:pid',walletCtrl.refundtoWallet)
 
 module.exports = route

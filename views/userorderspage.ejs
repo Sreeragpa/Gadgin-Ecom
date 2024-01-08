@@ -159,14 +159,16 @@
                                                         </form>
 
                                                         <%}else if(orders[i].orderitems.orderstatus=='delivered' ){%>
-                                                            <form method="post" class="m-0">
-                                                                <!-- <button
-                                                                    class="return-button text-bg-light">Return</button> -->
-                                                            </form>
-                                                            <form method="get" class="m-0" action="/api/get/invoice/<%=orders[i]._id%>">
-                                                                <button
-                                                                    class="return-button text-bg-light"><i class="fa-solid fa-file-lines" style="color: #000000;"></i></button>
-                                                            </form>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <form method="post" action="/api/order/return/<%=orders[i]._id%>/<%=orders[i].orderitems.pid%>"  class="order-cancel-form m-0">
+                                                                    <button
+                                                                        class="return-button text-bg-light">Return</button>
+                                                                </form>
+                                                                <form method="get" class="m-0" action="/api/get/invoice/<%=orders[i]._id%>">
+                                                                    <button
+                                                                        class="return-button text-bg-light"><i class="fa-solid fa-file-lines" style="color: #000000;"></i></button>
+                                                                </form>
+                                                            </div>
                                                             <%}%>
                                                 </div>
                                             </div>
@@ -235,6 +237,23 @@
                 let alertmodal = document.getElementById('sweetalert-overlay-modal');
 
                 document.querySelectorAll('.order-cancel-form').forEach((cancelform) => {
+                    cancelform.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        alertmodal.style.display = 'flex';
+                        document.getElementById('yesBtn').addEventListener('click', () => {
+                            console.log(cancelform.action);
+                            document.getElementById('feedback-form-cancel').action=cancelform.action;
+                            document.getElementById('feedback-form-cancel').submit();
+                        })
+                        document.getElementById('noBtn').addEventListener('click', () => {
+                            alertmodal.style.display = 'none';
+                            document.getElementById('feedback-form-cancel').action='';
+                        })
+
+                    });
+                })
+
+                document.querySelectorAll('.order-return-form').forEach((cancelform) => {
                     cancelform.addEventListener('submit', (e) => {
                         e.preventDefault();
                         alertmodal.style.display = 'flex';

@@ -114,6 +114,8 @@
                                     <ul>
                                         <li class="text-capitalize">Payment Method:<%=orders.paymentmethod%>
                                         </li>
+                                        <li class="text-capitalize">Payment Status:<%=(orders.paymentstatus)?"Paid":"Not Paid"%>
+                                        </li>
                                         <li>Order Date:<%= new Date(orders.orderdate).toLocaleString('en-IN') %>
                                         </li>
                                         <li>Order Items:<%=orders.orderquantity%>
@@ -151,6 +153,8 @@
                                             </li>
                                             <li class="fw-bold mt-2"> <%=(orders.appliedcoupon)?`Coupon Applied: ${orders.appliedcoupon}`:''%>
                                             </li>
+                                            <li class="fw-bold mt-2"> <%=(orders.appliedcoupon)?`Coupon Dicount: ${orders.coupondiscount}%`:''%>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -183,6 +187,10 @@
                                                     </li>
                                                     <li>Price:₹<%=(orders.orderitems[i].price).toLocaleString('en-IN')%>
                                                     </li>
+                                                    <%if(orders.coupondiscount){%>
+                                                        <li>Dicount Price:₹<%=((orders.orderitems[i].price)-(orders.coupondiscount*orders.orderitems[i].price/100)).toLocaleString('en-IN')%>
+                                                        </li>
+                                                    <%}%>
                                                     <li class="hidden text-capitalize">Order Status:
                                                         <%=orders.orderitems[i].orderstatus%>
                                                     </li>

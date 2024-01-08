@@ -13,7 +13,9 @@ const passport = require('./configs/passport-config');
 const session = require('express-session')
 const flash = require('express-flash');
 const errorMiddleware = require('./middlewares/errorMiddleware');
-const cors = require('cors')
+const cors = require('cors');
+const morgan = require('morgan');
+// app.use(morgan('dev'));
 dbConnect();
 
 app.use(session({

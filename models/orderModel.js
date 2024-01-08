@@ -83,8 +83,16 @@ var orderSchema = new mongoose.Schema({
         type:String,
         default:null
     },
+    coupondiscount:{
+        type:Number,
+        default:null
+    },
     finalvalue:{
         type:Number
+    },
+    paymentstatus:{
+        type:Boolean,
+        default:false
     }
 
 

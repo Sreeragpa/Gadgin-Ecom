@@ -35,71 +35,96 @@
 
         <!-- MAIN -->
         <%if(messages.success){%>
-                            <!-- Sweetalert -->
-        <div id="sweetalert-overlay" class="sweetalert-overlay">
-            <div id="sweetalert" class="sweetalert">
-                <i class="fa-regular fa-circle-check" style="color: #00ff40;"></i>
-                <p class="text-white fw-bold mt-2"><%=messages.success%></p>
-                <button id="okBtn" class="okBtn m-0">Ok</button>
-                <!-- <button id="cancelBtn" class="cancelBtn">No</button> -->
-            </div>
-        </div>
-        <!-- Sweetalert -->
-        <%}%>
-        <div class="container-fluid p-0 main-div">
-            <!-- Content -->
-            <div class="inner-content-div-user text-white">
-
-
-                <!-- Checkout Heading -->
-                <div class="cart-heading gap-2">
-                    <div class="">
-                        <h4 class="m-0">Manage Wallet</h4>
-                    </div>
-                    <div>
-
-                    </div>
+            <!-- Sweetalert -->
+            <div id="sweetalert-overlay" class="sweetalert-overlay">
+                <div id="sweetalert" class="sweetalert">
+                    <i class="fa-regular fa-circle-check" style="color: #00ff40;"></i>
+                    <p class="text-white fw-bold mt-2">
+                        <%=messages.success%>
+                    </p>
+                    <button id="okBtn" class="okBtn m-0">Ok</button>
+                    <!-- <button id="cancelBtn" class="cancelBtn">No</button> -->
                 </div>
-                <hr>
-                <!-- / Checckout Heading -->
-                <!-- Cart Content -->
-                <div class="wallet-content">
-                    <!-- Address -->
+            </div>
+            <!-- Sweetalert -->
+            <%}%>
+                <div class="container-fluid p-0 main-div">
+                    <!-- Content -->
+                    <div class="inner-content-div-user text-white">
 
 
-                    <div class="wallet-div" >
-                        <div class="mt-2 d-flex justify-content-center">
-                            <span class="fw-bold item-title"> <i class="fa-solid fa-wallet" style="color: #ffffff;"></i> Wallet </span>
-                        </div>
-                        <div class="wallet-config">
+                        <!-- Checkout Heading -->
+                        <div class="cart-heading gap-2">
                             <div class="">
-                                <span>Total Balance</span>
-                                <br>
-                                <span class="font-sz-18">₹62,900</span>
+                                <h4 class="m-0">Manage Wallet</h4>
                             </div>
-                            <div class="add-money-div">
-                                <!-- <form action=""> -->
-                                    <button class="add-money-btn">Add Money</button>
-                                <!-- </form> -->
+                            <div>
+
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <p>Transactions</p>
-                            <table class="table table-dark wallet-transaction-table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Amount</th>
-                
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">1</th>
-                                    <td>12/10/2023</td>
-                                    <td class="text-danger">₹2,900 <i class="fa-solid fa-arrow-trend-down" style="color: #ff0000;"></i></td>
-                                  </tr>
+                        <hr>
+                        <!-- / Checckout Heading -->
+                        <!-- Cart Content -->
+                        <div class="wallet-content">
+                            <!-- Address -->
+
+
+                            <div class="wallet-div">
+                                <div class="mt-2 d-flex justify-content-center">
+                                    <span class="fw-bold item-title"> <i class="fa-solid fa-wallet"
+                                            style="color: #ffffff;"></i> Wallet </span>
+                                </div>
+                                <div class="wallet-config">
+                                    <div class="">
+                                        <span>Total Balance</span>
+                                        <br>
+                                        <span
+                                            class="font-sz-18"><%=(wallet.walletbalance)?(wallet.walletbalance).toLocaleString('en-IN',
+                                                { style: 'currency' , currency: 'INR' }):'0'%></span>
+                                    </div>
+                                    <div class="add-money-div">
+                                        <!-- <form action=""> -->
+                                        <a class="add-money-btn text-dark" href="/wallet/addmoney">Add Money</a>
+                                        <!-- </form> -->
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <p>Transactions</p>
+                                    <table class="table table-dark wallet-transaction-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Amount</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%for(let i=0;i<wallet?.transactions?.length;i++){%>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <%=i+1%>
+                                                    </th>
+                                                    <td>
+                                                        <%=wallet.transactions[i].timestamp.toString().split('T')[0]%>
+                                                    </td>
+                                                    <td
+                                                        class="<%=(wallet.transactions[i].credit)?'text-success':'text-danger'%>">
+                                                        <%=(wallet.transactions[i].amount).toLocaleString('en-IN', {
+                                                            style: 'currency' , currency: 'INR' })%>
+
+                                                            <%if(wallet.transactions[i].credit){%>
+                                                                <i class="fa-solid fa-arrow-trend-up"
+                                                                    style="color: #37ff00;"></i>
+                                                                <%}else{%>
+                                                                    <i class="fa-solid fa-arrow-trend-down"
+                                                                        style="color: #ff0000;"></i>
+                                                                    <%}%>
+
+                                                    </td>
+                                                </tr>
+                                                <%}%>
+                                                    <!--                            
                                   <tr>
                                     <th scope="row">2</th>
                                     <td>12/10/2023</td>
@@ -109,32 +134,34 @@
                                     <th scope="row">3</th>
                                     <td >12/10/2023</td>
                                     <td class="text-danger">₹900 <i class="fa-solid fa-arrow-trend-down" style="color: #ff0000;"></i></td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                                  </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            <!-- / Address -->
                         </div>
-                       
+                        <!-- /Cart Content -->
+
+
+
                     </div>
 
-                    <!-- / Address -->
+                    <!-- /Content -->
+
                 </div>
-                <!-- /Cart Content -->
+                <!-- /MAIN -->
 
 
 
-            </div>
-
-            <!-- /Content -->
-
-        </div>
-        <!-- /MAIN -->
+                <!-- Footer -->
+                <%- include('include/_footer') %>
+                    <!-- Footer -->
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-
-        <!-- Footer -->
-        <%- include('include/_footer') %>
-            <!-- Footer -->
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </body>
 
 </html>

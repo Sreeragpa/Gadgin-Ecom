@@ -52,7 +52,7 @@ exports.paymentVerification = async (req, res) => {
         const ordersuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=razorpay`);
 
         if(ordersuccess.data){
-            const order = await Orderdb.findOneAndUpdate({_id:orderid},{$set:{razorpay_payment_id:razorpay_payment_id,razorpay_order_id:razorpay_order_id,razorpay_signature:razorpay_signature}},{upsert:true});
+            const order = await Orderdb.findOneAndUpdate({_id:orderid},{$set:{razorpay_payment_id:razorpay_payment_id,razorpay_order_id:razorpay_order_id,razorpay_signature:razorpay_signature,paymentstatus:true}},{upsert:true});
             res.status(200).render('paymentstatuspage.ejs', { paymentstatus: "Order Success", orderdetails: order });
         }else {
             res.render('paymentstatuspage.ejs', { paymentstatus: "Order Failed" })
@@ -66,3 +66,4 @@ exports.paymentVerification = async (req, res) => {
     // delete req.session.pendingorderid;
     // console.log(req.body);
 }
+

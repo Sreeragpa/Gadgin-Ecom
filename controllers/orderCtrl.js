@@ -2,7 +2,9 @@ const Orderdb = require('../models/orderModel');
 const Userdb = require('../models/userModel');
 const mongoose = require('mongoose');
 const CsvParser = require('json2csv').Parser;
-const pdfService = require('../services/invoicepdfService')
+const pdfService = require('../services/invoicepdfService');
+const Walletdb = require('../models/walletModel');
+const { default: axios } = require('axios');
 
 // const csv = require('csvtojson')
 
@@ -400,14 +402,40 @@ exports.changeorderStatus = async (req, res, next) => {
         const orderid = req.params.id;
         const pid = req.params.pid;
         const statustochange = req.body.status;
+        let paymentstatus=false;
+        if(req.body.status=="cancelled"){
+            paymentstatus=true
+        }
+        const order = await Orderdb.findOne({_id:orderid,'orderitems.pid': pid});
+        let currentStatus;
+        if(order){
+            const matchingproduct = order.orderitems.find((product)=>{
+                return product.pid==pid
+            })
+            if(matchingproduct){
+                currentStatus = matchingproduct.orderstatus
+            }
+        }
 
-        const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange } })
+        if(currentStatus==statustochange || currentStatus=="cancelled" || currentStatus == 'returned'){
+            req.flash("error",`Current Status is ${statustochange}`)
+            const referer = req.get('Referer')
+            return res.redirect(referer)
+        }
+
+
+    
+        const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange} })
+        if(req.body.status=="cancelled"){
+            // await Walletdb.findOneAndUpdate()
+            await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
+        }
         if (result) {
             const referer = req.get('Referer')
             res.redirect(referer)
         }
     } catch (error) {
-        console.error('Error in changeorderStatus :', err);
+        console.error('Error in changeorderStatus :', error);
         next(error)
     }
 
@@ -419,8 +447,8 @@ exports.cancelOrder = async (req, res, next) => {
         const orderid = req.params.oid;
         const pid = req.params.pid;
         const userid = req.session.passport.user;
-
-        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled', 'comments': req.body }, })
+        const walletrefund =  await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
+        const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled', 'comments': req.body }, });
         if (result) {
             res.redirect('/myorders')
         }
@@ -436,14 +464,30 @@ exports.cancelOrder = async (req, res, next) => {
 
 exports.returnOrder = async (req, res, next) => {
     try {
-        const orderid = req.params.id;
-        const userid = req.session.passport.user;
-        const currentStatus = await Orderdb.findOne({ _id: orderid }, { orderstatus: 1 });
-        if (currentStatus.orderstatus == 'delivered') {
-            const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid }, { $set: { orderstatus: 'return processed' } })
+        console.log('hehe');
+        const orderid = req.params.oid;
+        const userid = req.session?.passport.user;
+        console.log(userid);
+        const pid = req.params.pid;
+        const order = await Orderdb.findOne({_id:orderid,'orderitems.pid': pid});
+        let currentStatus;
+        if(order){
+            const matchingproduct = order.orderitems.find((product)=>{
+                return product.pid==pid
+            })
+            if(matchingproduct){
+                currentStatus = matchingproduct.orderstatus
+            }
+        }
+        
+        if (currentStatus == 'delivered') {
+            const walletrefund =  await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
+            const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'returned', 'comments': req.body }, });
+            console.log(result);
             if (result) {
                 res.redirect('/myorders')
             }
+    
         }
     } catch (error) {
         console.error('Error in returnOrder :', err);
@@ -518,7 +562,7 @@ exports.ordersreportforgraph = async (req, res, next) => {
 exports.generateInvoice = async (req, res) => {
     const path = require('path');
     const imageService = require('../services/imgtobase64Service');
-
+    
 
 
     const orderid = req.params.id;

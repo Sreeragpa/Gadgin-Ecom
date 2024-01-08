@@ -1,0 +1,198 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GADGIN</title>
+    <link rel="icon" type="image/PNG" href="stylesheet\img\gadgin.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap -->
+    <!-- Stylesheets -->
+
+    <!-- Stylesheets -->
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Fontawesome -->
+    <link href="https://cdn.jsdelivr.net/npm/boosted@5.3.2/dist/css/boosted.min.css" rel="stylesheet"
+        integrity="sha384-fyenpx19UpfUhZ+SD9o9IdxeIJKE6upKx0B54OcXy1TqnO660Qw9xw6rOASP+eir" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheet/main.css">
+    <link rel="stylesheet" href="/stylesheet/homestyle.css">
+    <link rel="stylesheet" href="/stylesheet/accountspage.css">
+    <link rel="stylesheet" href="/stylesheet/cartstyle.css">
+
+</head>
+
+<body>
+    <!-- Header Starts -->
+    <%-include('include/_header')%>
+        <!-- Header Ends -->
+
+
+        <!-- MAIN -->
+        <%if(messages.success){%>
+            <!-- Sweetalert -->
+            <div id="sweetalert-overlay" class="sweetalert-overlay">
+                <div id="sweetalert" class="sweetalert">
+                    <i class="fa-regular fa-circle-check" style="color: #00ff40;"></i>
+                    <p class="text-white fw-bold mt-2">
+                        <%=messages.success%>
+                    </p>
+                    <button id="okBtn" class="okBtn m-0">Ok</button>
+                    <!-- <button id="cancelBtn" class="cancelBtn">No</button> -->
+                </div>
+            </div>
+            <!-- Sweetalert -->
+            <%}%>
+                <div class="container-fluid p-0 main-div">
+                    <!-- Content -->
+                    <div class="inner-content-div-user text-white">
+
+
+                        <!-- Checkout Heading -->
+                        <div class="cart-heading gap-2">
+                            <div class="">
+                                <h4 class="m-0">Manage Wallet</h4>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- / Checckout Heading -->
+                        <!-- Cart Content -->
+                        <div class="wallet-content">
+                            <!-- Address -->
+
+
+                            <div class="wallet-div">
+                                <div class="mt-2 d-flex justify-content-center">
+                                    <span class="fw-bold item-title">Add Money</span>
+                                </div>
+                                <!-- <div class="wallet-config">
+                            <div class="">
+                                <span>Total Balance</span>
+                                <br>
+                                <span class="font-sz-18">₹62,900</span>
+                            </div>
+                            <div class="add-money-div">
+                     
+                                    <button class="add-money-btn">Add Money</button>
+                        
+                            </div>
+                        </div> -->
+                                <div class="addmoney-content">
+                                    <form action="" id="wallet-addmoney">
+
+                                        <div class="addmoney-content-inner d-flex flex-row">
+                                            <span class="bold-50">₹</span><input type="number" name="amount" class="add-money-input" placeholder="0">
+                                        </div>
+                                        <div class="addmoney-content-inner d-flex flex-row">
+                                            <span class="text-danger" id="wallet-error"><%=messages?.error%></span>
+                                        </div>
+                                        <div class="addmoney-content-inner">
+                                            <button class="add-money-btn mt-3 yellow-gadgin" id="addmoney-btn">Add
+                                                Money</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="mt-4">
+                                    <!-- <p>Transactions</p> -->
+
+                                </div>
+
+                            </div>
+
+                            <!-- / Address -->
+                        </div>
+                        <!-- /Cart Content -->
+
+
+
+                    </div>
+
+                    <!-- /Content -->
+
+                </div>
+                <!-- /MAIN -->
+
+
+
+                <!-- Footer -->
+                <%- include('include/_footer') %>
+                    <!-- Footer -->
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script>
+
+
+                        document.getElementById('addmoney-btn').onclick = async function (e) {
+                            e.preventDefault();
+                            let myForm = document.getElementById('wallet-addmoney');
+
+                            // Create a FormData object from the form
+                            let formData = new FormData(myForm);
+                            let jsonData = {};
+                            formData.forEach((value, key) => {
+                                jsonData[key] = value;
+                            });
+                            let response = await fetch('/api/user/wallet/addmoney', {
+                                method: 'POST',
+                                headers: {
+                                    "Content-type": "application/json"
+                                },
+                                body: JSON.stringify(jsonData)
+
+                            })
+                   
+                            const orderData = await response.json();
+                            console.log(orderData);
+                            if(orderData.statusCode===400){
+                                document.getElementById('wallet-error').innerHTML=orderData?.error?.description;
+                                return 0
+                            }
+                                const options = {
+                                    "key": "rzp_test_9MbG2FIUatrMFy",
+                                    "amount": orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                    "currency": "INR",
+                                    "name": "GADGIN",
+                                    "description": "Test Transaction",
+                                    "image": "https://example.com/your_logo",
+                                    "order_id": orderData.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                    "callback_url": "http://localhost:3001/api/user/wallet/addmoney/verify",
+                                    // "prefill": {
+                                    //     "name": "Gaurav Kumar",
+                                    //     "email": "gaurav.kumar@example.com",
+                                    //     "contact": "9000090000"
+                                    // },
+                                    // "notes": {
+                                    //     "address": "Razorpay Corporate Office"
+                                    // },
+                                    "theme": {
+                                        "color": "#050505"
+                                    }
+                                };
+
+
+                                var rzp1 = new Razorpay(options);
+
+                                rzp1.open();
+                        }
+
+
+
+
+
+                    </script>
+                      <script>
+                        // Focus the input element when the page loads
+                        document.addEventListener('DOMContentLoaded', function() {
+                          document.querySelector('.add-money-input').focus();
+                        });
+                      </script>
+</body>
+
+</html>
