@@ -1,6 +1,7 @@
 const Coupondb = require('../models/couponModel');
 const {validationResult} = require('express-validator');
 const Orderdb = require('../models/orderModel');
+const { login } = require('../services/userRender');
 
 exports.addCoupon = async (req, res) => {
     const errors = validationResult(req);
@@ -13,11 +14,12 @@ exports.addCoupon = async (req, res) => {
         const referer = req.get('referer');
         res.redirect(referer);
     } else {
-        const couponcode = req.body.couponcode;
+        const couponcode = req.body.couponcode.toUpperCase();
         const existing = await Coupondb.findOne({ couponcode: couponcode });
-        if (existing) {
+        if (existing) {  
             req.flash('couponexists', "Coupon already exists");
-            res.send("Coupon already exists")
+            const referrer = req.get('Referrer');
+            res.redirect(referrer)
         } else {
 
             const priceabove = (!req.body.priceabove) ? 1 : req.body.priceabove;
@@ -66,14 +68,13 @@ exports.editCoupon = async (req, res) => {
     if (!errors.isEmpty()) {
         const Errors = errors.array();
         Errors.forEach((errelem) => {
-
             req.flash(errelem.path + 'error', errelem.msg)
         })
         const referer = req.get('referer');
         res.redirect(referer);
     } else {
         const id = req.params.id;
-        const couponcode = req.body.couponcode;
+        const couponcode = req.body.couponcode.toUpperCase();
         const existing = await Coupondb.findOne({ couponcode: couponcode });
         
         if (existing?._id!=id) {

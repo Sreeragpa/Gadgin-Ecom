@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const { log } = require('console');
 const Orderdb = require('../models/orderModel');
+const Coupondb = require('../models/couponModel');
 
 
 exports.walletaddmoney = async (req, res) => {
@@ -128,17 +129,24 @@ exports.refundtoWallet = async (req, res) => {
     const order = await Orderdb.findOne({ _id: orderid });
 
     if (order.paymentstatus) {
-        const { userid, coupondiscount } = order;
+        const { userid, coupondiscount,appliedcoupon } = order;
         const initializewallet = await Walletdb.updateOne({ userid: userid }, { $set: { userid: userid } }, { upsert: true });
         const product = order.orderitems.find((product) => {
             return product.pid == pid
         })
-        const { price,quantity } = product;
+        const { price,quantity,category } = product;
         let amounttoRefund = 0;
-    
+        
+        
 
-        if (coupondiscount) {
-            amounttoRefund = (price - price * coupondiscount / 100)*quantity;
+        if (coupondiscount  ) {
+            const coupon = await Coupondb.findOne({couponcode:appliedcoupon});
+            if(coupon?.offertype?.category==category ||coupon?.offertype?.category=="all"){
+                amounttoRefund = (price - price * coupondiscount / 100)*quantity;
+            }else{
+                amounttoRefund = price*quantity;
+            }
+
         } else {
             amounttoRefund = price*quantity;
         }

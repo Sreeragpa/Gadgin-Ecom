@@ -187,7 +187,7 @@
                                                     </li>
                                                     <li>Price:₹<%=(orders.orderitems[i].price).toLocaleString('en-IN')%>
                                                     </li>
-                                                    <%if(orders.coupondiscount){%>
+                                                    <%if(orders.coupondiscount && orders.orderitems[i].category == "all" ){%>
                                                         <li>Dicount Price:₹<%=((orders.orderitems[i].price)-(orders.coupondiscount*orders.orderitems[i].price/100)).toLocaleString('en-IN')%>
                                                         </li>
                                                     <%}%>

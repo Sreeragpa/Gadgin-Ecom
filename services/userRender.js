@@ -28,7 +28,7 @@ exports.homepage = (req, res) => {
                         if(wishlist.data){
                             const wishlistset = new Set(wishlist.data[0].products);
                             req.flash('cartcount',cartcount.data.itemCount)
-                            res.render("homepage", { products: response1.data, category: response2.data,wishlist:wishlistset })
+                            res.render("homepage", { products: response1.data, category: response2.data,coupons:response3.data,wishlist:wishlistset })
                         }else{
                             const wishlistset = new Set();
                             req.flash('cartcount',cartcount.data.itemCount)
