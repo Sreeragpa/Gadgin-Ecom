@@ -21,7 +21,7 @@ route.get('/ordermgmt/:id',adminAuthenticated,adminRender.ordersmgmtsingle)
 route.get('/couponmgmt',adminAuthenticated,adminRender.couponManagement)
 route.get('/addcoupon',adminAuthenticated,adminRender.addCouponpage)
 route.get('/editcoupon/:id',adminAuthenticated,adminRender.editCouponpage)
-
+route.get('/addoffer',adminAuthenticated,adminRender.addOffer)
 
 
 

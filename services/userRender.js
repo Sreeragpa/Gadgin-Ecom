@@ -406,7 +406,6 @@ exports.orderitemInfo = async (req, res,next) => {
 exports.userWallet = async(req,res)=>{
     const userid  = req.session.passport.user;
     const wallet = await axios.get(`http://localhost:${process.env.PORT}/api/user/getwallet/${userid}`);
-    console.log(wallet.data);
     res.render("userwallet",{wallet:wallet.data});
     
 }

@@ -214,3 +214,9 @@ exports.editCouponpage = async(req,res)=>{
  
     res.render('admineditcouponform',{categories:categories.data,coupon:coupon.data})
 }
+
+exports.addOffer = async(req,res)=>{
+    const categories = await axios.get('http://localhost:3001/api/getcategory');
+
+    res.render('adminaddoffer',{categories:categories.data})
+}   

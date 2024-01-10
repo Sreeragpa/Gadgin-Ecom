@@ -4,6 +4,7 @@ const Orderdb = require('../models/orderModel');
 const { login } = require('../services/userRender');
 
 exports.addCoupon = async (req, res) => {
+    // Add Coupon body Validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const Errors = errors.array();
@@ -14,13 +15,17 @@ exports.addCoupon = async (req, res) => {
         const referer = req.get('referer');
         res.redirect(referer);
     } else {
+        // Finding Coupon with the provided coupon code
         const couponcode = req.body.couponcode.toUpperCase();
         const existing = await Coupondb.findOne({ couponcode: couponcode });
         if (existing) {  
+            // If the coupon code entered already exists, User is redirected with flash message
+
             req.flash('couponexists', "Coupon already exists");
             const referrer = req.get('Referrer');
             res.redirect(referrer)
         } else {
+            // If the Coupon Code is Unique. Adding the coupon to the database
 
             const priceabove = (!req.body.priceabove) ? 1 : req.body.priceabove;
             const pricebelow = (!req.body.pricebelow) ? Infinity : req.body.pricebelow;
@@ -45,11 +50,13 @@ exports.addCoupon = async (req, res) => {
 }
 
 exports.getCoupon = async (req, res) => {
+    // Fetching all coupons from the database
     const coupons = await Coupondb.find();
     res.send(coupons)
 }
 
 exports.deleteCoupon = async (req, res) => {
+    // Deleting a particular coupon by the id of the document
     const result = await Coupondb.findByIdAndDelete(req.params.id);
     if (result) {
         res.redirect('/admin/couponmgmt');
@@ -57,6 +64,7 @@ exports.deleteCoupon = async (req, res) => {
 }
 
 exports.getSinglecoupon = async(req,res)=>{
+    // Fetching a particular coupon detail
     const coupons = await Coupondb.findOne({_id:req.params.id});
 
     res.send(coupons);
@@ -64,6 +72,7 @@ exports.getSinglecoupon = async(req,res)=>{
 }
 
 exports.editCoupon = async (req, res) => {
+    // Edit Coupon Validation 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const Errors = errors.array();
@@ -75,14 +84,18 @@ exports.editCoupon = async (req, res) => {
     } else {
         const id = req.params.id;
         const couponcode = req.body.couponcode.toUpperCase();
+        // finding whether the coupon code already exists in coupondb
         const existing = await Coupondb.findOne({ couponcode: couponcode });
         
         if (existing?._id!=id) {
+            // If the couponcode exists, but the coupon document id is different ,the couponcode already exists for other document which means duplicated couponcodes ,So redirecting with a flash message.
+
             req.flash('couponexists', "Coupon already exists");
             const referrer = req.get('Referrer');
             res.redirect(referrer)
        
         } else {
+            // If there is no exisiting coupons or if the exisiting coupon has the document id same of the editing coupon , then we can edit the couponwith the coupon code
 
             const priceabove = (!req.body.priceabove) ? 1 : req.body.priceabove;
             const pricebelow = (!req.body.pricebelow) ? Infinity : req.body.pricebelow;
@@ -104,6 +117,7 @@ exports.editCoupon = async (req, res) => {
 }
 
 exports.applyCoupon = async(req,res)=>{
+    // Applying Coupon in the Checkout Page 
     const pendingorderid = req.session.pendingorderid;
     const couponcode = (req.body.couponcode).toUpperCase();
 
@@ -169,6 +183,7 @@ exports.applyCoupon = async(req,res)=>{
  
         }
 
+        // Function for applying coupon in the Orderdb 
         async function applyCouponinOrder(finalvalue,totaldiscount,coupondiscount,res){
             const finalv = parseInt(finalvalue)
             await Orderdb.findOneAndUpdate({_id:pendingorderid},{$set:{appliedcoupon:couponcode,finalvalue:finalv,coupondiscount:coupondiscount}})
@@ -179,6 +194,8 @@ exports.applyCoupon = async(req,res)=>{
 }
 
 exports.couponRemove = async(req,res)=>{
+    // Removing the coupon from the orderdb when user remove the coupon from the checkout page
+    
     const pendingorderid = req.session.pendingorderid;
 
     const order = await Orderdb.findOne({_id:pendingorderid},{ordervalue:1})

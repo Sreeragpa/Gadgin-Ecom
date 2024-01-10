@@ -6,13 +6,14 @@ const pdfService = require('../services/invoicepdfService');
 const Walletdb = require('../models/walletModel');
 const { default: axios } = require('axios');
 
-// const csv = require('csvtojson')
-
 
 exports.getallOrders = async (req, res) => {
+    // Fetching all Order ,which is sorted by the newest orders first
+
     const orders = await Orderdb.find({}).sort({ orderdate: -1 });
     res.send(orders)
 }
+
 exports.getallorderwithuser = async (req, res, next) => {
     if (req.query.orderStatus) {
 

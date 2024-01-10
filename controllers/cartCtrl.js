@@ -8,7 +8,7 @@ exports.addtoCart = async(req,res)=>{
         const userid = req.session.passport.user;
         
         let userCart = await cartDb.findOne({ userid });
-
+        // Creating a new Cart if cart doesnt exist
         if (!userCart) {
             userCart = new cartDb({
                 userid,
@@ -21,6 +21,7 @@ exports.addtoCart = async(req,res)=>{
                 ],
             });
         } else {
+            // If cart present , then pushing products to Cart
             const existingCartItem = userCart.cartitems.find(item => item.productid.toString() === pid);
         
             if (existingCartItem) {
@@ -48,7 +49,8 @@ exports.addtoCart = async(req,res)=>{
 }
 
 exports.getCart =async(req,res)=>{
-    
+
+    // Destructuring Products inside the cart and sending the cart products
     try {
         const userid = req.params.id;
         const result = await cartDb.aggregate([
@@ -92,7 +94,7 @@ exports.getCart =async(req,res)=>{
 
 exports.deleteCartitem =async(req,res)=>{
     try {
-        
+        // Removing Product from Cart 
         const pid = req.params.id;
         const userid = req.session.passport.user;
         const cart = await cartDb.findOne({userid});
@@ -116,6 +118,7 @@ exports.deleteCartitem =async(req,res)=>{
 }
 
 exports.updateQuantity = async(req,res)=>{
+    // Updating Cart Product Quantity
     try {
         const pid=req.params.id;
         const userid=req.session.passport.user;
@@ -136,6 +139,7 @@ exports.updateQuantity = async(req,res)=>{
 }
 
 exports.clearCart = async(req,res)=>{
+    // Clearing all items in the cart
     const userid = req.session.passport.user;
 
     try {
@@ -151,6 +155,7 @@ exports.clearCart = async(req,res)=>{
 }
 
 exports.clearAfterPurchase = async(req,res)=>{
+    // Clearing cart after purchase
     const userid = req.query.userid;
     console.log(userid);
 

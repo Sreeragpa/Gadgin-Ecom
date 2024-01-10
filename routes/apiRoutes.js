@@ -12,6 +12,7 @@ const validation = require('../middlewares/validationMiddleware');
 const paymentCtrl = require('../controllers/PaymentCtrl')
 const couponCtrl = require('../controllers/couponCtrl')
 const walletCtrl = require('../controllers/walletCtrl')
+const offerCtrl = require('../controllers/offerCtrl')
 
 
 // User
@@ -99,5 +100,8 @@ route.get('/user/getwallet/:id',walletCtrl.getWallet);
 route.post('/user/wallet/addmoney/verify',CheckAuthenticated,walletCtrl.paymentVerification);
 route.get('/user/wallet/balance/:id',walletCtrl.walletBalance)
 route.put('/wallet/refund/:orderid/:pid',walletCtrl.refundtoWallet)
+
+// Offer
+route.post('/admin/offer/add',offerCtrl.createOffer)
 
 module.exports = route

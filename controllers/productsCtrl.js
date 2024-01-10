@@ -59,6 +59,7 @@ exports.getProducts = async (req, res) => {
                 unlisted: false,
                 $or: [
                     { name: { $regex: req.query.search, $options: 'i' } },
+                    { category: { $regex: req.query.search, $options: 'i' } },
         
                 ]
             });
