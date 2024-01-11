@@ -3,9 +3,9 @@ const axios = require('axios');
 exports.loginpage = (req, res) => {
     res.render('adminlogin.ejs')
 }
-exports.admindash = async(req, res) => {
+exports.admindash = async (req, res) => {
     const dashdetails = await admindashdetails();
-    res.render('admindash.ejs',{dashdetails:dashdetails})
+    res.render('admindash.ejs', { dashdetails: dashdetails })
 }
 
 exports.loginvalidate = (req, res) => {
@@ -69,20 +69,20 @@ exports.ordermgmt = async (req, res, next) => {
             console.log(error);
             next(error)
         }
-    } else if(req.query.search) {
-        
+    } else if (req.query.search) {
+
         const page = req.query.page || 1;
         const currentPage = page;
         const orderss = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getorders/userdetails?search=${req.query.search}&page=${page}`);
 
         if (orderss) {
             const { orders, pageCount } = orderss.data;
-            req.flash('searchquery',req.query.search)
+            req.flash('searchquery', req.query.search)
             res.render('adminordermgmt.ejs', { orders: orders, query: [], pageCount: pageCount, currentPage: currentPage })
         } else {
             console.log('error');
         }
-    }else{
+    } else {
         try {
             const page = req.query.page || 1;
             const currentPage = page;
@@ -116,55 +116,55 @@ exports.ordersmgmtsingle = async (req, res, next) => {
 
 const Userdb = require('../models/userModel');
 const Orderdb = require('../models/orderModel');
-async function admindashdetails(){
+async function admindashdetails() {
     const usersCount = await Userdb.countDocuments();
     const Totalsales = await Orderdb.aggregate([{
-        $group:{
-            _id:null,
-            sales:{$sum:"$ordervalue"},
-            orders:{$sum:1}
+        $group: {
+            _id: null,
+            sales: { $sum: "$ordervalue" },
+            orders: { $sum: 1 }
         }
     }]);
-    let dashdetails ;
+    let dashdetails;
 
-    if(usersCount && Totalsales){
-        const {sales,orders} = Totalsales[0];
-         dashdetails = {
-            users:usersCount,
-            orders:orders,
-            sales:sales
+    if (usersCount && Totalsales) {
+        const { sales, orders } = Totalsales[0];
+        dashdetails = {
+            users: usersCount,
+            orders: orders,
+            sales: sales
         }
-    }else{
-         dashdetails = {
-            users:0,
-            orders:0,
-            sales:0
+    } else {
+        dashdetails = {
+            users: 0,
+            orders: 0,
+            sales: 0
         }
     }
-  
+
 
     return dashdetails;
 }
 
-async function orderdetails(){
+async function orderdetails() {
     const orders = await Orderdb.aggregate([
         {
-            $group:{
-                _id:"$orderdate",
-                count:{$sum:1},
+            $group: {
+                _id: "$orderdate",
+                count: { $sum: 1 },
             }
         },
-      
+
     ])
-    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug' ,'Sep', 'Oct', 'Nov', 'Dec'];
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let ordersbymonth = {
-        Jan:0,Feb:0, Mar:0, Apr:0, May:0, Jun:0, Jul:0, Aug:0 ,Sep:0, Oct:0, Nov:0, Dec:0
+        Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0, Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
     }
-    orders.forEach((order)=>{
+    orders.forEach((order) => {
 
         month = labels[(order._id.getMonth())]
         ordersbymonth[month] += order.count;
-        
+
 
     })
 
@@ -185,7 +185,7 @@ exports.ordersmgmtsingle = async (req, res, next) => {
 
 }
 
-exports.couponManagement = async(req,res,next)=>{
+exports.couponManagement = async (req, res, next) => {
     try {
 
         const result = await axios.get(`http://localhost:${process.env.PORT}/api/getcoupon`)
@@ -194,8 +194,8 @@ exports.couponManagement = async(req,res,next)=>{
         }
     } catch (error) {
         const status = 404;
-        const message ="HEHEHEHHEHEHEHE"
-        err={
+        const message = "Error"
+        err = {
             status,
             message
         }
@@ -203,20 +203,57 @@ exports.couponManagement = async(req,res,next)=>{
     }
 }
 
-exports.addCouponpage = async(req,res)=>{
-    const categories = await axios.get('http://localhost:3001/api/getcategory');
+exports.addCouponpage = async (req, res, next) => {
+    try {
+        const categories = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory`);
+        res.render('adminaddcouponform', { categories: categories.data })
+    } catch (error) {
+        next(error)
+    }
 
-    res.render('adminaddcouponform',{categories:categories.data})
-}   
-exports.editCouponpage = async(req,res)=>{
-    const categories = await axios.get('http://localhost:3001/api/getcategory');
-    const coupon = await axios.get(`http://localhost:3001/api/getsinglecoupon/${req.params.id}`);
- 
-    res.render('admineditcouponform',{categories:categories.data,coupon:coupon.data})
+}
+exports.editCouponpage = async (req, res, next) => {
+    try {
+        const categories = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory`);
+        const coupon = await axios.get(`http://localhost:${process.env.PORT}/api/getsinglecoupon/${req.params.id}`);
+
+        res.render('admineditcouponform', { categories: categories.data, coupon: coupon.data })
+    } catch (error) {
+        next(error)
+    }
+
 }
 
-exports.addOffer = async(req,res)=>{
-    const categories = await axios.get('http://localhost:3001/api/getcategory');
+exports.offerManagement = async (req, res, next) => {
+    try {
 
-    res.render('adminaddoffer',{categories:categories.data})
-}   
+        const result = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getoffers`)
+        if (result) {
+            res.render('adminoffermgmt', { offers: result.data })
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.addOffer = async (req, res, next) => {
+    try {
+        const categories = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory`);
+        res.render('adminaddoffer', { categories: categories.data })
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+exports.editOffer = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const result = await axios.get(`http://localhost:${process.env.PORT}/api/admin/getoffers?id=${id}`)
+        const categories = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory`);
+        res.render('admineditoffer', { categories: categories.data, offer: result.data })
+    } catch (error) {
+        next(error)
+    }
+
+}

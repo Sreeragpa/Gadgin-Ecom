@@ -45,7 +45,10 @@ var userSchema = new mongoose.Schema({
     unlisted:{
         type:Boolean,
         default:false,
-    }
+    },
+    offer: {
+         type: mongoose.Schema.Types.ObjectId, 
+         ref: 'offer' },
 
 
 })

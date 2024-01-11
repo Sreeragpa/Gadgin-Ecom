@@ -166,14 +166,16 @@ exports.cart = async (req, res) => {
 exports.orderSummary = async (req, res, next) => {
     try {
         const userid = req.session.passport.user;
-        const address = await axios.get(`http://localhost:3001/api/user/getaddress/${userid}`);
+        const address = await axios.get(`http://localhost:${process.env.PORT}/api/user/getaddress/${userid}`);
         if (req.params.type == 'cart') {
-            const cartItems = await axios.get(`http://localhost:3001/api/user/getCart/${userid}`)
+            const cartItems = await axios.get(`http://localhost:${process.env.PORT}/api/user/getCart/${userid}`)
             res.render('ordersummarypage.ejs', { addresses: address.data, cartitems: cartItems.data });
         } else {
             try {
-                const product = await axios.get(`http://localhost:3001/api/getproduct/${req.params.type}`)
+                const product = await axios.get(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.type}`)
+                console.log(product.data);
                 res.render('ordersummarypage.ejs', { addresses: address.data, cartitems: false, product: product.data });
+               
             } catch (error) {
                 console.error("Error in orderSummary:", error);
                 res.status(500).send({ error: "Internal Server Error" });
@@ -221,7 +223,7 @@ exports.checkoutPage = async (req, res, next) => {
                 const productpricedetails = {
                     mrp: mrp,
                     price: price,
-                    discount: discount,
+                    discount: discount.toFixed(2),
                     count: count
                 };
          
@@ -284,13 +286,13 @@ exports.paymentCheck = async (req, res, next) => {
         res.redirect('/');
     } else {
         try {
-            const order = await axios.get(`http://localhost:3001/api/user/getorders/${userid}/${orderid}`);
+            const order = await axios.get(`http://localhost:${process.env.PORT}/api/user/getorders/${userid}/${orderid}`);
 
             if (order) {
         
                 if (paymentmethod == 'cod') {
                     delete req.session.pendingorderid;
-                    const codsuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=cod`)
+                    const codsuccess = await axios.get(`http://localhost:${process.env.PORT}/api/user/order/success/${userid}/${orderid}?paymentmethod=cod`)
                     if (codsuccess.data) {
                         // const ress = await axios.get(`http://localhost:3001/api/user/cart/clearafterpurchase?userid=${userid}`);
                         await Cartdb.findOneAndUpdate({userid:userid},{$set:{cartitems:[]}});
@@ -313,7 +315,7 @@ exports.paymentCheck = async (req, res, next) => {
                         console.log("Insufficient Wallet Fund")
                     }else{
                         delete req.session.pendingorderid;
-                        const ordersuccess = await axios.get(`http://localhost:3001/api/user/order/success/${userid}/${orderid}?paymentmethod=wallet`)
+                        const ordersuccess = await axios.get(`http://localhost:${process.env.PORT}/api/user/order/success/${userid}/${orderid}?paymentmethod=wallet`)
                         // Logic for debiting wallet balnce with ordervalue
                         if (ordersuccess.data) {
                             await Cartdb.findOneAndUpdate({userid:userid},{$set:{cartitems:[]}});
@@ -344,9 +346,8 @@ exports.paymentCheck = async (req, res, next) => {
 
 
 exports.manageAddress = async (req, res, next) => {
+
     const id = req.session.passport.user;
-
-
     axios.get(`http://localhost:${process.env.PORT}/api/user/getaddress/${id}`)
         .then((response) => {
             res.render('manageaddress.ejs', { addresses: response.data });
@@ -403,22 +404,37 @@ exports.orderitemInfo = async (req, res,next) => {
  
 }
 
-exports.userWallet = async(req,res)=>{
-    const userid  = req.session.passport.user;
-    const wallet = await axios.get(`http://localhost:${process.env.PORT}/api/user/getwallet/${userid}`);
-    res.render("userwallet",{wallet:wallet.data});
+exports.userWallet = async(req,res,next)=>{
+    try {
+        const userid  = req.session.passport.user;
+        const wallet = await axios.get(`http://localhost:${process.env.PORT}/api/user/getwallet/${userid}`);
+        res.render("userwallet",{wallet:wallet.data});
+    } catch (error) {
+        next(error)
+    }
+
     
 }
 
-exports.userWishlist = async(req,res)=>{
-    const userid = req.session.passport.user;
-    const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}?products=true`);
-    if(wishlist.data){
-        res.render("wishlistpage",{products:wishlist.data[0].products});
-    }else{
-        res.render("wishlistpage",{products:false});
+exports.userWishlist = async(req,res,next)=>{
+    try {
+        const userid = req.session.passport.user;
+        const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}?products=true`);
+        if(wishlist.data){
+            res.render("wishlistpage",{products:wishlist.data[0].products});
+        }else{
+            res.render("wishlistpage",{products:false});
+        }
+    } catch (error) {
+        next(error)
     }
+
 }
-exports.userwalletAddmoney = async(req,res)=>{
-    res.render("userwalletAddmoney");
+exports.userwalletAddmoney = async(req,res,next)=>{
+    try {
+        res.render("userwalletAddmoney");
+    } catch (error) {
+        next(error)
+    }
+
 }

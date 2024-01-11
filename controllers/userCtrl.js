@@ -36,7 +36,6 @@ exports.create = async (req, res) => {
         try {
             
             const filename = await generateProfilepicture.generateProfilepicture(req.body.name[0]);
-            console.log(filename);
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             const user = new Userdb({
                 name: req.body.name,
@@ -269,17 +268,22 @@ exports.checkout = async (req, res) => {
                 let cartProducts = await axios.get(`http://localhost:${process.env.PORT}/api/user/getCart/${userid}`);
 
                 const userdetails = await axios.get(`http://localhost:${process.env.PORT}/api/user/get/${userid}`);
-
-
+                
                 
 
                 let items = cartProducts.data.map(item => {
+                    let discount= 0;
+                    let discountpercentage = 0;
+                    if(item?.offer1.length!=0){
+                        discount=item?.offer1[0]?.discount/100;
+                        discountpercentage = item?.offer1[0].discount
+                    }
                     return {
                         pid: item.cartItemsWithDetails[0]._id,
                         name: item.cartItemsWithDetails[0].name,
                         mrp: item.cartItemsWithDetails[0].mrp,
-                        price: item.cartItemsWithDetails[0].price,
-                        discount: item.cartItemsWithDetails[0].discount,
+                        price: (item.cartItemsWithDetails[0].price)-((item.cartItemsWithDetails[0].price)*discount),
+                        discount: (item.cartItemsWithDetails[0].discount)+ discountpercentage,
                         category: item.cartItemsWithDetails[0].category,
                         description: item.cartItemsWithDetails[0].description,
                         color: item.cartItemsWithDetails[0].color,
@@ -312,14 +316,17 @@ exports.checkout = async (req, res) => {
             } else if (type == 'buynow') {
                 const quantity = Number(req.body.quantity);
                 const pid = req.body.pid;
-                const product = await Productdb.findOne({ _id: pid })
-
+                const product = await Productdb.findOne({ _id: pid }).populate('offer');
+                console.log(product);
+                let offerdiscount=product?.offer?.discount/100 || 0;
+                
+                let offerdiscountpercentage = product?.offer?.discount || 0
                 const orderItem = {
                     pid: product._id,
                     name: product.name,
                     mrp: product.mrp,
-                    price: product.price,
-                    discount: product.discount,
+                    price: (product.price)-(product.price*offerdiscount),
+                    discount: product.discount+offerdiscountpercentage,
                     category: product.category,
                     description: product.description,
                     color: product.color,
@@ -367,7 +374,7 @@ exports.changePassword = async (req, res) => {
         const oldpassword = req.body.oldpassword;
         const newpassword = req.body.password;
 
-        const user = await Userdb.findById(id);
+        const user = await Userdb.findById(id)
 
         const { password } = user;
         const isMatch = await bcrypt.compare(oldpassword, password);
@@ -508,7 +515,6 @@ exports.setcodSuccess = async (req, res) => {
                 );
 
                 const amount = changeorder.finalvalue;
-                console.log(amount);
 
                 const wallet = await Walletdb.findOneAndUpdate(
                     {userid:userid},

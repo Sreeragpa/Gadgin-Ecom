@@ -1,6 +1,8 @@
+const Cartdb = require('../models/cartModel');
 const cartDb = require('../models/cartModel');
 const productDb = require('../models/productModel');
 const mongoose = require('mongoose')
+
 exports.addtoCart = async(req,res)=>{
     
     try {
@@ -39,6 +41,7 @@ exports.addtoCart = async(req,res)=>{
         }
         // Save the updated cart
         await userCart.save();
+
         const referer = req.get('Referer');
         res.redirect(referer);
 
@@ -69,17 +72,25 @@ exports.getCart =async(req,res)=>{
                 }
             },
             {
-                $project: {
-    
-                    cartItemsWithDetails: 1,
-                    "cartitems":1
-
+                $lookup: {
+                    from: 'offers',
+                    localField: 'cartItemsWithDetails.offer',
+                    foreignField: '_id',
+                    as: 'offer1'
                 }
             },
+
+            // {
+            //     $project: {
+            //         cartItemsWithDetails: 1,
+            //         "cartitems":1
+            //     }
+            // },
     
         ]);
 
         if (result.length > 0) {
+
             res.status(200).send(result)
 
         } else {

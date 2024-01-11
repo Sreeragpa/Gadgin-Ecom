@@ -19,7 +19,7 @@ document.querySelectorAll(".add-wishlist").forEach((element)=>{
        }
     },
     error: function () {
-        console.error('Failed to load content.');
+        window.location.href = '/login'; 
     }
         })
     })

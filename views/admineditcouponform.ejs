@@ -34,50 +34,51 @@
 			</span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li class="">
 				<a href="/admin">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin/productmgmt">
+				<a href="/admin/productmgmt">
 					<i class='bx bxs-shopping-bag-alt'></i>
 					<span class="text">Product Management</span>
 				</a>
 			</li>
-			<li>
-				<a href="admin/categorymgmt">
+			<li class="">
+				<a href="/admin/categorymgmt">
 					<i class='bx bxs-category'></i>
 					<span class="text">Category Management</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin/usermgmt">
+				<a href="/admin/usermgmt">
 					<i class='bx bxs-user'></i>
 					<span class="text">User Management</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin/ordermgmt">
+				<a href="/admin/ordermgmt">
 					<i class='bx bxs-book-reader'></i>
 					<span class="text">Order Management</span>
 				</a>
 			</li>
-			<li>
-				<a href="#">
+			<li class="active">
+				<a href="/admin/couponmgmt">
 					<i class='bx bxs-coupon'></i>
 					<span class="text">Coupon Management</span>
 				</a>
 			</li>
+			<li class="">
+				<a href="/admin/offermgmt">
+					<i class='bx bxs-offer'></i>
+					<span class="text">Offer Management</span>
+				</a>
+			</li>
 		</ul>
 		<ul class="side-menu2 ">
-			<!-- <li>
-				<a href="#">
-					<i class='bx bxs-cog' ></i>
-					<span class="text">Settings</span>
-				</a>
-			</li> -->
+
 			<li>
 				<a href="/logout" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
@@ -115,42 +116,10 @@
 						</li>
 					</ul>
 				</div>
-				<!-- <a href="#" class="btn-download">
-					<i class='bx bxs-cloud-download' ></i>
-					<span class="text">Download PDF</span>
-				</a> -->
+
 			</div>
 			<div class="contents">
-				<!-- <div class="contents-head">
-					<div class="d-flex gap-2">
-						<div>
-							<form action="#">
-								<div class="form-input">
-									<button type="submit" class="search-btn submitt-btn text-bg-dark">Add
-										Product</button>
-								</div>
-							</form>
-						</div>
-						<div>
-							<form action="#">
-								<div class="form-input">
-									<button type="submit" class="search-btn submitt-btn text-bg-dark">Add
-										Category</button>
-								</div>
-							</form>
-						</div>
-					</div>
 
-					<div>
-						<form action="#">
-							<div class="form-input">
-								<input type="search" placeholder="Search...">
-								<button type="submit" class="search-btn text-bg-dark px-2"><i
-										class='bx bx-search'></i></button>
-							</div>
-						</form>
-					</div>
-				</div> -->
 				<div class="content-list d-flex jus">
 					<!-- item -->
 					<form action="/api/admin/editcoupon/<%=coupon._id%>?_method=PUT" method="post"  id="pdt-form">
@@ -163,7 +132,6 @@
 							</div>
 							<div class="d-flex flex-column">
 								<label for="name">Category</label>
-								<!-- <input type="d" name="category"  class="w-auto"> -->
 								<select id="categDropdown" name="category" required>
 									<option value="all">All</option>
 									<% for(let i=0;i<categories.length;i++){%>
@@ -202,7 +170,7 @@
 							</div>
 							<div class="d-flex flex-column">
 								<label for="price">Coupon Expiry</label>
-								<input type="date" name="couponexpiry" class="w-auto" id="quantity" value="<%=coupon.couponexpiry%>">
+								<input type="date" name="couponexpiry" class="w-auto" id="quantity" value="<%=coupon.couponexpiry.split('T')[0]%>">
 								<span class=" text-danger"><%=messages.couponexpiryerror%></span>
 							</div>
 						</div>
@@ -210,14 +178,7 @@
 			
 
 						</div>
-						<div class=" d-flex mt-5" id="imageContainer">
-							<!-- <div class="preview-img-div">
-								<img class="img-fluid preview-img" src="/uploads/images-1700583732256.webp">
 	
-								<button class="text-white text-bg-danger p-1 close-btnn">&times;</button>
-	
-							</div> -->
-						</div>
 						<div class="d-flex align-items-center justify-content-center mt-3">
 							<button type="submit" class="search-btn submitt-btn text-bg-dark" id="add-pdt-btn">Edit
 								Coupon</button>
@@ -226,8 +187,6 @@
 
 					</form>
 
-					<!-- <img id="upimg" src=""> -->
-					<!-- /item -->
 				</div>
 
 
@@ -244,9 +203,9 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-	<!-- <script src="/js/uploadimagehandler.js"></script> -->
+
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-	<!-- <script src="/js/addproductform.js"></script> -->
+
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -256,8 +215,7 @@
 		console.log('<%=messages%>');
 
 	</script>
-	<!-- <script src="/js/admindashscript.js"></script> -->
-	<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/tZlKXNHaaD6B6sWJeQG3UE6z5wEiZ3lFO8NwI=" crossorigin="anonymous"></script> -->
+
 
 
 </body>

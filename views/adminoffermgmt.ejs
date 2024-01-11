@@ -7,12 +7,11 @@
 
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css' rel='stylesheet'>
 	<!-- My CSS -->
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-	<link rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css"
-		integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
 
 	<link rel="stylesheet" href="/stylesheet/admindash.css">
 
@@ -49,7 +48,7 @@
 					<span class="text">Product Management</span>
 				</a>
 			</li>
-			<li class="active">
+			<li>
 				<a href="/admin/categorymgmt">
 					<i class='bx bxs-category'></i>
 					<span class="text">Category Management</span>
@@ -73,7 +72,7 @@
 					<span class="text">Coupon Management</span>
 				</a>
 			</li>
-			<li class="">
+			<li class="active">
 				<a href="/admin/offermgmt">
 					<i class='bx bxs-offer'></i>
 					<span class="text">Offer Management</span>
@@ -104,25 +103,25 @@
 		<!-- MODAL -->
 		<div id="continue-overlay">
 			<div id="modal">
-				<p>Do you want to continue?</p>
-				<button id="confirmBtn">Yes</button>
-				<button id="cancelBtn">No</button>
+			  <p>Do you want to continue?</p>
+			  <button id="confirmBtn">Yes</button>
+			  <button id="cancelBtn">No</button>
 			</div>
-		</div>
+		  </div>
 		<!-- MODAL -->
 
 		<!-- MAIN -->
 		<main id="main-content">
 			<div class="head-title">
 				<div class="left">
-					<h1>Product Management</h1>
+					<h1>Offer Management</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
-							<a class="active" href="#">Product Management</a>
+							<a class="active" href="#">Offer Management</a>
 						</li>
 					</ul>
 				</div>
@@ -133,83 +132,88 @@
 			</div>
 			<div class="contents">
 				<div class="contents-head">
-					<div class="d-flex gap-2">
+					<div class="d-flex gap-2">	
 						<div>
 							<!-- <form action="#"> -->
-
-							<div class="form-input">
-								<a href="/admin/productmgmt">
-									<button class="search-btn submitt-btn text-bg-dark">Back</button>
-								</a>
-							</div>
-
+								
+                                <div class="form-input">
+                                    <a href="/admin/addoffer">
+                                    <button  class="search-btn submitt-btn text-bg-dark" >Add Offer</button>
+                                    </a>
+                                </div>
+								
 							<!-- </form> -->
 						</div>
 						<div>
-
-							<div class="form-input">
-								<a href="">
-									<button type="submit" class="search-btn submitt-btn text-bg-dark">Unlisted
-										Products</button>
-								</a>
-							</div>
-
+						
+								<!-- <div class="form-input">
+									<a href="/admin/productmgmt/unlisted">
+										<button type="submit" class="search-btn submitt-btn text-bg-dark">Unlisted Products</button>
+									</a>
+								</div> -->
+					
 						</div>
 					</div>
-
+	
 					<div>
 						<form action="#">
 							<div class="form-input">
-								<input type="search" placeholder="Search...">
+								<!-- <input type="search" placeholder="Search...">
 								<button type="submit" class="search-btn text-bg-dark px-2"><i
-										class='bx bx-search'></i></button>
+										class='bx bx-search'></i></button> -->
 							</div>
 						</form>
 					</div>
 				</div>
 				<div class="content-list">
 					<!-- item -->
-					<% for(let i=0;i<products.length;i++) { %>
-						<a href="/getproduct/<%=products[i]._id%>">
-							<div class="content-list-item text-dark">
-								<div class="">
-									<img src="<%=products[i].images[0]%>" class="content-list-item-img">
-								</div>
-								<div>
-									<ul>
-										<li class="fw-bold">
-											<%=products[i].name%>
-										</li>
-										<li>Color: <%=products[i].color%>
-										</li>
-										<li>Qty: <%=products[i].quantity%>
-										</li>
-
-									</ul>
-								</div>
-								<div class="content-list-item-price">
-									<div>
-										<li class="fw-bold">MRP: <%=products[i].mrp %>
-										</li>
-										<li>Discount: <%=products[i].discount%>
-										</li>
-										<li>Price: <%=products[i].price%>
-										</li>
-									</div>
-								</div>
-								<div class="d-flex justify-content-center align-items-center mx-5">
-									<form action="/api/addproductsfromunlisted/<%=products[i]._id%>" method="post"
-										class="pdt-delete-form">
-										<button class="product-dlt-button" id="delete-btn"><svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M128 64c0-35.3 28.7-64 64-64H352V128c0 17.7 14.3 32 32 32H512V448c0 35.3-28.7 64-64 64H192c-35.3 0-64-28.7-64-64V336H302.1l-39 39c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l39 39H128V64zm0 224v48H24c-13.3 0-24-10.7-24-24s10.7-24 24-24H128zM512 128H384V0L512 128z"/></svg></button>
-									</form>
-								</div>
-
+					<% for(let i=0;i<offers.length;i++) {  %>
+					<a href="">
+						<div class="content-list-item text-dark justify-content-center align-items-center">
+							<div class="">
+								<img src="" class="content-list-item-img">
 							</div>
-						</a>
-						<% }%>
+							<div>
+								<ul>
+									<li class="fw-bold">Offer:<%=offers[i].discount%>%</li>
+									<li class="fw-bold">Expires On:<%=offers[i].offerexpiry.split('T')[0]%></li>
+									<li>Products:<%=offers[i].product%></li>
+									<li>Category:<%=offers[i].category%></li>
+		
+								
+								</ul>
+							</div>
+                            <div>
+                                <ul>
+						
+								
+								</ul>
+                            </div>
+							<div class="content-list-item-price text-center">
+								<div class="d-flex justify-content-center align-items-center">
+								
+								</div>
+							
+							</div>
+                            <div class="d-flex justify-content-center align-items-center mx-5">
+                                <form action="/api/admin/offer/remove/<%=offers[i]._id%>?_method=DELETE" method="post">
+                                    <button class="product-dlt-button block-btnn" id="delete-btn">Delete</button>
+                                </form>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <form action="/admin/editoffer/<%=offers[i]._id%>" method="get">
+                                    <button class="product-dlt-button block-btnn" id="delete-btn"><i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></button>
+                                </form>
+                            </div>
+			
 
-							<!-- /item -->
+						</div>
+					</a>
+					<% }%>
+
+					<!-- /item -->
 				</div>
+				
 
 			</div>
 
@@ -223,9 +227,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 		crossorigin="anonymous"></script>
-	<script src="/js/adminprdmgmt.js"></script>
+	<!-- <script src="/js/adminprdmgmt.js"></script> -->
 	<script src="/js/admindashscript.js"></script>
-
 	<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/tZlKXNHaaD6B6sWJeQG3UE6z5wEiZ3lFO8NwI=" crossorigin="anonymous"></script> -->
 
 

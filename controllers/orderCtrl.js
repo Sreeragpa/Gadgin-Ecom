@@ -101,7 +101,7 @@ exports.getallorderwithuser = async (req, res, next) => {
     } else if (req.query.search) {
 
         const search = req.query.search;
-        console.log(search);
+  
         try {
             const page = req.query.page || 1;
             const limit = 10;
@@ -138,6 +138,9 @@ exports.getallorderwithuser = async (req, res, next) => {
                             },
                             {
                                 'userdetails.email': { $regex: search, $options: 'i' }
+                            },
+                            {
+                                'orderid': { $regex: search, $options: 'i' }
                             },
 
                         ]
@@ -464,10 +467,9 @@ exports.cancelOrder = async (req, res, next) => {
 
 exports.returnOrder = async (req, res, next) => {
     try {
-        console.log('hehe');
+
         const orderid = req.params.oid;
         const userid = req.session?.passport.user;
-        console.log(userid);
         const pid = req.params.pid;
         const order = await Orderdb.findOne({_id:orderid,'orderitems.pid': pid});
         let currentStatus;
@@ -483,7 +485,7 @@ exports.returnOrder = async (req, res, next) => {
         if (currentStatus == 'delivered') {
             const walletrefund =  await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
             const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'returned', 'comments': req.body }, });
-            console.log(result);
+
             if (result) {
                 res.redirect('/myorders')
             }
@@ -555,56 +557,61 @@ exports.ordersreportforgraph = async (req, res, next) => {
         },
 
     ])
-
     res.send(orders)
 }
 
-exports.generateInvoice = async (req, res) => {
-    const path = require('path');
-    const imageService = require('../services/imgtobase64Service');
+exports.generateInvoice = async (req, res, next) => {
+
+    try {
+        const path = require('path');
+        const imageService = require('../services/imgtobase64Service');
+        const orderid = req.params.id;
+        const order = await Orderdb.findOne({ _id: orderid });
+        const user = await Userdb.findOne({ _id: order.userid }, { name: 1, email: 1 });
+    
+        const products = order.orderitems.map((value) => {
+            return {
+                "quantity": value.quantity,
+                "description": value.description,
+                "price": value.price
+            }
+        })
+        const imagepath = path.join(__dirname,'..','public','img','gadgin.png');
+        const base64Image = await imageService.imageToBase64(imagepath)
+        const invoiceData = {
+            orderNumber: order.orderid,
+            date: order.orderdate.toLocaleString('en-IN', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+            }),
+            amount: order.finalvalue,
+            products: order.orderitems,
+            address: order.address,
+            finalvalue: order.finalvalue,
+            ordervalue: order.ordervalue,
+            paymentmethod: order.paymentmethod,
+            userdetails: {
+                name: user.name,
+                email: user.email,
+            },
+            logo:base64Image
+    
+        }
+    
+    
+        const data = {
+            invoiceData
+        };
+    
+        await pdfService.generatePdf(res, invoiceData)
+    } catch (error) {
+        next(error)
+    }
     
 
 
-    const orderid = req.params.id;
-    const order = await Orderdb.findOne({ _id: orderid });
-    const user = await Userdb.findOne({ _id: order.userid }, { name: 1, email: 1 });
 
-    const products = order.orderitems.map((value) => {
-        return {
-            "quantity": value.quantity,
-            "description": value.description,
-            "price": value.price
-        }
-    })
-    const imagepath = path.join(__dirname,'..','public','img','gadgin.png');
-    const base64Image = await imageService.imageToBase64(imagepath)
-    const invoiceData = {
-        orderNumber: order.orderid,
-        date: order.orderdate.toLocaleString('en-IN', {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-        }),
-        amount: order.finalvalue,
-        products: order.orderitems,
-        address: order.address,
-        finalvalue: order.finalvalue,
-        ordervalue: order.ordervalue,
-        paymentmethod: order.paymentmethod,
-        userdetails: {
-            name: user.name,
-            email: user.email,
-        },
-        logo:base64Image
-
-    }
-
-
-    const data = {
-        invoiceData
-    };
-
-    await pdfService.generatePdf(res, invoiceData)
 
 
 }

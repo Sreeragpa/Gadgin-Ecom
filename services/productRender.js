@@ -3,7 +3,7 @@ const store = require('../services/multer');
 
 
 exports.productmanagement = (req, res, next) => {
-    axios.get('http://localhost:3001/api/products')
+    axios.get(`http://localhost:${process.env.PORT}/api/products`)
         .then(function (response) {
             res.render('adminproductmgmt.ejs', { products: response.data })
         })
@@ -13,7 +13,7 @@ exports.productmanagement = (req, res, next) => {
 
 }
 exports.Unlistedproductmanagement = (req, res, next) => {
-    axios.get('http://localhost:3001/api/unlistedproducts')
+    axios.get(`http://localhost:${process.env.PORT}/api/unlistedproducts`)
         .then(function (response) {
             res.render('adminUnlistedproductmgmt.ejs', { products: response.data })
         })
@@ -24,7 +24,7 @@ exports.Unlistedproductmanagement = (req, res, next) => {
 }
 
 exports.addproductform = (req, res, next) => {
-    axios.get('http://localhost:3001/api/getcategory')
+    axios.get(`http://localhost:${process.env.PORT}/api/getcategory`)
         .then(function (response) {
             res.render('adminaddproductform.ejs', { categories: response.data })
         })
@@ -41,7 +41,7 @@ exports.addCategory = async (req, res) => {
 
 exports.unlistedCategorymgmt = async (req, res, next) => {
     try {
-        const response = await axios.get(`http://localhost:3001/api/getcategory/unlisted`)
+        const response = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory/unlisted`)
         res.render("adminUnlistedcategorymgmt.ejs", { categories: response.data })
     } catch (error) {
         next(error)
@@ -52,7 +52,7 @@ exports.unlistedCategorymgmt = async (req, res, next) => {
 
 exports.categoryManagement = async (req, res, next) => {
     try {
-        const response = await axios.get(`http://localhost:3001/api/getcategory`)
+        const response = await axios.get(`http://localhost:${process.env.PORT}/api/getcategory`)
 
         if (response) {
             res.render('admincategorymgmt.ejs', { categories: response.data })
@@ -75,7 +75,7 @@ exports.productsbyCategory = async (req, res,next) => {
     }
     if (req.query.category) {
         if(req.query.sortBy){
-            axios.get(`http://localhost:3001/api/products?category=${req.query.category}&sortBy=${req.query.sortBy}`)
+            axios.get(`http://localhost:${process.env.PORT}/api/products?category=${req.query.category}&sortBy=${req.query.sortBy}`)
             .then(function (response) {
                 if (!response.data) {
                     res.send("No products")
@@ -89,7 +89,7 @@ exports.productsbyCategory = async (req, res,next) => {
             })
         }else{
 
-            axios.get(`http://localhost:3001/api/products?category=${req.query.category}`)
+            axios.get(`http://localhost:${process.env.PORT}/api/products?category=${req.query.category}`)
                 .then(function (response) {
                     if (!response.data) {
                         res.send("No products")
@@ -104,7 +104,7 @@ exports.productsbyCategory = async (req, res,next) => {
         }
     } else if(req.query.search){
         
-        axios.get(`http://localhost:3001/api/products?search=${req.query.search}`)
+        axios.get(`http://localhost:${process.env.PORT}/api/products?search=${req.query.search}`)
         .then(function (response) {
             if (!response.data) {
                 res.send("No products")
@@ -117,7 +117,7 @@ exports.productsbyCategory = async (req, res,next) => {
             next(error)
         })
     }else{
-        axios.get(`http://localhost:3001/api/products`)
+        axios.get(`http://localhost:${process.env.PORT}/api/products`)
         .then(function (response) {
    
             res.render('productpage.ejs', { products: response.data, isInCart: null ,wishlist:wishlistset})
@@ -129,8 +129,8 @@ exports.productsbyCategory = async (req, res,next) => {
 
 exports.getProductdetails = async (req, res, next) => {
     axios.all([
-        axios.get(`http://localhost:3001/api/getproduct/${req.params.id}`),
-        axios.get(' http://localhost:3001/api/getcategory')
+        axios.get(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.id}`),
+        axios.get(`http://localhost:${process.env.PORT}/api/getcategory`)
     ])
 
         .then(axios.spread((response1, response2) => {

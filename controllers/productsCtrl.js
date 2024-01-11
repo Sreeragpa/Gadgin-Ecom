@@ -14,11 +14,12 @@ exports.getProducts = async (req, res) => {
             try {
                 const category = (req.query.category=="all")?"":req.query.category;
                 const sortby = (req.query.sortBy=="priceLowToHigh")?1:-1;
-                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).sort({price:sortby})
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).sort({price:sortby}).populate('offer')
                 if (products.length === 0) {
                     const nop = false;
                     res.send();
                 } else {
+                 
                     res.send(products)
                 }
             } catch (error) {
@@ -29,7 +30,7 @@ exports.getProducts = async (req, res) => {
 
             try {
                 const category = req.query.category;
-                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false })
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).populate('offer')
                 if (products.length === 0) {
                     const nop = false;
                     res.send();
@@ -46,7 +47,7 @@ exports.getProducts = async (req, res) => {
     } else if (req.params.id) {
         try {
             const id = req.params.id
-            const response = await Productdb.findOne({ _id: id, unlisted: false })
+            const response = await Productdb.findOne({ _id: id, unlisted: false }).populate('offer')
             res.send(response)
         } catch (error) {
             console.error("Error in getProductsingle:", error);
@@ -62,8 +63,8 @@ exports.getProducts = async (req, res) => {
                     { category: { $regex: req.query.search, $options: 'i' } },
         
                 ]
-            });
-            console.log(products);
+            }).populate('offer');
+
             res.send(products)
         } catch (error) {
             console.error("Error in getProducts:", error);
@@ -71,7 +72,7 @@ exports.getProducts = async (req, res) => {
         }
     }else{
         try {
-            const products = await Productdb.find({ unlisted: false });
+            const products = await Productdb.find({ unlisted: false }).populate('offer');
             res.send(products)
         } catch (error) {
             console.error("Error in getProducts:", error);
@@ -88,7 +89,7 @@ exports.singlepdtRender = async (req, res) => {
         let isInCart = null;
         let wishlistset=new Set();
 
-        const response = await Productdb.findById(req.params.id);
+        const response = await Productdb.findById(req.params.id).populate('offer');
         if (userid) {
             const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
 

@@ -15,7 +15,7 @@ const offerSchema = new mongoose.Schema({
     },
     offerexpiry:{
         type:Date,
-
+        expires: 0,
     }
     
 })

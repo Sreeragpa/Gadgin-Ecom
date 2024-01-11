@@ -6,6 +6,7 @@ const wishlistCtrl = require('../controllers/wishlistCtrl')
 const orderCtrl = require('../controllers/orderCtrl')
 const cartCtrl = require('../controllers/cartCtrl')
 const { CheckAuthenticated, CheckNotauthenticated } = require('../middlewares/authMiddleware');
+const{adminAuthenticated,adminNotAuthenticated} = require('../middlewares/adminMiddleware')
 const {isBlocked} = require('../middlewares/userBlockMiddleware');
 const store = require('../services/multer');
 const validation = require('../middlewares/validationMiddleware');
@@ -102,6 +103,9 @@ route.get('/user/wallet/balance/:id',walletCtrl.walletBalance)
 route.put('/wallet/refund/:orderid/:pid',walletCtrl.refundtoWallet)
 
 // Offer
-route.post('/admin/offer/add',offerCtrl.createOffer)
+route.get('/admin/getoffers',offerCtrl.showOffers)
+route.post('/admin/offer/add',adminAuthenticated,offerCtrl.createOffer)
+route.put('/admin/offer/edit/:id',adminAuthenticated,offerCtrl.editOffer)
+route.delete('/admin/offer/remove/:id',adminAuthenticated,offerCtrl.removeOffer)
 
 module.exports = route

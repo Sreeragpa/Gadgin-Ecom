@@ -179,6 +179,17 @@ footer a {
     animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
 }
 
+.ppass{
+    position: relative;
+}
+.password-show-unhode-div{
+    position: absolute;
+    top: 34px;
+    left: 210px;
+}
+
+
+
 @keyframes stroke {
     100% {
         stroke-dashoffset: 0;

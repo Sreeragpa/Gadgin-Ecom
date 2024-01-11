@@ -3,16 +3,14 @@ const Razorpay = require('razorpay');
 const Walletdb = require('../models/walletModel');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
-const { log } = require('console');
 const Orderdb = require('../models/orderModel');
 const Coupondb = require('../models/couponModel');
 
 
 exports.walletaddmoney = async (req, res) => {
     const userid = req.session.passport.user;
-    console.log(userid);
     const amount = parseFloat(req.body.amount);
-    console.log(typeof (amount));
+
     const instance = new Razorpay({ key_id: process.env.raz_keyid, key_secret: process.env.raz_key_secret })
 
     var options = {
@@ -23,10 +21,10 @@ exports.walletaddmoney = async (req, res) => {
     let order = await instance.orders.create(options, async function (err, order) {
 
         if (order) {
-            console.log(order);
+      
             const initializewallet = await Walletdb.updateOne({ userid: userid }, { $set: { userid: userid } }, { upsert: true });
             const wallettransaction = await Walletdb.findOneAndUpdate({ userid: userid }, { $push: { transactions: { amount: amount, credit: true, status: "pending", transactionid: order.id } } }, { new: true });
-            console.log(wallettransaction);
+      
 
             res.status(201).json({
                 statusCode: 200,
@@ -49,7 +47,7 @@ exports.paymentVerification = async (req, res) => {
     const orderid = req.session.pendingorderid;
     const userid = req.session.passport.user;
     const instance = new Razorpay({ key_id: process.env.raz_keyid, key_secret: process.env.raz_key_secret })
-    console.log(req.body);
+
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
 
     const body_data = razorpay_order_id + "|" + razorpay_payment_id;
@@ -61,7 +59,7 @@ exports.paymentVerification = async (req, res) => {
     const isValid = generated_signature === razorpay_signature;
 
     if (isValid) {
-        console.log('hehe');
+   
         const wallettransaction = await Walletdb.findOneAndUpdate(
             { 'transactions.transactionid': razorpay_order_id },
             {
@@ -76,13 +74,13 @@ exports.paymentVerification = async (req, res) => {
 
             { new: true }
         );
-        console.log(wallettransaction);
+    
         const transaction = wallettransaction.transactions.find((transaction) => {
             return transaction.transactionid == razorpay_order_id
         })
-        console.log(transaction);
+ 
         const amount = parseFloat(transaction.amount);
-        console.log(amount);
+
         await Walletdb.findOneAndUpdate(
             { 'transactions.transactionid': razorpay_order_id },
             { $inc: { walletbalance: amount } }

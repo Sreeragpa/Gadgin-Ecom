@@ -15,6 +15,9 @@ var cartSchema = new mongoose.Schema({
                 default:1
             },
             createdAt:Date,
+            offer:{
+                type:Object
+            }
         }
     ]
 
