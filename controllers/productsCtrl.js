@@ -8,29 +8,34 @@ const fs = require('fs');
 const path = require('path');
 const { log } = require('console');
 const Cartdb = require('../models/cartModel');
-exports.getProducts = async (req, res) => {
+exports.getProducts = async (req, res, next) => {
     if (req.query.category) {
-        if(req.query.sortBy){
+        if (req.query.sortBy) {
             try {
-                const category = (req.query.category=="all")?"":req.query.category;
-                const sortby = (req.query.sortBy=="priceLowToHigh")?1:-1;
-                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).sort({price:sortby}).populate('offer')
+                const category = (req.query.category == "all") ? "" : req.query.category;
+                const sortby = (req.query.sortBy == "priceLowToHigh") ? 1 : -1;
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') }, unlisted: false }).sort({ price: sortby }).populate('offer')
                 if (products.length === 0) {
                     const nop = false;
                     res.send();
                 } else {
-                 
+
                     res.send(products)
                 }
             } catch (error) {
+                const err = {
+                    status: 500
+                    
+                }
                 console.error("Error in getProductcategory:", error);
-                res.status(500).send({ error: "Internal Server Error" });
+                next(err)
+               
             }
-        }else{
+        } else {
 
             try {
                 const category = req.query.category;
-                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') },unlisted: false }).populate('offer')
+                const products = await Productdb.find({ category: { $regex: new RegExp(category, 'i') }, unlisted: false }).populate('offer')
                 if (products.length === 0) {
                     const nop = false;
                     res.send();
@@ -38,8 +43,12 @@ exports.getProducts = async (req, res) => {
                     res.send(products)
                 }
             } catch (error) {
+                const err = {
+                    status: 500
+                }
                 console.error("Error in getProductcategory:", error);
-                res.status(500).send({ error: "Internal Server Error" });
+                next(err)
+               
             }
         }
 
@@ -50,76 +59,96 @@ exports.getProducts = async (req, res) => {
             const response = await Productdb.findOne({ _id: id, unlisted: false }).populate('offer')
             res.send(response)
         } catch (error) {
+            const err = {
+                status: 500
+            }
             console.error("Error in getProductsingle:", error);
-            res.status(500).send({ error: "Internal Server Error" });
+            next(err)
+           
         }
     }
-    else if(req.query.search){
+    else if (req.query.search) {
         try {
             const products = await Productdb.find({
                 unlisted: false,
                 $or: [
                     { name: { $regex: req.query.search, $options: 'i' } },
                     { category: { $regex: req.query.search, $options: 'i' } },
-        
+
                 ]
             }).populate('offer');
 
             res.send(products)
         } catch (error) {
+            const err = {
+                status: 500
+            }
             console.error("Error in getProducts:", error);
-            res.status(500).send({ error: "Internal Server Error" });
+            next(err)
+           
         }
-    }else{
+    } else {
         try {
             const products = await Productdb.find({ unlisted: false }).populate('offer');
             res.send(products)
         } catch (error) {
+            const err = {
+                status: 500
+            }
             console.error("Error in getProducts:", error);
-            res.status(500).send({ error: "Internal Server Error" });
+            next(err)
+           
         }
     }
 
 }
 
-exports.singlepdtRender = async (req, res) => {
+exports.singlepdtRender = async (req, res, next) => {
     try {
         const id = req.params.id;
         const userid = req.session.passport?.user;
         let isInCart = null;
-        let wishlistset=new Set();
+        let wishlistset = new Set();
 
         const response = await Productdb.findById(req.params.id).populate('offer');
         if (userid) {
-            const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
+            const cartcount = await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
 
             isInCart = await Cartdb.findOne({ userid: userid, 'cartitems.productid': id });
             const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
-            
-             wishlistset = new Set(wishlist.data[0].products);
-             req.flash('cartcount',cartcount.data.itemCount);
+
+            wishlistset = new Set(wishlist.data[0].products);
+            req.flash('cartcount', cartcount.data.itemCount);
 
         }
-        res.render('singleproductpage.ejs', { product: response, isInCart: isInCart,wishlist:wishlistset });
+        res.render('singleproductpage.ejs', { product: response, isInCart: isInCart, wishlist: wishlistset });
 
     } catch (error) {
-        console.error('Error fetching product from external API:', error.message);
-        res.status(500).send('Internal Server Error');
+        const err = {
+            status: 500
+        }
+        console.error('Error fetching product from external API:', error);
+        next(err)
+        // res.status(500).send('Internal Server Error');
     }
 }
 
-exports.unlistedProd = async (req, res) => {
+exports.unlistedProd = async (req, res, next) => {
     try {
         const unlistedproducts = await Productdb.find({ unlisted: true });
         res.send(unlistedproducts)
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error("Error in unlistedProd:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        next(err)
+       
     }
 
 }
 
-exports.addProducts = async (req, res) => {
+exports.addProducts = async (req, res, next) => {
     try {
         const files = req.files;
         imag = files.map((file) => {
@@ -141,15 +170,19 @@ exports.addProducts = async (req, res) => {
         product = await newProduct.save()
         res.redirect('/admin/productmgmt')
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error("Error in addProducts:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        next(err)
+       
     }
 
 
 
 }
 
-exports.addProductsfromUnlisted = async (req, res) => {
+exports.addProductsfromUnlisted = async (req, res, next) => {
     try {
         const id = req.params.id;
         const addsuccess = await Productdb.findOneAndUpdate({ _id: id }, { $set: { unlisted: false } });
@@ -159,26 +192,34 @@ exports.addProductsfromUnlisted = async (req, res) => {
             res.send("Error deleting")
         }
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error("Error in addProductsfromUnlisted:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        next(err)
+       
     }
 
 
 }
 
-exports.addategoryFromUnlisted = async (req, res) => {
+exports.addategoryFromUnlisted = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:false}},{ new: true })
+        const result = await Categorydb.findOneAndUpdate({ _id: id }, { $set: { unlisted: false } }, { new: true })
         res.redirect('/admin/categorymgmt');
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error("Error in addcategoryFromUnlisted:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        next(err)
+       
     }
 
 }
 
-exports.editProducts = async (req, res) => {
+exports.editProducts = async (req, res, next) => {
     try {
         id = req.params.id;
         const files = req.files;
@@ -207,13 +248,17 @@ exports.editProducts = async (req, res) => {
         updatedProduct = await Productdb.findByIdAndUpdate({ _id: id }, { $set: updateFields }, { new: true });
         res.redirect('/admin/productmgmt')
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error("Error in editProducts:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        next(err)
+       
     }
 
 }
 
-exports.deleteProducts = async (req, res) => {
+exports.deleteProducts = async (req, res, next) => {
     try {
         const id = req.params.id;
         const deletesuccess = await Productdb.findOneAndUpdate({ _id: id }, { $set: { unlisted: true } });
@@ -225,18 +270,22 @@ exports.deleteProducts = async (req, res) => {
             res.status(404).json({ message: 'Product not found' });
         }
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 
 }
 
-exports.deleteCategory = async (req, res) => {
+exports.deleteCategory = async (req, res, next) => {
     try {
         const id = req.params.id;
         console.log(id);
 
-        const result = await Categorydb.findOneAndUpdate({_id:id},{$set:{unlisted:true}},{ new: true })
+        const result = await Categorydb.findOneAndUpdate({ _id: id }, { $set: { unlisted: true } }, { new: true })
 
 
         if (result) {
@@ -246,14 +295,18 @@ exports.deleteCategory = async (req, res) => {
             res.status(404).json({ message: 'Category not found' });
         }
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error('Error deleting Category:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 
 }
 
 
-exports.deleteImage = async (req, res) => {
+exports.deleteImage = async (req, res, next) => {
 
     try {
         const productid = req.query.pid;
@@ -266,13 +319,18 @@ exports.deleteImage = async (req, res) => {
         const category = await Categorydb.find()
         res.render('admineditproductform.ejs', { product: updatedProduct, categories: category })
     }
-    catch (err) {
+    catch (error) {
+        const err = {
+            status: 500,
+            message:"Internal Server Error"
+        }
         console.error('Error deleteImage:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 }
 
-exports.createCategory = async (req, res) => {
+exports.createCategory = async (req, res, next) => {
     try {
         cat = req.body.category;
         cat = cat.toLowerCase();
@@ -297,30 +355,42 @@ exports.createCategory = async (req, res) => {
             res.redirect('/admin/categorymgmt')
         }
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error('Error createCategory:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 
 
 }
 
-exports.getCategory = async (req, res) => {
+exports.getCategory = async (req, res, next) => {
     try {
-        const categories = await Categorydb.find({unlisted:false})
+        const categories = await Categorydb.find({ unlisted: false })
         res.send(categories)
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error('Error getCategory:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 
 }
-exports.getUnlistedCategory = async (req, res) => {
+exports.getUnlistedCategory = async (req, res, next) => {
     try {
-        const categories = await Categorydb.find({unlisted:true})
+        const categories = await Categorydb.find({ unlisted: true })
         res.send(categories)
     } catch (error) {
+        const err = {
+            status: 500
+        }
         console.error('Error getUnlistedCategory:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        next(err)
+        // res.status(500).json({ message: 'Internal Server Error' });
     }
 
 }

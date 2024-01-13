@@ -48,6 +48,9 @@ app.use('/',userRoutes)
 app.use('/',authRoutes)
 app.use('/admin',adminRoutes);
 app.use('/api',apiRoutes);
+app.use('/*',(req,res)=>{
+    res.render('errorpage')
+});
 
 // Error Middleware
 app.use(errorMiddleware);

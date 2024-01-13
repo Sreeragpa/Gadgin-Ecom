@@ -3,8 +3,9 @@ const errorMiddleware = (err ,req, res, next)=>{
     const message = err.message || "Server Error";
     const extraDetails = err.extraDetails || "Error from Server";
 
-    return res.status(status).json({message, extraDetails,status});
-    // return res.render('errorpageDynamic',{status:status,message:message})
+    // return res.status(status).json({message, extraDetails,status});
+    return res.render('errorpageDynamic',{status,message})
+
 };
 
 module.exports = errorMiddleware;
