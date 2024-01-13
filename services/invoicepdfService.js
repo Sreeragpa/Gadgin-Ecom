@@ -7,7 +7,8 @@ const fs = require('fs').promises;
 
 
 const generatePdf = async (res, invoiceData) => {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: "new",
+    executablePath: '/usr/bin/chromium-browser', });
     // const browser = await puppeteer.launch({args: ['--no-sandbox']});
 
     const page = await browser.newPage();
@@ -32,6 +33,7 @@ const generatePdf = async (res, invoiceData) => {
                 left: '20mm',
             },
         });
+        
         // Send the PDF buffer as a response for download
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment: filename=invoice.pdf');
