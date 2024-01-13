@@ -173,7 +173,6 @@ exports.orderSummary = async (req, res, next) => {
         } else {
             try {
                 const product = await axios.get(`http://localhost:${process.env.PORT}/api/getproduct/${req.params.type}`)
-                console.log(product.data);
                 res.render('ordersummarypage.ejs', { addresses: address.data, cartitems: false, product: product.data });
                
             } catch (error) {
@@ -206,7 +205,7 @@ exports.checkoutPage = async (req, res, next) => {
             const wallet = await axios.get(`http://localhost:${process.env.PORT}/api/user/wallet/balance/${userid}`);
 
             const walletbalance = wallet.data.walletbalance;
-            console.log(walletbalance);
+
             
             // For new checkout
             if(!orderdetails.data[0].finalvalue){
@@ -304,7 +303,7 @@ exports.paymentCheck = async (req, res, next) => {
                     }
     
                 } else if (paymentmethod == 'wallet') {
-                    console.log("Wallet Payment");
+                
                     const wallet = await axios.get(`http://localhost:${process.env.PORT}/api/user/wallet/balance/${userid}`);
 
                     const walletbalance = Number(wallet.data.walletbalance);
@@ -312,7 +311,7 @@ exports.paymentCheck = async (req, res, next) => {
                     if(walletbalance<Number(order.data[0].finalvalue) || !wallet.data){
                         req.flash('error',"Insufficient Wallet Fund")
                         return res.redirect('/checkout')
-                        console.log("Insufficient Wallet Fund")
+        
                     }else{
                         delete req.session.pendingorderid;
                         const ordersuccess = await axios.get(`http://localhost:${process.env.PORT}/api/user/order/success/${userid}/${orderid}?paymentmethod=wallet`)

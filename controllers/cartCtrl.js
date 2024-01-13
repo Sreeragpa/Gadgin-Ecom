@@ -168,7 +168,7 @@ exports.clearCart = async(req,res)=>{
 exports.clearAfterPurchase = async(req,res)=>{
     // Clearing cart after purchase
     const userid = req.query.userid;
-    console.log(userid);
+
 
     try {
         const result = await cartDb.findOneAndUpdate({userid:userid},{$set:{cartitems:[]}});

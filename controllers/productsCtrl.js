@@ -266,7 +266,6 @@ exports.deleteProducts = async (req, res, next) => {
         if (deletesuccess) {
             res.status(200).redirect('/admin/productmgmt');
         } else {
-            console.log('Product not found.');
             res.status(404).json({ message: 'Product not found' });
         }
     } catch (error) {
@@ -283,7 +282,7 @@ exports.deleteProducts = async (req, res, next) => {
 exports.deleteCategory = async (req, res, next) => {
     try {
         const id = req.params.id;
-        console.log(id);
+
 
         const result = await Categorydb.findOneAndUpdate({ _id: id }, { $set: { unlisted: true } }, { new: true })
 
@@ -291,7 +290,7 @@ exports.deleteCategory = async (req, res, next) => {
         if (result) {
             res.status(200).redirect('/admin/categorymgmt');
         } else {
-            console.log('Category not found.');
+
             res.status(404).json({ message: 'Category not found' });
         }
     } catch (error) {

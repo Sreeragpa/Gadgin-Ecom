@@ -446,7 +446,6 @@ exports.changeorderStatus = async (req, res, next) => {
 
 exports.cancelOrder = async (req, res, next) => {
     try {
-        console.log(req.body);
         const orderid = req.params.oid;
         const pid = req.params.pid;
         const userid = req.session.passport.user;

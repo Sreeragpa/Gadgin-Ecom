@@ -317,7 +317,6 @@ exports.checkout = async (req, res) => {
                 const quantity = Number(req.body.quantity);
                 const pid = req.body.pid;
                 const product = await Productdb.findOne({ _id: pid }).populate('offer');
-                console.log(product);
                 let offerdiscount=product?.offer?.discount/100 || 0;
                 
                 let offerdiscountpercentage = product?.offer?.discount || 0
