@@ -1,5 +1,7 @@
 const path = require('path');
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+
 const ejs = require('ejs');
 const fs = require('fs').promises;
 
