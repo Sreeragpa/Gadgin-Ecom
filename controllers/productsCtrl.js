@@ -3,7 +3,7 @@ const Productdb = require('../models/productModel')
 
 const store = require('../services/multer');
 const Categorydb = require('../models/categoryModel');
-
+const mongoose= require('mongoose')
 const fs = require('fs');
 const path = require('path');
 const { log } = require('console');
@@ -110,7 +110,7 @@ exports.singlepdtRender = async (req, res, next) => {
         let isInCart = null;
         let wishlistset = new Set();
 
-        const response = await Productdb.findById(req.params.id).populate('offer');
+        const response = await Productdb.findById(new mongoose.Types.ObjectId(req.params.id)).populate('offer');
         if (userid) {
             const cartcount = await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
 
