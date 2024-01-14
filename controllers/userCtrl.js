@@ -489,7 +489,7 @@ exports.setcodSuccess = async (req, res) => {
             const updateq = Number(product.quantity);
 
             const originalq = await Productdb.findOne(
-                { _id: mongoose.Types.ObjectId(product.pid) }
+                { _id: new mongoose.Types.ObjectId(product.pid) }
             );
 
             if (originalq.quantity < updateq) {
@@ -540,7 +540,7 @@ exports.setcodSuccess = async (req, res) => {
                 const updateq = Number(product.quantity);
 
                 await Productdb.findOneAndUpdate(
-                    { _id: mongoose.Types.ObjectId(product.pid) },
+                    { _id: new mongoose.Types.ObjectId(product.pid) },
                     { $inc: { quantity: -updateq } }
                 );
             }

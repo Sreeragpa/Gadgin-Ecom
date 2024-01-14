@@ -25,7 +25,6 @@ exports.payment = async (req, res ,next) => {
                 order,
                 amount: amount * 100
             })
-            console.log(err);
         });
     
     } catch (error) {
