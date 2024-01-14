@@ -41,7 +41,7 @@ route.get('/getusers',userCtrl.getuser)
 route.get('/user/cartcount/:id',userCtrl.getcartCount)
 
 // Wishlist
-route.put('/wishlist/:pid',CheckAuthenticated,wishlistCtrl.addtoWishlist)
+route.put('/wishlist/:pid',wishlistCtrl.addtoWishlist)
 route.get('/getwishlist/:id',wishlistCtrl.getWishlist)
 
 

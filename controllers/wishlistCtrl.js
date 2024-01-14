@@ -3,6 +3,10 @@ const Productdb = require('../models/productModel')
 exports.addtoWishlist = async(req,res,next)=>{
     try {
         const userid = req.session.passport.user;
+
+        if(!userid){
+            return res.redirect(303,'/login')
+        }
         const pid = req.params.pid;
         const wishlist = await Wishlistdb.findOne({userid:userid});
 
