@@ -19,7 +19,8 @@ document.querySelectorAll(".add-wishlist").forEach((element) => {
                 }
             },
             error: function () {
-                window.location.href = '/login';
+                // window.location.href = '/login';
+                window.location.replace('/login');
             }
         })
     })
