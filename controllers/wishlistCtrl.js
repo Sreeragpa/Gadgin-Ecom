@@ -5,7 +5,8 @@ exports.addtoWishlist = async(req,res,next)=>{
         const userid = req.session?.passport?.user;
 
         if(!userid){
-            return res.redirect(303,'/login')
+            const refferer = req.get("Referrer");
+            return res.redirect(303,refferer)
         }
         const pid = req.params.pid;
         const wishlist = await Wishlistdb.findOne({userid:userid});
