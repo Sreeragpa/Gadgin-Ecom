@@ -2,7 +2,7 @@ const Wishlistdb = require('../models/wishlistModel');
 const Productdb = require('../models/productModel')
 exports.addtoWishlist = async(req,res,next)=>{
     try {
-        const userid = req.session.passport.user;
+        const userid = req.session?.passport?.user;
 
         if(!userid){
             return res.redirect(303,'/login')
