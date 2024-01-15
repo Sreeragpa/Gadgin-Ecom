@@ -12,6 +12,9 @@ body {
 
 
 }
+a:hover {
+    color: inherit ;
+}
 
 #search-box {
     background-color: transparent;
