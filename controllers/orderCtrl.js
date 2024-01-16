@@ -101,7 +101,7 @@ exports.getallorderwithuser = async (req, res, next) => {
     } else if (req.query.search) {
 
         const search = req.query.search;
-  
+
         try {
             const page = req.query.page || 1;
             const limit = 10;
@@ -406,31 +406,31 @@ exports.changeorderStatus = async (req, res, next) => {
         const orderid = req.params.id;
         const pid = req.params.pid;
         const statustochange = req.body.status;
-        let paymentstatus=false;
-        if(req.body.status=="cancelled"){
-            paymentstatus=true
+        let paymentstatus = false;
+        if (req.body.status == "cancelled") {
+            paymentstatus = true
         }
-        const order = await Orderdb.findOne({_id:orderid,'orderitems.pid': pid});
+        const order = await Orderdb.findOne({ _id: orderid, 'orderitems.pid': pid });
         let currentStatus;
-        if(order){
-            const matchingproduct = order.orderitems.find((product)=>{
-                return product.pid==pid
+        if (order) {
+            const matchingproduct = order.orderitems.find((product) => {
+                return product.pid == pid
             })
-            if(matchingproduct){
+            if (matchingproduct) {
                 currentStatus = matchingproduct.orderstatus
             }
         }
 
-        if(currentStatus==statustochange || currentStatus=="cancelled" || currentStatus == 'returned'){
-            req.flash("error",`Current Status is ${statustochange}`)
+        if (currentStatus == statustochange || currentStatus == "cancelled" || currentStatus == 'returned') {
+            req.flash("error", `Current Status is ${statustochange}`)
             const referer = req.get('Referer')
             return res.redirect(referer)
         }
 
 
-    
-        const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange} })
-        if(req.body.status=="cancelled"){
+
+        const result = await Orderdb.findOneAndUpdate({ _id: orderid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': statustochange } })
+        if (req.body.status == "cancelled") {
             await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
         }
         if (result) {
@@ -449,7 +449,7 @@ exports.cancelOrder = async (req, res, next) => {
         const orderid = req.params.oid;
         const pid = req.params.pid;
         const userid = req.session.passport.user;
-        const walletrefund =  await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
+        const walletrefund = await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
         const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'cancelled', 'comments': req.body }, });
         if (result) {
             res.redirect('/myorders')
@@ -470,25 +470,25 @@ exports.returnOrder = async (req, res, next) => {
         const orderid = req.params.oid;
         const userid = req.session?.passport.user;
         const pid = req.params.pid;
-        const order = await Orderdb.findOne({_id:orderid,'orderitems.pid': pid});
+        const order = await Orderdb.findOne({ _id: orderid, 'orderitems.pid': pid });
         let currentStatus;
-        if(order){
-            const matchingproduct = order.orderitems.find((product)=>{
-                return product.pid==pid
+        if (order) {
+            const matchingproduct = order.orderitems.find((product) => {
+                return product.pid == pid
             })
-            if(matchingproduct){
+            if (matchingproduct) {
                 currentStatus = matchingproduct.orderstatus
             }
         }
-        
+
         if (currentStatus == 'delivered') {
-            const walletrefund =  await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
+            const walletrefund = await axios.put(`http://localhost:${process.env.PORT}/api/wallet/refund/${orderid}/${pid}`)
             const result = await Orderdb.findOneAndUpdate({ _id: orderid, userid: userid, 'orderitems.pid': pid }, { $set: { 'orderitems.$.orderstatus': 'returned', 'comments': req.body }, });
 
             if (result) {
                 res.redirect('/myorders')
             }
-    
+
         }
     } catch (error) {
         console.error('Error in returnOrder :', err);
@@ -514,27 +514,43 @@ exports.getSingleOrder = async (req, res, next) => {
 exports.salesReport = async (req, res, next) => {
     try {
 
-        const Orders = [];
-
         const Orderdata = await Orderdb.aggregate([
+            { $unwind: "$orderitems" },
+        ]);
+
+        const finalvaluesum = await Orderdb.aggregate([
             {
-                $unwind: "$orderitems"
+                $group:{
+                    _id:null,
+                    total:{$sum:"$finalvalue"},
+                    pricee:{$sum:"$price"}
+                }
             }
         ])
 
-        Orderdata.forEach((order) => {
-            const { orderid, orderitems, orderdate, paymentmethod } = order;
-            const productname = orderitems.name;
-            const price = orderitems.price;
-            const quantity = orderitems.quantity;
+ 
+
+        let Orders = Orderdata.map(order => {
+            const {
+                orderid,
+                orderitems: { name: productname, price, quantity },
+                orderdate,
+                paymentmethod,
+                finalvalue
+            } = order;
+
             const orderDate = orderdate.toISOString().split('T')[0];
-            Orders.push({ orderid, orderDate, productname, price, quantity, paymentmethod })
+
+            return { orderid, orderDate, productname, price, quantity, paymentmethod };
         });
+        coupondiscount = (finalvaluesum[0].total)-(finalvaluesum[0].pricee)
+        total = finalvaluesum[0].total.toLocaleString('en-IN');
+        Orders.push({ orderid: 'Total Order Value', price: total });
 
-        const csvFields = ['Order id', "Order Date", "Product", "Price", "Quantity", "Payment Method"];
-
+        const csvFields = ['Order id', 'Order Date', 'Product', 'Price', 'Quantity', 'Payment Method', 'Total'];
         const csvParser = new CsvParser({ csvFields });
         const csvData = csvParser.parse(Orders);
+
 
         res.setHeader("Content-type", "text/csv")
         res.setHeader("Content-Disposition", "attachment: filename=OrderData.csv");
@@ -567,7 +583,7 @@ exports.generateInvoice = async (req, res, next) => {
         const orderid = req.params.id;
         const order = await Orderdb.findOne({ _id: orderid });
         const user = await Userdb.findOne({ _id: order.userid }, { name: 1, email: 1 });
-    
+
         const products = order.orderitems.map((value) => {
             return {
                 "quantity": value.quantity,
@@ -575,7 +591,7 @@ exports.generateInvoice = async (req, res, next) => {
                 "price": value.price
             }
         })
-        const imagepath = path.join(__dirname,'..','public','img','gadgin.png');
+        const imagepath = path.join(__dirname, '..', 'public', 'img', 'gadgin.png');
         const base64Image = await imageService.imageToBase64(imagepath)
         const invoiceData = {
             orderNumber: order.orderid,
@@ -594,20 +610,20 @@ exports.generateInvoice = async (req, res, next) => {
                 name: user.name,
                 email: user.email,
             },
-            logo:base64Image
-    
+            logo: base64Image
+
         }
-    
-    
+
+
         const data = {
             invoiceData
         };
-    
+
         await pdfService.generatePdf(res, invoiceData)
     } catch (error) {
         next(error)
     }
-    
+
 
 
 
