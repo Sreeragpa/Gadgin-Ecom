@@ -38,3 +38,16 @@ exports.validateCoupon = [
             return true; // Indicates the validation passed
         }).withMessage('Coupon discount must be less than 70'),
 ]
+
+exports.validateOffer = [
+    body('discount')
+        .isLength({min:1}).trim().withMessage('Invalid Discount')
+        .custom(value => {
+            if (parseInt(value) > 70) {
+                throw new Error(`Coupon discount must be less than 70`);
+            }
+            return true; 
+        }).withMessage('Coupon discount must be less than 70'),
+    body('offerexpiry')
+        .isDate().withMessage('Invalid Date')
+]

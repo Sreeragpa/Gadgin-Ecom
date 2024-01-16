@@ -1,44 +1,56 @@
 const Offerdb = require('../models/offerModel');
 const Productdb = require('../models/productModel')
-const axios = require('axios')
+const axios = require('axios');
+const { validationResult } = require('express-validator');
 
 exports.createOffer = async (req, res, next) => {
-    const category = req.body.category;
-    const product = req.body.product || 'all';
-    const productquery = req.body.product || '';
-    const categoryquery = (req.body.category == 'all') ? '' : req.body.category;
-    const discount = req.body.discount;
-    const date = req.body.offerexpiry;
-    try {
-        const offer = new Offerdb({
-            category: category,
-            product: product,
-            discount: discount,
-            offerexpiry: date,
-        });
-    
-        await offer.save();
-        const updateproduct = await Productdb.updateMany({
-            brand: { $regex: productquery, $options: 'i' },
-            category: { $regex: categoryquery, $options: 'i' }
-        },
-            {
-                $set: {
-                    offer: offer._id
-                },
-    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const Errors = errors.array();
+        Errors.forEach((errelem) => {
+            req.flash(errelem.path + 'error', errelem.msg)
+        })
+        const referer = req.get('referer');
+        return res.redirect(referer);
+    }else{
+        const category = req.body.category;
+        const product = req.body.product || 'all';
+        const productquery = req.body.product || '';
+        const categoryquery = (req.body.category == 'all') ? '' : req.body.category;
+        const discount = req.body.discount;
+        const date = req.body.offerexpiry;
+        try {
+            const offer = new Offerdb({
+                category: category,
+                product: product,
+                discount: discount,
+                offerexpiry: date,
+            });
+        
+            await offer.save();
+            const updateproduct = await Productdb.updateMany({
+                brand: { $regex: productquery, $options: 'i' },
+                category: { $regex: categoryquery, $options: 'i' }
             },
-            {
-                new: true
-            }
-    
-        );
-    
-        res.redirect('/admin/offermgmt')
-    
-    } catch (error) {
-        next(error)
+                {
+                    $set: {
+                        offer: offer._id
+                    },
+        
+                },
+                {
+                    new: true
+                }
+        
+            );
+        
+            res.redirect('/admin/offermgmt')
+        
+        } catch (error) {
+            next(error)
+        }
     }
+
 
    
 }

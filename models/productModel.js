@@ -57,5 +57,3 @@ const Productdb = mongoose.model('product',userSchema);
 
 module.exports = Productdb;
 
-// Userdb - Model name
-// user -collection name ,where in mongodb it pluralizes it and saves as users

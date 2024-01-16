@@ -104,7 +104,7 @@ route.put('/wallet/refund/:orderid/:pid',walletCtrl.refundtoWallet)
 
 // Offer
 route.get('/admin/getoffers',offerCtrl.showOffers)
-route.post('/admin/offer/add',adminAuthenticated,offerCtrl.createOffer)
+route.post('/admin/offer/add',adminAuthenticated,validation.validateOffer,offerCtrl.createOffer)
 route.put('/admin/offer/edit/:id',adminAuthenticated,offerCtrl.editOffer)
 route.delete('/admin/offer/remove/:id',adminAuthenticated,offerCtrl.removeOffer)
 
