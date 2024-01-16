@@ -1,7 +1,7 @@
 let data1;
 $(document).ready(function () {
     $.ajax({
-        url: `http://localhost:3001/api/admin/ordersreportforgraph`,
+        url: `/api/admin/ordersreportforgraph`,
         type: 'GET',
         success: function (data) {
             data1 = data;
