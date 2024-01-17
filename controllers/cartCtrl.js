@@ -80,13 +80,6 @@ exports.getCart =async(req,res)=>{
                 }
             },
 
-            // {
-            //     $project: {
-            //         cartItemsWithDetails: 1,
-            //         "cartitems":1
-            //     }
-            // },
-    
         ]);
 
         if (result.length > 0) {
