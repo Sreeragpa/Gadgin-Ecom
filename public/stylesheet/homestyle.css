@@ -579,9 +579,9 @@ input[type="search"]::-webkit-search-cancel-button {
     .responsive-hint {
       display: none;
     }
-    h3 {
+    /* h3 {
       margin-top:20px;
-    }
+    } */
     .pdt-img-div-small {
         width: 70px;
     }

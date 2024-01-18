@@ -1,0 +1,59 @@
+.hamburger-menu {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 20px;  /* Adjust the height as needed */
+    color: white;
+}
+
+.bar {
+    width: 20px;  /* Adjust the width as needed */
+    height: 2px;  /* Adjust the height for smaller bars */
+    background-color: white;
+    margin: 2px 0;  /* Adjust the margin as needed */
+    transition: transform 0.3s ease;
+}
+
+.sidebar-mobile {
+    position: fixed;
+    top: 200px;
+    left: -250px; /* Start off-screen */
+
+
+    transition: left 0.3s ease;
+    z-index: 1;
+
+    height: 60vh;
+    background-color: rgb(0, 0, 0);
+    margin: 0px 12px 0px 0px;
+    border-radius: 12px;
+    margin-left: 20px;
+    display: flex;
+    flex: 0 0 280px;
+    max-width: 180px;
+    padding: 0px 10px 0px 0px;
+
+    
+
+}
+
+/* Add your other styles for the sidebar content, e.g., padding, font color, etc. */
+
+.sidebar-mobile.open {
+    left: 0;
+}
+
+.hamburger-menu.active .bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger-menu.active .bar:nth-child(2) {
+    transform: scaleX(0);
+}
+
+.hamburger-menu.active .bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
