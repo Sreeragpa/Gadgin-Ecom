@@ -84,8 +84,8 @@
                         </div>
                         <div class="sidebar-mobile" id="sidebar">
                             <!-- <h2>Filter & Sort</h2> -->
-                            <form id="filterForm" class="filter-form mt-2">
-                                <div class="form-group">
+                            <form id="filterForm" class="filter-form mt-2 filter-inner">
+                                <div class="form-group ">
                                     <label for="category">Category:</label>
                                     <select id="category" name="category" class="select-sty">
                                         <option value="all">All Categories</option>
@@ -215,14 +215,7 @@
             <!-- Footer -->
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="/js/addtoFav.js"></script>
-            <script>
-document.getElementById("hamburger-menu").addEventListener("click", function() {
-    console.log('clicked');
-    document.getElementById("sidebar").classList.toggle("open");
-    this.classList.toggle("active");
-});
-
-            </script>
+            <script src="/js/sidebartoggle.js"></script>
 </body>
 
 </html>
