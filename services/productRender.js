@@ -70,8 +70,9 @@ exports.productsbyCategory = async (req, res,next) => {
         const cartcount =  await axios.get(`http://localhost:${process.env.PORT}/api/user/cartcount/${userid}`);
          const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
         req.flash('cartcount',cartcount.data.itemCount);
-         wishlistset = new Set(wishlist.data[0].products);
-    
+        if(wishlist.data){
+            wishlistset = new Set(wishlist.data[0].products);
+        }
     }
     if (req.query.category) {
         if(req.query.sortBy){
