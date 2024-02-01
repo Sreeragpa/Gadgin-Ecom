@@ -116,8 +116,9 @@ exports.singlepdtRender = async (req, res, next) => {
 
             isInCart = await Cartdb.findOne({ userid: userid, 'cartitems.productid': id });
             const wishlist = await axios.get(`http://localhost:${process.env.PORT}/api/getwishlist/${userid}`);
-
-            wishlistset = new Set(wishlist.data[0].products);
+            if(wishlist.data){
+                wishlistset = new Set(wishlist.data[0].products);
+            }
             req.flash('cartcount', cartcount.data.itemCount);
 
         }

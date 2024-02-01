@@ -30,7 +30,6 @@ const path = require('path')
           if (err) {
             reject(err)
           } else {
-            console.log('Profile picture generated');
             resolve(filename);
           }
       });
