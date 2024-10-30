@@ -89,7 +89,8 @@ exports.getProducts = async (req, res, next) => {
         }
     } else {
         try {
-            const products = await Productdb.find({ unlisted: false }).populate('offer');
+            const products = await Productdb.find({ unlisted: false }).sort({'updatedAt':-1}).populate('offer');
+            
             res.send(products)
         } catch (error) {
             const err = {

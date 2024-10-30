@@ -8,7 +8,7 @@ const path = require('path')
     const outputPath = path.join(__dirname,'..',`/public${filename}`);
     const size = 200;
     const fontsize = 80;
-    console.log(outputPath);
+
       return new Promise((resolve, reject) => {
         sharp({
           create:{

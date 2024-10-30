@@ -6,7 +6,7 @@ let files = [];
 
 document.getElementById('img-input').addEventListener('change',async(event)=>{
   const file = imginput.files;
-  console.log(file);
+
   files=[]
   if(files.length + file.length > 1){
   
@@ -91,7 +91,7 @@ document.getElementById('img-input').addEventListener('change',async(event)=>{
 
 
   function uploadImage2(){
-    console.log('uploadImage2');
+
     const dataTransfer = new DataTransfer()
     files.forEach((file,index)=>{
       dataTransfer.items.add(file)

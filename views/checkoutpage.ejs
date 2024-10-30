@@ -238,7 +238,7 @@
                     })
 
                     const orderData = await response.json();
-                    console.log(orderData);
+       
                     const options = {
                         "key": "rzp_test_9MbG2FIUatrMFy",
                         "amount": orderData.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -289,10 +289,10 @@
             </script>
             <script>
          document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOMContentLoaded event fired');
+
     
     document.getElementById('apply-button').addEventListener('click', function () {
-        console.log('Apply button clicked');
+   
         
         const form = document.getElementById('couponform');
         if (!form) {
@@ -345,7 +345,7 @@
     // Remove Coupon AJAX
     document.getElementById('coupon-remove-link').addEventListener('click',(e)=>{
         e.preventDefault();
-        console.log('hHEHE');
+
         $.ajax({
             url: "/api/coupon/remove",
             method: 'DELETE',

@@ -149,7 +149,7 @@
                             })
                    
                             const orderData = await response.json();
-                            console.log(orderData);
+           
                             if(orderData.statusCode===400){
                                 document.getElementById('wallet-error').innerHTML=orderData?.error?.description;
                                 return 0

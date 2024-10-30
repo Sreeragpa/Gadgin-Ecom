@@ -6,7 +6,7 @@ let files = [];
 
 document.getElementById('img-input').addEventListener('change',async(event)=>{
   const file = imginput.files;
-  console.log(files.length);
+
   if(files.length + file.length > 4){
     document.getElementById('image-errorr').innerHTML="Please select up to 4 files";
     event.target.value = '';
@@ -94,7 +94,7 @@ document.getElementById('img-input').addEventListener('change',async(event)=>{
 
 
   function uploadImage2(){
-    console.log('uploadImage2');
+
     const dataTransfer = new DataTransfer()
     files.forEach((file,index)=>{
       dataTransfer.items.add(file)

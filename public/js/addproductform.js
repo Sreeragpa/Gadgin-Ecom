@@ -39,12 +39,10 @@ const pname = document.getElementById('pname')
     }
     if(Number(price.value)<0){
       flag=1;
-      console.log(Number(price.value));
       document.getElementById('price-error').innerHTML='Price should be greater than zero';
     }
     if(Number(mrp.value)<0){
       flag=1;
-      console.log(Number(mrp.value));
       document.getElementById('mrp-error').innerHTML='MRP should be greater than zero';
     }
     if(Number(mrp.value)<Number(price.value)){
@@ -136,7 +134,7 @@ document.getElementById('price').addEventListener('keyup',function(){
     let dis=((Number(mrp)-Number(price))/Number(mrp))*100;
     dis=Math.floor(dis);
     document.getElementById('discount').value=dis;
-    console.log(dis);
+
     
 })
 document.getElementById('img-input').addEventListener('change', function (e) {

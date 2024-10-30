@@ -1,6 +1,6 @@
         const isnewlogin = document.getElementById('newlogin').value;
     //  const isnewlogin = '<%=messages.login%>';
-     console.log(isnewlogin);
+    
      const Toast = Swal.mixin({
           toast: true,
           position: "top-end",

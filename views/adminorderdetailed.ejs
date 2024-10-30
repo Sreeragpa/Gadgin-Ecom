@@ -278,11 +278,11 @@
 	<script>
 		let isodate = '<%=orders.orderdate%>';
 		isodate=new Date(isodate)
-		console.log(isodate);
+
 		let hours = isodate.getHours();
 		let minutes = isodate.getMinutes();
 		const ampm = (hours>=12)?'PM':'AM';
-		console.log(hours);
+
 		hours= (hours>12)?Math.abs(12-hours):hours;
 		hours = (hours<10)?'0'+hours:hours
 		minutes = (minutes<10)?'0'+minutes:minutes

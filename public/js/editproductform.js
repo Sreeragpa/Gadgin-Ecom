@@ -14,12 +14,10 @@
     let flag=0;
     if(Number(price.value)<0){
       flag=1;
-      console.log(Number(price.value));
       document.getElementById('price-error').innerHTML='Price should be greater than zero';
     }
     if(Number(mrp.value)<0){
       flag=1;
-      console.log(Number(mrp.value));
       document.getElementById('mrp-error').innerHTML='MRP should be greater than zero';
     }
     if(Number(quantity.value)<0){
@@ -55,7 +53,6 @@
     let dis=((Number(mrp)-Number(price))/Number(mrp))*100;
     dis=Math.floor(dis);
     document.getElementById('discount').value=dis;
-    console.log(dis);
     
 })
 

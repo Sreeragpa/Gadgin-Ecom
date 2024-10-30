@@ -4,7 +4,7 @@ $(document).ready(function () {
 document.getElementById('continue-btnn').addEventListener('click',(e)=>{
     e.preventDefault(); 
     var action = $('#form').attr('action');
-    console.log(action);
+
 
     // Use AJAX to load content from the specified URL
     $.ajax({

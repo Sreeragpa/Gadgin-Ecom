@@ -51,7 +51,7 @@ var userSchema = new mongoose.Schema({
          ref: 'offer' },
 
 
-})
+},{timestamps: true})   
 
 const Productdb = mongoose.model('product',userSchema);
 

@@ -5,7 +5,7 @@ let files = [];
 document.getElementById('img-input').addEventListener('change',(event)=>{
   const file = imginput.files;
   const savedImg = document.getElementById('img-length')
-  console.log(savedImg.dataset.imglength);
+
   const saveimglength = Number(savedImg.dataset.imglength)
   if(files.length + file.length + saveimglength > 4){
   
@@ -60,7 +60,7 @@ document.getElementById('img-input').addEventListener('change',(event)=>{
 
 
   function uploadImage2(){
-    console.log('uploadImage2');
+
     const dataTransfer = new DataTransfer()
     files.forEach((file,index)=>{
       dataTransfer.items.add(file)

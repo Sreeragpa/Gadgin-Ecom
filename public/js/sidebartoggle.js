@@ -1,5 +1,4 @@
 document.getElementById("hamburger-menu").addEventListener("click", function() {
-    console.log('clicked');
     document.getElementById("sidebar").classList.toggle("open");
     this.classList.toggle("active");
 });

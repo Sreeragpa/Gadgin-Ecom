@@ -48,7 +48,7 @@ exports.getWishlist = async(req,res,next)=>{
     const getProducts = req.query?.products
     if(getProducts){
         const wishlist = await Wishlistdb.find({userid:userid}).populate('products');
-        console.log(wishlist);
+
         if(wishlist.length!=0){
             res.send(wishlist)
         }else{

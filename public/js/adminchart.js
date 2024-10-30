@@ -107,7 +107,7 @@ function generatechartitem(type = "currentyear") {
 
 
         })
-        // console.log(ordersbyyear);
+
         getChart(ordersbyyear, '1')
     }
 

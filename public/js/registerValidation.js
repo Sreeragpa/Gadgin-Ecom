@@ -42,7 +42,7 @@ form.addEventListener('submit',(e)=>{
     if(flag==1){
         e.preventDefault() 
     }
-    console.log(flag);
+
 })
 
 
